@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 
 import Calendar from './Calendar.jsx';
+import Guest from './Guest.jsx';
 
 
 class App extends React.Component {
@@ -46,7 +47,7 @@ class App extends React.Component {
           min_stay, review_count, star_rating
         }, () => {
           this.setState({
-            displayCalendar: true,
+            displayCalendar: false,
           });
         });
       });
@@ -66,7 +67,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { id, displayCalendar, view } = this.state;
+    const { id, displayCalendar, view, max_guests } = this.state;
 
     return (
       <div>
@@ -74,6 +75,8 @@ class App extends React.Component {
         {
           displayCalendar ? <Calendar id={id} view={view} getSelectedDates={this.getSelectedDates} /> : null
         }
+        <Guest maxGuests={max_guests} />
+        
       </div>
     );
   }
