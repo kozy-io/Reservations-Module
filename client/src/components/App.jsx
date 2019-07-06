@@ -24,11 +24,15 @@ class App extends React.Component {
       selectedCheckOut: "2019-01-01",
       displayCalendar: false,
       view: 'out',
+      adults: 0,
+      children: 0,
+      infants: 0,
       
     };
 
     this.getListing = this.getListing.bind(this);
     this.getSelectedDates = this.getSelectedDates.bind(this);
+    this.getSelectedGuests = this.getSelectedGuests.bind(this);
   }
 
   componentDidMount() {
@@ -64,6 +68,12 @@ class App extends React.Component {
         selectedCheckOut: date,
       });
     }
+  }
+
+  getSelectedGuests(type, number) {
+    this.setState({
+      [type]: number,
+    });
   }
 
   render() {
