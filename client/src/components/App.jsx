@@ -13,15 +13,20 @@ class App extends React.Component {
       currency: 'USD',
       extra_guest_cap: 0,
       extra_guest_charge: 0,
-      id: 0,
+      id: null,
       local_tax: 0.09,
       max_guests: 0,
       min_stay: 0,
       review_count: 0,
       star_rating: 0,
+      selectedCheckIn: "2019-01-01",
+      selectedCheckOut: "2019-01-01",
+      displayCalendar: false
+      
     };
 
     this.getListing = this.getListing.bind(this);
+    this.getSelectedDates = this.getSelectedDates.bind(this);
   }
 
   componentDidMount() {
@@ -38,16 +43,35 @@ class App extends React.Component {
         this.setState({
           base_rate, currency, extra_guest_cap, extra_guest_charge, id, local_tax, max_guests,
           min_stay, review_count, star_rating
-        })
+        }, () => {
+          this.setState({
+            displayCalendar: true,
+          });
+        });
       });
   }
 
+  getSelectedDates(view, date) {
+    if (view === "in") {
+      this.setState({
+        selectedCheckIn: date,
+      });
+    } else {
+      this.setState({
+        selectedCheckOut: date,
+      });
+    }
+  }
 
   render() {
+    const { id, displayCalendar } = this.state;
+
     return (
       <div>
         <h4>Reservations</h4>
-        <Calendar />
+        {
+          displayCalendar ? <Calendar id={id} getSelectedDates={this.getSelectedDates} /> : null
+        }
       </div>
     );
   }
