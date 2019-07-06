@@ -21,7 +21,8 @@ class App extends React.Component {
       star_rating: 0,
       selectedCheckIn: "2019-01-01",
       selectedCheckOut: "2019-01-01",
-      displayCalendar: false
+      displayCalendar: false,
+      view: 'out',
       
     };
 
@@ -51,7 +52,8 @@ class App extends React.Component {
       });
   }
 
-  getSelectedDates(view, date) {
+  getSelectedDates(date) {
+    const { view } = this.state.view;
     if (view === "in") {
       this.setState({
         selectedCheckIn: date,
@@ -64,13 +66,13 @@ class App extends React.Component {
   }
 
   render() {
-    const { id, displayCalendar } = this.state;
+    const { id, displayCalendar, view } = this.state;
 
     return (
       <div>
         <h4>Reservations</h4>
         {
-          displayCalendar ? <Calendar id={id} getSelectedDates={this.getSelectedDates} /> : null
+          displayCalendar ? <Calendar id={id} view={view} getSelectedDates={this.getSelectedDates} /> : null
         }
       </div>
     );

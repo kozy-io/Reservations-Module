@@ -30,8 +30,9 @@ class Calendar extends React.Component {
 
   getReservedDates() {
     const { currentMonth, currentYear } = this.state;
-    const listing_id = 1; // hard coded for now, but this should be passed down from App
-    axios.get(`/reserved/month?id=${listing_id}&month=${currentMonth+1}&year=${currentYear}`)
+    // const listing_id = 1; 
+    // console.log(listing_id);
+    axios.get(`/reserved/month?id=${this.props.id}&month=${currentMonth+1}&year=${currentYear}`)
       .then(response => this.setState({
         reserved: response.data,
       }))
@@ -40,8 +41,10 @@ class Calendar extends React.Component {
 
   getStatus(date) {
     const {
-      currentMonth, currentYear, initialMonth, initialYear, reserved, 
+      currentMonth, currentYear, initialMonth, initialYear, reserved,
     } = this.state;
+
+    const { view } = this.props;
 
     if (currentYear === initialYear) {
       if (currentMonth < initialMonth) {
@@ -50,8 +53,15 @@ class Calendar extends React.Component {
     } else if (currentYear < initialYear) {
       return 'week-days-disabled';
     }
-    if (reserved.includes(date)) {
-      return 'week-days-disabled';
+
+    if (view === 'in') {
+      if (reserved.includes(date)) {
+        return 'week-days-disabled';
+      }
+    } else if (view === 'out') {
+      if (reserved.includes(date - 1)) {
+        return 'week-days-disabled';
+      }
     }
     return 'week-days-active';
   }
@@ -103,12 +113,15 @@ class Calendar extends React.Component {
       currentMonth: initialMonth,
       currentYear: initialYear,
     }, () => {
-      this.getReservedDates()
+      this.getReservedDates();
     });
   }
 
   handleSelect(event, date) {
-    console.log(date);
+    const { currentMonth, currentYear } = this.state;
+    const fullDate = `${currentYear}-${currentMonth + 1}-${date}`;
+    this.props.getSelectedDates(fullDate);
+    console.log(fullDate);
   }
 
 
