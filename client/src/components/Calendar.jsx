@@ -1,16 +1,23 @@
 import React from 'react';
+import axios from 'axios';
 
 class Calendar extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      initialMonth: new Date().getMonth(),
+      initialYear: new Date().getFullYear(),
       currentMonth: new Date().getMonth(),
       currentYear: new Date().getFullYear(),
+      selectCheckIn: 0,
+      selectCheckOut: 0,
+      reserved: [],
     };
 
     this.getStartingDay = this.getStartingDay.bind(this);
     this.getDaysInMonth = this.getDaysInMonth.bind(this);
+    this.handleMonthChange = this.handleMonthChange.bind(this);
   }
 
   getStartingDay() {
@@ -25,6 +32,31 @@ class Calendar extends React.Component {
     return new Date(currentYear, currentMonth + 1, 0).getDate();
   }
 
+  // eslint-disable-next-line react/sort-comp
+  handleMonthChange(event) {
+    event.preventDefault();
+    const { name } = event.target;
+    const { currentMonth, currentYear } = this.state;
+
+    if (name === 'right') {
+      const newMonth = (currentMonth + 1) % 12;
+      const newYear = (newMonth === 0 ? currentYear + 1 : currentYear );
+
+      this.setState({
+        currentMonth: newMonth,
+        currentYear: newYear,
+      });
+    } else {
+      const newMonth = ( currentMonth + 11 ) % 12;
+      const newYear = ( newMonth === 11 ? currentYear - 1 : currentYear );
+
+      this.setState({
+        currentMonth: newMonth,
+        currentYear: newYear,
+      });
+    }
+  }
+
   getMonth() {
     const { currentMonth } = this.state;
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
@@ -33,15 +65,15 @@ class Calendar extends React.Component {
   }
 
   render() {
+    // eslint-disable-next-line react/destructuring-assignment
+    
     const month = this.getMonth();
-    const { currentYear } = this.state;
+    const { currentYear, reserved } = this.state;
 
     const days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
     const daysOfTheWeek = days.map((day) => {
       return (
-        <th key={day} className="week-names">
-          {day}
-        </th>
+        <th key={day} className="week-names">{day}</th>
       );
     });
 
@@ -56,7 +88,7 @@ class Calendar extends React.Component {
     const daysInMonth = this.getDaysInMonth();
     for (let j = 1; j <= daysInMonth; j += 1) {
       existingDays.push(
-        <td key={j} className="week-days-active">{j}</td>,
+        <td key={j}>{j}</td>,
       );
     }
 
@@ -87,7 +119,9 @@ class Calendar extends React.Component {
     return (
       <div>
         <div className="calendar-header">
+          <button name="left" onClick={(event) => {this.handleMonthChange(event)}}>Left</button>
           <b>{`${month} ${currentYear}`}</b>
+          <button name="right" onClick={(event) => {this.handleMonthChange(event)}}>Right</button>
         </div>
         <table>
           <tbody>
