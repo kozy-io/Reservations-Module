@@ -1,0 +1,57 @@
+div {
+  color: #484848;
+}
+
+.calendar-header {
+  width: 16em;
+  padding: 0px;
+  margin: 0px;
+}
+
+#calendar-header-left {
+  float: left;
+}
+
+#calendar-header-right {
+  float: right;
+}
+
+#calendar-header-center {
+  margin: 0 auto;
+}
+
+
+table {
+  border-spacing: 0rem;
+  table-layout: fixed;
+  color: #484848;
+}
+
+.week-days-active {
+  border: 0.5px solid #eeeeee;
+  padding: 2px;
+  margin: 0px;
+  width: 2em;
+  height: 2em;
+  text-align: center;
+}
+
+.week-days-disabled {
+  border: 0.5px solid #eeeeee;
+  padding: 2px;
+  align-content: center;
+  margin: 0px;
+  width: 2em;
+  height: 2em;
+  text-decoration: line-through;
+  text-align: center;
+  pointer-events: none; 
+  color: #d8d8d8;
+}
+
+.week-names {
+  padding: 5px;
+  align-content: center;
+  margin: 0px;
+  color: #484848;
+}

@@ -15,9 +15,45 @@ class Calendar extends React.Component {
       reserved: [],
     };
 
+    this.getReservedDates = this.getReservedDates.bind(this);
+    this.getStatus = this.getStatus.bind(this);
     this.getStartingDay = this.getStartingDay.bind(this);
     this.getDaysInMonth = this.getDaysInMonth.bind(this);
     this.handleMonthChange = this.handleMonthChange.bind(this);
+    this.clearDates = this.clearDates.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
+  }
+
+  componentDidMount() {
+    this.getReservedDates();
+  }
+
+  getReservedDates() {
+    const { currentMonth, currentYear } = this.state;
+    const listing_id = 1; // hard coded for now, but this should be passed down from App
+    axios.get(`/reserved/month?id=${listing_id}&month=${currentMonth+1}&year=${currentYear}`)
+      .then(response => this.setState({
+        reserved: response.data,
+      }))
+      .catch((error) => { throw error });
+  }
+
+  getStatus(date) {
+    const {
+      currentMonth, currentYear, initialMonth, initialYear, reserved, 
+    } = this.state;
+
+    if (currentYear === initialYear) {
+      if (currentMonth < initialMonth) {
+        return 'week-days-disabled';
+      }
+    } else if (currentYear < initialYear) {
+      return 'week-days-disabled';
+    }
+    if (reserved.includes(date)) {
+      return 'week-days-disabled';
+    }
+    return 'week-days-active';
   }
 
   getStartingDay() {
@@ -34,7 +70,6 @@ class Calendar extends React.Component {
 
   // eslint-disable-next-line react/sort-comp
   handleMonthChange(event) {
-    event.preventDefault();
     const { name } = event.target;
     const { currentMonth, currentYear } = this.state;
 
@@ -45,6 +80,8 @@ class Calendar extends React.Component {
       this.setState({
         currentMonth: newMonth,
         currentYear: newYear,
+      }, () => {
+        this.getReservedDates();
       });
     } else {
       const newMonth = ( currentMonth + 11 ) % 12;
@@ -53,9 +90,27 @@ class Calendar extends React.Component {
       this.setState({
         currentMonth: newMonth,
         currentYear: newYear,
+      }, () => {
+        this.getReservedDates();
       });
     }
   }
+
+  clearDates(event) {
+    event.preventDefault();
+    const { initialMonth, initialYear } = this.state;
+    this.setState({
+      currentMonth: initialMonth,
+      currentYear: initialYear,
+    }, () => {
+      this.getReservedDates()
+    });
+  }
+
+  handleSelect(event, date) {
+    console.log(date);
+  }
+
 
   getMonth() {
     const { currentMonth } = this.state;
@@ -88,7 +143,8 @@ class Calendar extends React.Component {
     const daysInMonth = this.getDaysInMonth();
     for (let j = 1; j <= daysInMonth; j += 1) {
       existingDays.push(
-        <td key={j}>{j}</td>,
+        <td onClick={(event, date) => { this.handleSelect(event, j)}} key={j}
+          className={this.getStatus(j)}>{j}</td>,
       );
     }
 
@@ -131,6 +187,7 @@ class Calendar extends React.Component {
             {calendarDays}
           </tbody>
         </table>
+        <button name="clear" onClick={(event) => {this.clearDates(event)}}>Clear</button>
       </div>
     );
   }
