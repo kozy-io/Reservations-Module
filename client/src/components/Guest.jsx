@@ -72,11 +72,11 @@ class Guest extends React.Component {
     let infantStatusPlus;
     let infantStatusMinus;
 
-    // it max guests are reached, all plus buttons are disabled
-    if (adult + child + infant >= maxGuests) {
+    // it max guests are reached, add buttons are disabled for adult and child
+    // infants do not count toward total guests
+    if (adult + child >= maxGuests) {
       adultStatusPlus = 'button-disabled';
       childStatusPlus = 'button-disabled';
-      infantStatusPlus = 'button-disabled';
     }
     // adults cannot go below 1
     if (adult === 1) {
