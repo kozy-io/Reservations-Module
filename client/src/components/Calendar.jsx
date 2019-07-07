@@ -186,7 +186,7 @@ class Calendar extends React.Component {
     });
 
     return (
-      <div>
+      <div className="overlay-calendar">
         <div className="calendar-header">
           <button name="left" onClick={(event) => {this.handleMonthChange(event)}}>Left</button>
           <b>{`${month} ${currentYear}`}</b>

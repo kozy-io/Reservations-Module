@@ -94,8 +94,8 @@ class Guest extends React.Component {
     }
 
     return (
+    <div class="overlay-guests">
       <div className="guest-form">
-
         <div id="guest-type">
           Adult
               <button name="adult-minus" className={adultStatusMinus} onClick={this.selectGuests}>-</button>
@@ -117,6 +117,7 @@ class Guest extends React.Component {
               <button name="infant-plus" className={infantStatusPlus} onClick={this.selectGuests}>+</button>
           </div>
       </div>
+    </div>
     );
   }
 }

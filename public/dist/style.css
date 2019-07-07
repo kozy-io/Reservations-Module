@@ -3,6 +3,30 @@ div {
   font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue";
 }
 
+body {
+  position: relative;
+}
+
+.overlay-guests{
+  position: absolute;
+  top: 193px;
+  left: 50px;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  background: #ffffff;
+}
+
+.overlay-calendar{
+  position: absolute;
+  top: 143px;
+  left: 49px;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  background: #ffffff;
+}
+
 .reservations-container {
   width: 421px;
   height: 393px;
@@ -26,7 +50,7 @@ div {
 
 /* Calendar */
 .calendar-header {
-  width: 16em;
+  width: 300px;
   padding: 0px;
   margin: 0px;
 }
@@ -55,12 +79,13 @@ div {
   width: 300px;
   height: 30px;
   border: 1px solid;
-  margin: 10px 0px 10px 0px;
+  margin: 10px 0px 0px 0px;
 }
 
 
 table {
   border-spacing: 0rem;
+  width: 300px;
   table-layout: fixed;
   color: #484848;
 }
@@ -96,9 +121,11 @@ table {
 
 /* Guests */
 .guest-form {
-  width: 16em;
+  width: 300px;
   padding: 0px;
   margin: 0px;
+  border: 0.5px solid #484848;
+
 }
 
 #guest-type {

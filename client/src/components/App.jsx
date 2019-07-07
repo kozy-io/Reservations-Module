@@ -89,10 +89,10 @@ class App extends React.Component {
 
   changeView(event) {
     const { name } = event.target;
-    this.setState({
+    this.setState(prevState => ({
       view: name,
-      displayCalendar: true,
-    });
+      displayCalendar: !prevState.displayCalendar,
+    }));
   }
 
   render() {
@@ -127,7 +127,7 @@ class App extends React.Component {
             <button name="in" onClick={(event) => {this.changeView(event)}}>Check In</button> -> 
             <button name="out" onClick={(event) => {this.changeView(event)}}>Check Out</button>
           </div>
-
+          Guests
           <div className="guests-options">
             <span onClick={this.displayGuest}>{displayGuests} {displayInfants}</span>
           </div>
