@@ -17,7 +17,6 @@ class Guest extends React.Component {
     event.preventDefault();
     const { name } = event.target;
     const { getSelectedGuests } = this.props;
-    console.log(getSelectedGuests);
 
     if (name.includes('minus')) {
       if (name.includes('adult')) {
@@ -96,7 +95,6 @@ class Guest extends React.Component {
 
     return (
       <div className="guest-form">
-        <h1>Guest Bar</h1>
 
         <div id="guest-type">
           Adult
