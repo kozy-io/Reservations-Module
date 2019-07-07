@@ -1,11 +1,56 @@
 div {
   color: #484848;
+  font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue";
 }
 
+body {
+  position: relative;
+}
+
+.overlay-guests{
+  position: absolute;
+  top: 193px;
+  left: 50px;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  background: #ffffff;
+}
+
+.overlay-calendar{
+  position: absolute;
+  top: 143px;
+  left: 49px;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  background: #ffffff;
+}
+
+.reservations-container {
+  width: 421px;
+  height: 393px;
+  background-color: #ffffff;
+  border: 1px solid #eeeeee;
+  padding: 16px 24px;
+  box-shadow: 0 -1px 0 0 rgba(72, 72, 72, 0.16)
+}
+
+.reservations-inner {
+  padding: 0px 24px;
+}
+
+.price-displayed {
+  padding: 0px 16px 0px 0px;
+  font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
+  font-weight: 800 !important;
+  line-height: 1.44444em !important;
+  color: rgb(72, 72, 72) !important;
+}
 
 /* Calendar */
 .calendar-header {
-  width: 16em;
+  width: 300px;
   padding: 0px;
   margin: 0px;
 }
@@ -22,14 +67,30 @@ div {
   margin: 0 auto;
 }
 
+.dates-options {
+  width: 300px;
+  height: 30px;
+  border: 1px solid;
+  margin: 10px 0px 10px 0px;
+}
+
+
+.guests-options {
+  width: 300px;
+  height: 30px;
+  border: 1px solid;
+  margin: 10px 0px 0px 0px;
+}
+
 
 table {
   border-spacing: 0rem;
+  width: 300px;
   table-layout: fixed;
   color: #484848;
 }
 
-.week-days-active {
+.week-days-active-normal {
   border: 0.5px solid #eeeeee;
   padding: 2px;
   margin: 0px;
@@ -38,7 +99,18 @@ table {
   text-align: center;
 }
 
-.week-days-disabled {
+.week-days-active-selected {
+  border: 0.5px solid #eeeeee;
+  padding: 2px;
+  margin: 0px;
+  width: 2em;
+  height: 2em;
+  background: #02A699;
+  color: #ffffff;
+  text-align: center;
+}
+
+.week-days-disabled-normal {
   border: 0.5px solid #eeeeee;
   padding: 2px;
   align-content: center;
@@ -60,15 +132,15 @@ table {
 
 /* Guests */
 .guest-form {
-  width: 16em;
+  width: 300px;
   padding: 0px;
   margin: 0px;
-  border: 0.5px solid;
+  border: 0.5px solid #484848;
+
 }
 
 #guest-type {
   height: 20px;
-  border: 1px solid;
 }
 
 .guest-input {

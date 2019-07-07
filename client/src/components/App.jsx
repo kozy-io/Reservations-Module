@@ -24,20 +24,24 @@ class App extends React.Component {
       selectedCheckOut: "2019-01-01",
       displayCalendar: false,
       view: 'out',
-      adults: 0,
+      adults: 1,
       children: 0,
       infants: 0,
+      displayGuest: false,
       
     };
 
     this.getListing = this.getListing.bind(this);
     this.getSelectedDates = this.getSelectedDates.bind(this);
     this.getSelectedGuests = this.getSelectedGuests.bind(this);
+    this.displayGuest = this.displayGuest.bind(this);
+    this.changeView = this.changeView.bind(this);
   }
 
   componentDidMount() {
     this.getListing();
   }
+
 
   getListing() {
     const random = Math.floor(Math.random() * 100);
@@ -58,7 +62,8 @@ class App extends React.Component {
   }
 
   getSelectedDates(date) {
-    const { view } = this.state.view;
+    let { view } = this.state;
+
     if (view === "in") {
       this.setState({
         selectedCheckIn: date,
@@ -77,16 +82,64 @@ class App extends React.Component {
     });
   }
 
+  displayGuest() {
+    this.setState(prevState => ({
+      displayGuest: !prevState.displayGuest,
+    }));
+  }
+
+  changeView(event) {
+    const { name } = event.target;
+    this.setState(prevState => ({
+      view: name,
+      displayCalendar: !prevState.displayCalendar,
+    }));
+  }
+
   render() {
-    const { id, displayCalendar, view, max_guests } = this.state;
+    const { id, displayCalendar, view, max_guests, star_rating, review_count, base_rate,
+      adults, children, infants, displayGuest } = this.state;
+
+    let displayGuests = "";
+    let displayInfants = "";
+
+    if (adults + children > 1) {
+      displayGuests = `${adults + children} guests`;
+    } else if (adults + children <= 1) {
+      displayGuests = `${adults + children} guest`;
+    }
+
+    if (infants === 1) {
+      displayInfants = `, 1 infant`;
+    } else if (infants > 1) {
+      displayInfants = `, ${infants} infants`;  
+    }
+
+
 
     return (
-      <div>
-        <h4>Reservations</h4>
-        {
-          displayCalendar ? <Calendar id={id} view={view} getSelectedDates={this.getSelectedDates} /> : null
-        }
-        <Guest maxGuests={max_guests} getSelectedGuests={this.getSelectedGuests} />
+      <div className="reservations-container">
+        <div className="reservations-inner">
+          <div className="price-displayed">${Number(base_rate)}</div>
+          ***** {review_count}
+          <p></p>
+          Dates
+          <div className="dates-options">
+            <button name="in" onClick={(event) => {this.changeView(event)}}>Check In</button> -> 
+            <button name="out" onClick={(event) => {this.changeView(event)}}>Check Out</button>
+          </div>
+          Guests
+          <div className="guests-options">
+            <span onClick={this.displayGuest}>{displayGuests} {displayInfants}</span>
+          </div>
+          {
+            displayCalendar ? <Calendar id={id} view={view} getSelectedDates={this.getSelectedDates} /> : null
+          }
+          {
+            displayGuest ?  <Guest maxGuests={max_guests} getSelectedGuests={this.getSelectedGuests} /> : null 
+          }
+        </div>
+
         
       </div>
     );

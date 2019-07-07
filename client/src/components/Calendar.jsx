@@ -134,7 +134,8 @@ class Calendar extends React.Component {
 
   render() {
     // eslint-disable-next-line react/destructuring-assignment
-    
+    let selectedDate = 1;
+
     const month = this.getMonth();
     const { currentYear, reserved } = this.state;
 
@@ -154,10 +155,11 @@ class Calendar extends React.Component {
 
     const existingDays = [];
     const daysInMonth = this.getDaysInMonth();
+
     for (let j = 1; j <= daysInMonth; j += 1) {
       existingDays.push(
         <td onClick={(event, date) => { this.handleSelect(event, j)}} key={j}
-          className={this.getStatus(j)}>{j}</td>,
+          className={`${this.getStatus(j)}${selectedDate === j ? '-selected' : '-normal'}`}>{j}</td>,
       );
     }
 
@@ -186,7 +188,7 @@ class Calendar extends React.Component {
     });
 
     return (
-      <div>
+      <div className="overlay-calendar">
         <div className="calendar-header">
           <button name="left" onClick={(event) => {this.handleMonthChange(event)}}>Left</button>
           <b>{`${month} ${currentYear}`}</b>
