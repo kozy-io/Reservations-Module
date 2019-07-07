@@ -16,34 +16,48 @@ class Guest extends React.Component {
   selectGuests(event) {
     event.preventDefault();
     const { name } = event.target;
+    const { getSelectedGuests } = this.props;
+    console.log(getSelectedGuests);
 
     if (name.includes('minus')) {
       if (name.includes('adult')) {
         this.setState(prevState => ({
           adult: prevState.adult - 1,
-        }));
+        }), () => {
+          getSelectedGuests('adults', this.state.adult);
+        });
       } else if (name.includes('child')) {
         this.setState(prevState => ({
           child: prevState.child - 1,
-        }));
+        }), () => {
+          getSelectedGuests('children', this.state.child);
+        });
       } else {
         this.setState(prevState => ({
           infant: prevState.infant - 1,
-        }));
+        }), () => {
+          getSelectedGuests('infants', this.state.infant);
+        });
       }
     } else if (name.includes('plus')) {
       if (name.includes('adult')) {
         this.setState(prevState => ({
           adult: prevState.adult + 1,
-        }));
+        }), () => {
+          getSelectedGuests('adults', this.state.adult);
+        });
       } else if (name.includes('child')) {
         this.setState(prevState => ({
           child: prevState.child + 1,
-        }));
+        }), () => {
+          getSelectedGuests('children', this.state.child);
+        });
       } else {
         this.setState(prevState => ({
           infant: prevState.infant + 1,
-        }));
+        }), () => {
+          getSelectedGuests('infants', this.state.infant);
+        });
       }
     }
   }

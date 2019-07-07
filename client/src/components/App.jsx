@@ -71,6 +71,7 @@ class App extends React.Component {
   }
 
   getSelectedGuests(type, number) {
+    console.log('getting selected guests at parents');
     this.setState({
       [type]: number,
     });
@@ -85,7 +86,7 @@ class App extends React.Component {
         {
           displayCalendar ? <Calendar id={id} view={view} getSelectedDates={this.getSelectedDates} /> : null
         }
-        <Guest maxGuests={max_guests} />
+        <Guest maxGuests={max_guests} getSelectedGuests={this.getSelectedGuests} />
         
       </div>
     );
