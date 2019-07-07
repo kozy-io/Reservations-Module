@@ -7,6 +7,20 @@ body {
   position: relative;
 }
 
+
+#overlay-test {
+  display: none; /* Hidden by default */
+  position: absolute;
+  top: 193px;
+  left: 50px;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  background: #ffffff;
+}
+
+
+
 .overlay-guests{
   position: absolute;
   top: 193px;

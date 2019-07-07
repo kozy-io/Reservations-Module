@@ -94,7 +94,7 @@ class Guest extends React.Component {
     }
 
     return (
-    <div class="overlay-guests">
+    <div id="overlay-test">
       <div className="guest-form">
         <div id="guest-type">
           Adult

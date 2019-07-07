@@ -27,7 +27,6 @@ class App extends React.Component {
       adults: 1,
       children: 0,
       infants: 0,
-      displayGuest: false,
       
     };
 
@@ -83,9 +82,10 @@ class App extends React.Component {
   }
 
   displayGuest() {
-    this.setState(prevState => ({
-      displayGuest: !prevState.displayGuest,
-    }));
+    // this.setState(prevState => ({
+    //   displayGuest: !prevState.displayGuest,
+    // }));
+    document.getElementById("overlay-test").style.display = "block";
   }
 
   changeView(event) {
@@ -135,9 +135,9 @@ class App extends React.Component {
           {
             displayCalendar ? <Calendar id={id} view={view} getSelectedDates={this.getSelectedDates} /> : null
           }
-          {
-            displayGuest ?  <Guest maxGuests={max_guests} getSelectedGuests={this.getSelectedGuests} /> : null 
-          }
+          
+          <Guest maxGuests={max_guests} getSelectedGuests={this.getSelectedGuests} /> 
+          
         </div>
 
         
