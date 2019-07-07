@@ -11,6 +11,27 @@ class Guest extends React.Component {
     };
 
     this.selectGuests = this.selectGuests.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.handleClickOutside = this.handleClickOutside.bind(this);
+  }
+
+  componentDidMount() {
+    document.addEventListener('mousedown', this.handleClick, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClick, false);
+  }
+
+  handleClick(e) {
+    if (this.node.contains(e.target)) {
+      return;
+    }
+    this.handleClickOutside();
+  }
+
+  handleClickOutside() {
+    document.getElementById("overlay-guest").style.display = "none";
   }
 
   selectGuests(event) {
@@ -94,7 +115,8 @@ class Guest extends React.Component {
     }
 
     return (
-    <div id="overlay-test">
+    <div ref={node => this.node = node}>
+    <div id="overlay-guest">
       <div className="guest-form">
         <div id="guest-type">
           Adult
@@ -117,6 +139,7 @@ class Guest extends React.Component {
               <button name="infant-plus" className={infantStatusPlus} onClick={this.selectGuests}>+</button>
           </div>
       </div>
+    </div>
     </div>
     );
   }
