@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 
 import Calendar from './Calendar.jsx';
+import Guest from './Guest.jsx';
 
 
 class App extends React.Component {
@@ -23,11 +24,15 @@ class App extends React.Component {
       selectedCheckOut: "2019-01-01",
       displayCalendar: false,
       view: 'out',
+      adults: 0,
+      children: 0,
+      infants: 0,
       
     };
 
     this.getListing = this.getListing.bind(this);
     this.getSelectedDates = this.getSelectedDates.bind(this);
+    this.getSelectedGuests = this.getSelectedGuests.bind(this);
   }
 
   componentDidMount() {
@@ -46,7 +51,7 @@ class App extends React.Component {
           min_stay, review_count, star_rating
         }, () => {
           this.setState({
-            displayCalendar: true,
+            displayCalendar: false,
           });
         });
       });
@@ -65,8 +70,15 @@ class App extends React.Component {
     }
   }
 
+  getSelectedGuests(type, number) {
+    console.log('getting selected guests at parents');
+    this.setState({
+      [type]: number,
+    });
+  }
+
   render() {
-    const { id, displayCalendar, view } = this.state;
+    const { id, displayCalendar, view, max_guests } = this.state;
 
     return (
       <div>
@@ -74,6 +86,8 @@ class App extends React.Component {
         {
           displayCalendar ? <Calendar id={id} view={view} getSelectedDates={this.getSelectedDates} /> : null
         }
+        <Guest maxGuests={max_guests} getSelectedGuests={this.getSelectedGuests} />
+        
       </div>
     );
   }

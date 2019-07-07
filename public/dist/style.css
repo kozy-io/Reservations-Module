@@ -2,6 +2,8 @@ div {
   color: #484848;
 }
 
+
+/* Calendar */
 .calendar-header {
   width: 16em;
   padding: 0px;
@@ -54,4 +56,26 @@ table {
   align-content: center;
   margin: 0px;
   color: #484848;
+}
+
+/* Guests */
+.guest-form {
+  width: 16em;
+  padding: 0px;
+  margin: 0px;
+  border: 0.5px solid;
+}
+
+#guest-type {
+  height: 20px;
+  border: 1px solid;
+}
+
+.guest-input {
+  float: right;
+}
+
+.button-disabled {
+  pointer-events: none; 
+  color: #d8d8d8;
 }
