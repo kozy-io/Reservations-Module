@@ -62,7 +62,8 @@ class App extends React.Component {
   }
 
   getSelectedDates(date) {
-    const { view } = this.state.view;
+    let { view } = this.state;
+
     if (view === "in") {
       this.setState({
         selectedCheckIn: date,

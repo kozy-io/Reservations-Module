@@ -90,7 +90,7 @@ table {
   color: #484848;
 }
 
-.week-days-active {
+.week-days-active-normal {
   border: 0.5px solid #eeeeee;
   padding: 2px;
   margin: 0px;
@@ -99,7 +99,18 @@ table {
   text-align: center;
 }
 
-.week-days-disabled {
+.week-days-active-selected {
+  border: 0.5px solid #eeeeee;
+  padding: 2px;
+  margin: 0px;
+  width: 2em;
+  height: 2em;
+  background: #02A699;
+  color: #ffffff;
+  text-align: center;
+}
+
+.week-days-disabled-normal {
   border: 0.5px solid #eeeeee;
   padding: 2px;
   align-content: center;
