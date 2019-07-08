@@ -168,12 +168,13 @@ table {
 .guest-form {
   width: 300px;
   margin: 0px;
-  padding: 10px;
+  padding: 15px;
 
 }
 
 #guest-type {
   height: 20px;
+  margin: 10px;
 }
 
 .guest-input {
