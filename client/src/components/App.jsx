@@ -77,7 +77,7 @@ class App extends React.Component {
   getSelectedDates(date) {
     let { view } = this.state;
 
-    if (view === "in") {
+    if (view === 'in') {
       this.setState({
         selectedCheckIn: date,
       }, () => {
@@ -104,13 +104,13 @@ class App extends React.Component {
       this.setState(prevState => ({
         showGuest: !prevState.showGuest,
       }), () => {
-        document.getElementById("overlay-guest").style.display = "block";
+        document.getElementById('overlay-guest').style.display = 'block';
       });
     } else {
       this.setState(prevState => ({
         showGuest: !prevState.showGuest,
       }), () => {
-        document.getElementById("overlay-guest").style.display = "none";
+        document.getElementById('overlay-guest').style.display = 'none';
       });
     }
   }
@@ -124,13 +124,13 @@ class App extends React.Component {
         this.setState(prevState => ({
           showCalendar: !prevState.showCalendar,
         }), () => {
-          document.getElementById("overlay-calendar").style.display = "block";
+          document.getElementById('overlay-calendar').style.display = 'block';
         });
       } else {
         this.setState(prevState => ({
           showCalendar: !prevState.showCalendar,
         }), () => {
-          document.getElementById("overlay-calendar").style.display = "none";
+          document.getElementById('overlay-calendar').style.display = 'none';
         });
       }
     });
@@ -151,17 +151,18 @@ class App extends React.Component {
   }
 
   styleDisplayDate(date) {
-    let data = date.split("-");
-    return data[1] + "/" + data[2] + "/" + data[0];
+    let data = date.split('-');
+    return data[1] + '/' + data[2] + '/' + data[0];
   }
 
   validateStay(reserved) {
     const { selectedCheckIn, selectedCheckOut, min_stay } = this.state;
     // work only with the current month 
     if (selectedCheckIn && selectedCheckOut) {
-      let dateIn = selectedCheckIn.split("-")[2];
-      let dateOut = selectedCheckOut.split("-")[2];
-      let duration = dateOut - dateIn;
+      const dateIn = moment(selectedCheckIn);
+      const dateOut = moment(selectedCheckOut);
+      const duration = dateOut.diff(dateIn, 'days');
+
       if (duration >= min_stay) {
         console.log('this is a valid stay!');
         this.setState({
@@ -169,8 +170,9 @@ class App extends React.Component {
         }, () => {
           this.calculateBase();
         });
+      } else {
+        console.log('this is not a valid stay');
       }
-      console.log('this is not a valid stay');
     }
     return;
   }
@@ -180,27 +182,28 @@ class App extends React.Component {
     // then, check each one (start at check in, end at check out ) 
     // keep track of total stay 
     const { id, selectedCheckIn, selectedCheckOut } = this.state;
-    let dateIn = selectedCheckIn.split("-")[2];
-    let dateOut = selectedCheckOut.split("-")[2];
-    let monthIn = selectedCheckIn.split("-")[1];
-    let yearIn = selectedCheckIn.split("-")[0];
+
+    const dateIn = moment(selectedCheckIn);
+    const dateOut = moment(selectedCheckOut);
+    const daysBetween = [];
+    let query = '';
     let total = 0;
+    
+    for (let m = moment(dateIn); m.isBefore(dateOut); m.add(1, 'days')) {
+      daysBetween.push(m.format('YYYY-MM-DD'));
+    }
 
-    axios.get(`/custom/month?id=${id}&month=${monthIn}&year=${yearIn}`)
+    for (let i = 0; i < daysBetween.length; i += 1) {
+      query += '&time=' + daysBetween[i];
+    }
+
+    axios.get(`/custom/month?id=${id}${query}`)
       .then((response) => {
-        let customDatesOnly = response.data.map((element) => {
-          return element.date;
-        });
+        const customDatesOnly = response.data.map(element => element.date);
+        const customPricesOnly = response.data.map(item => item.price);
 
-        let customPricesOnly = response.data.map((item) => {
-          return item.price;
-        })
-
-        let a = moment(`${yearIn}-${monthIn}-${dateIn}`);
-        let b = moment(`${yearIn}-${monthIn}-${dateOut}`);
-
-        for (var m = moment(a); m.isBefore(b); m.add(1, 'days')) {
-          let item = (m.format('YYYY-MM-DD'));
+        for (let j = moment(dateIn); j.isBefore(dateOut); j.add(1, 'days')) {
+          let item = (j.format('YYYY-MM-DD'));
           let index = customDatesOnly.indexOf(item);
 
           if (index >= 0) {
@@ -219,8 +222,8 @@ class App extends React.Component {
     const { id, displayCalendar, view, max_guests, star_rating, review_count, base_rate, cleaning_charge, local_tax,
       adults, children, infants, selectedCheckIn, selectedCheckOut, displayPricing, total_base, duration } = this.state;
 
-    let displayGuests = "";
-    let displayInfants = "";
+    let displayGuests = '';
+    let displayInfants = '';
 
     if (adults + children > 1) {
       displayGuests = `${adults + children} guests`;
@@ -229,7 +232,7 @@ class App extends React.Component {
     }
 
     if (infants === 1) {
-      displayInfants = `, 1 infant`;
+      displayInfants = ', 1 infant';
     } else if (infants > 1) {
       displayInfants = `, ${infants} infants`;  
     }
@@ -250,9 +253,9 @@ class App extends React.Component {
           <span className="titles">Dates</span>
           <div className="dates-options">
             <a name="in" className="options-text-checkin" onClick={(event) => {this.displayCalendar(event);}}>
-              { selectedCheckIn ? this.styleDisplayDate(selectedCheckIn) : "Check-in" }</a>
+              { selectedCheckIn ? this.styleDisplayDate(selectedCheckIn) : 'Check-in' }</a>
             <a className="options-text-checkout" name="out" onClick={(event) => {this.displayCalendar(event);}}>
-              { selectedCheckOut ? this.styleDisplayDate(selectedCheckOut) : "Checkout" }</a>
+              { selectedCheckOut ? this.styleDisplayDate(selectedCheckOut) : 'Checkout' }</a>
           </div>
 
           <Calendar id={id} view={view} getSelectedDates={this.getSelectedDates} hideCalendar={this.hideCalendar} />
@@ -263,7 +266,7 @@ class App extends React.Component {
 
           { displayPricing ?
           <div className="pricing">
-            <div id="text-base-fee-description">${perNight} x {duration} {duration > 1 ? "nights" : "night" }
+            <div id="text-base-fee-description">${perNight} x {duration} {duration > 1 ? 'nights' : 'night' }
               <div className="right">
                 <NumberFormat value={total_base} displayType={'text'} 
                   thousandSeparator={true} prefix={'$'} decimalScale={0}/>
