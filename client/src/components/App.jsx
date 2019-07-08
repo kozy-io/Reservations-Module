@@ -16,6 +16,7 @@ class App extends React.Component {
       extra_guest_charge: 0,
       id: null,
       local_tax: 0.09,
+      cleaning_charge: 100,
       max_guests: 0,
       min_stay: 0,
       review_count: 0,
@@ -23,11 +24,12 @@ class App extends React.Component {
       selectedCheckIn: "2019-01-01",
       selectedCheckOut: "2019-01-01",
       displayCalendar: false,
-      view: 'out',
+      view: null,
       adults: 1,
       children: 0,
       infants: 0,
       showGuest: false,
+      showCalendar: false,
       
     };
 
@@ -51,8 +53,8 @@ class App extends React.Component {
           min_stay, review_count, star_rating } = response.data;
         
         this.setState({
-          base_rate, currency, extra_guest_cap, extra_guest_charge, id, local_tax, max_guests,
-          min_stay, review_count, star_rating
+          currency, extra_guest_cap, extra_guest_charge, id, local_tax, max_guests,
+          min_stay, review_count, star_rating, base_rate: Number(base_rate),
         }, () => {
           this.setState({
             displayCalendar: false,
@@ -98,6 +100,27 @@ class App extends React.Component {
     }
   }
 
+  displayCalendar(event) {
+    const { name } = event.target;
+    this.setState({
+      view: name,
+    }, () => {
+      if (this.state.showCalendar === false) {
+        this.setState(prevState => ({
+          showCalendar: !prevState.showCalendar,
+        }), () => {
+          document.getElementById("overlay-calendar").style.display = "block";
+        });
+      } else {
+        this.setState(prevState => ({
+          showCalendar: !prevState.showCalendar,
+        }), () => {
+          document.getElementById("overlay-calendar").style.display = "none";
+        });
+      }
+    });
+  }
+
   changeView(event) {
     const { name } = event.target;
     this.setState(prevState => ({
@@ -130,26 +153,32 @@ class App extends React.Component {
     return (
       <div className="reservations-container">
         <div className="reservations-inner">
-          <div className="price-displayed">${Number(base_rate)}</div>
+          <div className="price-displayed">${base_rate}</div>
           <div className="ratings-displayed">***** {review_count}</div>
           <p></p>
           <span className="titles">Dates</span>
           <div className="dates-options">
-            <a name="in" className="options-text-checkin" onClick={(event) => {this.changeView(event)}}>Check-in</a>
-            <a className="options-text-arrow"></a>
-            <a className="options-text-checkout" name="out" onClick={(event) => {this.changeView(event)}}>Checkout</a>
+            <a name="in" className="options-text-checkin" onClick={(event) => {this.displayCalendar(event);}}>Check-in</a>
+            <a className="options-text-checkout" name="out" onClick={(event) => {this.displayCalendar(event);}}>Checkout</a>
           </div>
           <span className="titles">Guests</span>
           <div id="guests-display" onClick={this.displayGuest}>{displayGuests} {displayInfants}</div>
-          {
-            displayCalendar ? <Calendar id={id} view={view} getSelectedDates={this.getSelectedDates} /> : null
-          }
-          
-          <Guest maxGuests={max_guests} getSelectedGuests={this.getSelectedGuests} /> 
-          
-        </div>
+          <Guest maxGuests={max_guests} getSelectedGuests={this.getSelectedGuests} />
+          <Calendar id={id} view={view} getSelectedDates={this.getSelectedDates} />
 
-        
+          <div id="text-base-fee">${base_rate} x 2 nights</div>
+
+          <div id="text-misc-fees">
+            Cleaning fee
+            <p></p>
+            Service charge
+          </div>
+
+          <div id="text-taxes">Occupancy taxes and fees</div>
+
+          <div id="total-price">Total</div>
+
+        </div>
       </div>
     );
   }

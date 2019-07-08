@@ -7,15 +7,49 @@ body {
   position: relative;
 }
 
+#text-base-fee {
+  margin: 10px 0px 0px 0px;
+  font-size: 13px;
+}
+
+#text-misc-fees {
+  margin: 10px 0px 10px 0px;
+  font-size: 13px;
+  border-top: 1px solid #eeeeee;
+  padding: 5px 0px 0px 0px;
+}
+
+#text-taxes {
+  font-size: 13px;
+  border-top: 1px solid #eeeeee;
+  margin: 10px 0px 10px 0px;
+  padding: 5px 0px 0px 0px;
+}
+
+#total-price {
+  margin: 20px 0px 10px 0px;
+  font-size: 13px;
+  font-weight: bold;
+}
 
 #overlay-guest {
   display: none; /* Hidden by default */
   position: absolute;
   border: 1px solid #eeeeee;
-  top: 210px;
+  top: 226px;
   left: 50px;
-  width: 310px;
   z-index: 10;
+  background: #ffffff;
+}
+
+#overlay-calendar {
+  display: none; /* Hidden by default */
+  position: absolute;
+  border: 1px solid #eeeeee;
+  top: 143px;
+  left: 49px;
+  width: 310px;
+  z-index: 20;
   background: #ffffff;
 }
 
@@ -36,19 +70,9 @@ body {
   float: right;
 }
 
-.overlay-calendar{
-  position: absolute;
-  top: 143px;
-  left: 49px;
-  width: 100%;
-  height: 100%;
-  z-index: 10;
-  background: #ffffff;
-}
-
 .reservations-container {
   width: 370px;
-  height: 350px;
+  height: 400px;
   background-color: #ffffff;
   border: 1px solid #eeeeee;
   padding: 16px 24px;
@@ -80,7 +104,15 @@ body {
   width: 300px;
   padding: 0px;
   margin: 0px;
+  
 }
+
+.calendar-container {
+  box-shadow: 0 1px 1px 1px rgba(72, 72, 72, 0.16);
+  padding: 16px;
+  text-align: center;
+}
+
 
 #calendar-header-left {
   float: left;
@@ -105,7 +137,6 @@ body {
 
 
 #guests-display {
-  width: 300px;
   height: 30px;
   padding: 6px;
   margin: 4px 0px 0px 0px;
@@ -114,13 +145,17 @@ body {
 
 
 table {
+  padding: 8px;
   border-spacing: 0rem;
-  width: 300px;
+  width: 270px;
   table-layout: fixed;
   color: #484848;
+  font-size: 12px;
+  font-weight: bold;
 }
 
 .titles {
+  font-size: 12px;
   font-weight: 600 !important;
 }
 
@@ -166,9 +201,11 @@ table {
 
 /* Guests */
 .guest-form {
-  width: 300px;
+  width: 290px;
   margin: 0px;
   padding: 15px;
+  border-top: 2px solid #02A699;
+  box-shadow: 0 1px 1px 2px rgba(72, 72, 72, 0.16)
 
 }
 

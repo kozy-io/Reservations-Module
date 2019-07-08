@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import OutsideClickHandler from 'react-outside-click-handler';
 
 class Calendar extends React.Component {
   constructor(props) {
@@ -28,10 +29,12 @@ class Calendar extends React.Component {
     this.getReservedDates();
   }
 
+  handleClickOutside() {
+    document.getElementById('overlay-calendar').style.display = 'none';
+  }
+
   getReservedDates() {
     const { currentMonth, currentYear } = this.state;
-    // const listing_id = 1; 
-    // console.log(listing_id);
     axios.get(`/reserved/month?id=${this.props.id}&month=${currentMonth+1}&year=${currentYear}`)
       .then(response => this.setState({
         reserved: response.data,
@@ -188,22 +191,29 @@ class Calendar extends React.Component {
     });
 
     return (
-      <div className="overlay-calendar">
-        <div className="calendar-header">
-          <button name="left" onClick={(event) => {this.handleMonthChange(event)}}>Left</button>
-          <b>{`${month} ${currentYear}`}</b>
-          <button name="right" onClick={(event) => {this.handleMonthChange(event)}}>Right</button>
+      <OutsideClickHandler
+      onOutsideClick={() => {
+        this.handleClickOutside();
+      }}>
+        <div id="overlay-calendar">
+          <div className="calendar-container">
+          <div className="calendar-header">
+            <button name="left" onClick={(event) => {this.handleMonthChange(event)}}>Left</button>
+            <b>{`${month} ${currentYear}`}</b>
+            <button name="right" onClick={(event) => {this.handleMonthChange(event)}}>Right</button>
+          </div>
+          <table>
+            <tbody>
+              <tr>
+                {daysOfTheWeek}
+              </tr>
+              {calendarDays}
+            </tbody>
+          </table>
+          <button name="clear" onClick={(event) => {this.clearDates(event)}}>Clear</button>
         </div>
-        <table>
-          <tbody>
-            <tr>
-              {daysOfTheWeek}
-            </tr>
-            {calendarDays}
-          </tbody>
-        </table>
-        <button name="clear" onClick={(event) => {this.clearDates(event)}}>Clear</button>
-      </div>
+        </div>
+        </OutsideClickHandler>
     );
   }
 }
