@@ -122,7 +122,16 @@ class Calendar extends React.Component {
 
   handleSelect(event, date) {
     const { currentMonth, currentYear } = this.state;
-    const fullDate = `${currentYear}-${currentMonth + 1}-${date}`;
+    date = date + "";
+    if (date.length === 1) {
+      date = "0" + date;
+    }
+
+    let month = currentMonth + 1 + "";
+    if (month.length === 1) {
+      month = "0" + month;
+    }
+    const fullDate = `${currentYear}-${month}-${date}`;
     this.props.getSelectedDates(fullDate);
     console.log(fullDate);
   }
