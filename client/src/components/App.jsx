@@ -47,6 +47,7 @@ class App extends React.Component {
     this.styleDisplayDate = this.styleDisplayDate.bind(this);
     this.validateStay = this.validateStay.bind(this);
     this.calculateBase = this.calculateBase.bind(this);
+    this.hideCalendar = this.hideCalendar.bind(this);
   }
 
   componentDidMount() {
@@ -133,6 +134,12 @@ class App extends React.Component {
         });
       }
     });
+  }
+
+  hideCalendar() {
+    this.setState({
+      showCalendar: false,
+    })
   }
 
   changeView(event) {
@@ -248,7 +255,7 @@ class App extends React.Component {
               { selectedCheckOut ? this.styleDisplayDate(selectedCheckOut) : "Checkout" }</a>
           </div>
 
-          <Calendar id={id} view={view} getSelectedDates={this.getSelectedDates} />
+          <Calendar id={id} view={view} getSelectedDates={this.getSelectedDates} hideCalendar={this.hideCalendar} />
 
           <span className="titles">Guests</span>
           <div id="guests-display" onClick={this.displayGuest}>{displayGuests} {displayInfants}</div>
