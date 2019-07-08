@@ -48,6 +48,7 @@ class App extends React.Component {
     this.validateStay = this.validateStay.bind(this);
     this.calculateBase = this.calculateBase.bind(this);
     this.hideCalendar = this.hideCalendar.bind(this);
+    this.calculateExtraGuests = this.calculateExtraGuests.bind(this);
   }
 
   componentDidMount() {
@@ -94,8 +95,12 @@ class App extends React.Component {
 
   getSelectedGuests(type, number) {
     console.log('getting selected guests at parents');
+    const { adults, children } = this.state;
+    let previousTotal = adults + children;
     this.setState({
       [type]: number,
+    }, () => {
+      this.calculateExtraGuests(previousTotal);
     });
   }
 
@@ -218,6 +223,32 @@ class App extends React.Component {
       });
   }
 
+  calculateExtraGuests(previousTotal) {
+    const { adults, children, extra_guest_cap, extra_guest_charge } = this.state;
+    let prevAddlCharge;
+    if (previousTotal > extra_guest_cap) {
+      prevAddlCharge = (previousTotal - extra_guest_cap) * extra_guest_charge;
+    } else {
+      prevAddlCharge = 0;
+    }
+
+    let currTotal = adults + children;
+    let currAddlCharge;
+    if (currTotal > extra_guest_cap) {
+      currAddlCharge = (currTotal - extra_guest_cap) * extra_guest_charge;
+    } else {
+      currAddlCharge = 0;
+    }
+
+    let chargeDiff = currAddlCharge - prevAddlCharge;
+
+    console.log("charge difference", chargeDiff);
+
+    this.setState(prevState => ({
+      total_base: prevState.total_base + chargeDiff,
+    }));
+  }
+
   render() {
     const { id, displayCalendar, view, max_guests, star_rating, review_count, base_rate, cleaning_charge, local_tax,
       adults, children, infants, selectedCheckIn, selectedCheckOut, displayPricing, total_base, duration } = this.state;
@@ -237,7 +268,16 @@ class App extends React.Component {
       displayInfants = `, ${infants} infants`;  
     }
 
-    let perNight = Math.round(total_base / duration);
+    // if duration does not exist (no dates have been selected), then display the base_rate
+    // if duration does not exist but adults + children > 1 (meaning guests have been selected), then display total_base/1
+    // if duration does exist, display perNight 
+    let perNight;
+    if (duration) {
+      perNight = Math.round(total_base / duration);
+    } else if (!duration && adults + children > 1) {
+      perNight = base_rate + total_base; // total base would only include the additional guest charge at this point since no dates selected
+    }
+    // let perNight = Math.round(total_base / duration);
     let serviceCharge = total_base * .08;
     let occupancyFees = local_tax * (total_base + serviceCharge + cleaning_charge);
     let aggregate = total_base + serviceCharge + occupancyFees + cleaning_charge;
