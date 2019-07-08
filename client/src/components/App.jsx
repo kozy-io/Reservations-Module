@@ -1,6 +1,8 @@
+/* eslint-disable react/jsx-wrap-multilines */
 import React from 'react';
 import axios from 'axios';
 import moment from 'moment';
+import NumberFormat from 'react-number-format';
 
 import Calendar from './Calendar.jsx';
 import Guest from './Guest.jsx';
@@ -200,12 +202,14 @@ class App extends React.Component {
             total += this.state.base_rate;
           }
         }
-        this.setState({total_base: total});
+        this.setState({ total_base: total }, () => {
+          this.setState({ displayPricing: true });
+        });
       });
   }
 
   render() {
-    const { id, displayCalendar, view, max_guests, star_rating, review_count, base_rate,
+    const { id, displayCalendar, view, max_guests, star_rating, review_count, base_rate, cleaning_charge, local_tax,
       adults, children, infants, selectedCheckIn, selectedCheckOut, displayPricing, total_base, duration } = this.state;
 
     let displayGuests = "";
@@ -224,6 +228,9 @@ class App extends React.Component {
     }
 
     let perNight = Math.round(total_base / duration);
+    let serviceCharge = total_base * .08;
+    let occupancyFees = local_tax * (total_base + serviceCharge + cleaning_charge);
+    let aggregate = total_base + serviceCharge + occupancyFees + cleaning_charge;
 
 
     return (
@@ -231,7 +238,7 @@ class App extends React.Component {
         <div className="reservations-inner">
           <div className="price-displayed">${ perNight || base_rate}</div>
           <div className="ratings-displayed">***** {review_count}</div>
-          <p></p>
+          <p />
 
           <span className="titles">Dates</span>
           <div className="dates-options">
@@ -248,15 +255,34 @@ class App extends React.Component {
           <Guest maxGuests={max_guests} getSelectedGuests={this.getSelectedGuests} />
 
           { displayPricing ?
-          <div class="pricing">
-          <div id="text-base-fee">${base_rate} x 2 nights</div>
-          <div id="text-misc-fees">
-            Cleaning fee
-            <p></p>
-            Service charge
+          <div className="pricing">
+            <div id="text-base-fee-description">${perNight} x {duration} {duration > 1 ? "nights" : "night" }
+              <div className="right">
+                <NumberFormat value={total_base} displayType={'text'} 
+                  thousandSeparator={true} prefix={'$'} decimalScale={0}/>
+              </div>
+            </div>
+
+            <div id="text-misc-fees-description">
+              Cleaning fee
+              <div className="right">${cleaning_charge}</div>
+              <p></p>
+              Service charge
+              <div className="right">
+                <NumberFormat value={serviceCharge} displayType={'text'} 
+                  thousandSeparator={true} prefix={'$'} decimalScale={0}/>
+              </div>
+            </div>
+            
+            <div id="text-taxes">Occupancy taxes and fees
+            <div className="right">
+            <NumberFormat value={occupancyFees} displayType={'text'} 
+            thousandSeparator={true} prefix={'$'} decimalScale={0}/></div>
           </div>
-          <div id="text-taxes">Occupancy taxes and fees</div>
-            <div id="total-price">Total</div>
+            <div id="total-price">Total
+              <div className="right"><NumberFormat value={aggregate} displayType={'text'} 
+                thousandSeparator={true} prefix={'$'} decimalScale={0}/></div>
+            </div>
           </div>
           : null }
 
