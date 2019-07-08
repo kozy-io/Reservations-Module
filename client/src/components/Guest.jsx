@@ -31,7 +31,7 @@ class Guest extends React.Component {
   }
 
   handleClickOutside() {
-    document.getElementById("overlay-guest").style.display = "none";
+    document.getElementById('overlay-guest').style.display = 'none';
   }
 
   selectGuests(event) {
@@ -102,7 +102,7 @@ class Guest extends React.Component {
     if (adult === 1) {
       adultStatusMinus = 'button-disabled';
     }
-    // child and infant cannot go below 0 
+    // child and infant cannot go below 0
     if (child === 0) {
       childStatusMinus = 'button-disabled';
     }
@@ -115,32 +115,32 @@ class Guest extends React.Component {
     }
 
     return (
-    <div ref={node => this.node = node}>
-    <div id="overlay-guest">
-      <div className="guest-form">
+      <div ref={node => this.node = node}>
+        <div id="overlay-guest">
+          <div className="guest-form">
         <div id="guest-type">
           Adult
-              <button name="adult-minus" className={adultStatusMinus} onClick={this.selectGuests}>-</button>
-              <span>{adult}</span>
-              <button name="adult-plus" className={adultStatusPlus} onClick={this.selectGuests}>+</button>
+          <button name="adult-minus" className={adultStatusMinus} onClick={this.selectGuests}>-</button>
+          <span>{adult}</span>
+          <button name="adult-plus" className={adultStatusPlus} onClick={this.selectGuests}>+</button>
         </div>
 
-          <div id="guest-type">
+        <div id="guest-type">
           Child
-              <button name="child-minus" className={childStatusMinus} onClick={this.selectGuests}>-</button>
-              <span>{child}</span>
-              <button name="child-plus" className={childStatusPlus} onClick={this.selectGuests}>+</button>
+            <button name="child-minus" className={childStatusMinus} onClick={this.selectGuests}>-</button>
+            <span>{child}</span>
+            <button name="child-plus" className={childStatusPlus} onClick={this.selectGuests}>+</button>
           </div>
-  
-          <div id="guest-type">
+
+        <div id="guest-type">
           Infant
-              <button name="infant-minus" className={infantStatusMinus} onClick={this.selectGuests}>-</button>
-              <span>{infant}</span>
-              <button name="infant-plus" className={infantStatusPlus} onClick={this.selectGuests}>+</button>
+            <button name="infant-minus" className={infantStatusMinus} onClick={this.selectGuests}>-</button>
+            <span>{infant}</span>
+            <button name="infant-plus" className={infantStatusPlus} onClick={this.selectGuests}>+</button>
           </div>
       </div>
-    </div>
-    </div>
+        </div>
+      </div>
     );
   }
 }

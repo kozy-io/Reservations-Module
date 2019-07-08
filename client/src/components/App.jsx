@@ -27,6 +27,7 @@ class App extends React.Component {
       adults: 1,
       children: 0,
       infants: 0,
+      showGuest: false,
       
     };
 
@@ -82,13 +83,19 @@ class App extends React.Component {
   }
 
   displayGuest() {
-    let currentDisplay = document.getElementById("overlay-guest").style.display;
-    console.log(currentDisplay);
-    if (currentDisplay === "none") {
-      document.getElementById("overlay-guest").style.display = "block";
+    if (this.state.showGuest === false) {
+      this.setState(prevState => ({
+        showGuest: !prevState.showGuest,
+      }), () => {
+        document.getElementById("overlay-guest").style.display = "block";
+      });
+    } else {
+      this.setState(prevState => ({
+        showGuest: !prevState.showGuest,
+      }), () => {
+        document.getElementById("overlay-guest").style.display = "none";
+      });
     }
-    document.getElementById("overlay-guest").style.display = "block";
-    console.log(currentDisplay);
   }
 
   changeView(event) {

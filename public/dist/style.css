@@ -15,7 +15,6 @@ body {
   top: 210px;
   left: 50px;
   width: 310px;
-  height: 60px;
   z-index: 10;
   background: #ffffff;
 }
@@ -169,6 +168,7 @@ table {
 .guest-form {
   width: 300px;
   margin: 0px;
+  padding: 10px;
 
 }
 
