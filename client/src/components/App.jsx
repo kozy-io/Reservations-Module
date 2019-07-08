@@ -27,6 +27,7 @@ class App extends React.Component {
       adults: 1,
       children: 0,
       infants: 0,
+      showGuest: false,
       
     };
 
@@ -82,10 +83,19 @@ class App extends React.Component {
   }
 
   displayGuest() {
-    // this.setState(prevState => ({
-    //   displayGuest: !prevState.displayGuest,
-    // }));
-    document.getElementById("overlay-test").style.display = "block";
+    if (this.state.showGuest === false) {
+      this.setState(prevState => ({
+        showGuest: !prevState.showGuest,
+      }), () => {
+        document.getElementById("overlay-guest").style.display = "block";
+      });
+    } else {
+      this.setState(prevState => ({
+        showGuest: !prevState.showGuest,
+      }), () => {
+        document.getElementById("overlay-guest").style.display = "none";
+      });
+    }
   }
 
   changeView(event) {
@@ -121,17 +131,16 @@ class App extends React.Component {
       <div className="reservations-container">
         <div className="reservations-inner">
           <div className="price-displayed">${Number(base_rate)}</div>
-          ***** {review_count}
+          <div className="ratings-displayed">***** {review_count}</div>
           <p></p>
-          Dates
+          <span className="titles">Dates</span>
           <div className="dates-options">
-            <button name="in" onClick={(event) => {this.changeView(event)}}>Check In</button> -> 
-            <button name="out" onClick={(event) => {this.changeView(event)}}>Check Out</button>
+            <a name="in" className="options-text-checkin" onClick={(event) => {this.changeView(event)}}>Check-in</a>
+            <a className="options-text-arrow"></a>
+            <a className="options-text-checkout" name="out" onClick={(event) => {this.changeView(event)}}>Checkout</a>
           </div>
-          Guests
-          <div className="guests-options">
-            <span onClick={this.displayGuest}>{displayGuests} {displayInfants}</span>
-          </div>
+          <span className="titles">Guests</span>
+          <div id="guests-display" onClick={this.displayGuest}>{displayGuests} {displayInfants}</div>
           {
             displayCalendar ? <Calendar id={id} view={view} getSelectedDates={this.getSelectedDates} /> : null
           }
