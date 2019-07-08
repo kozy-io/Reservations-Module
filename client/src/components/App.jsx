@@ -16,6 +16,7 @@ class App extends React.Component {
       extra_guest_charge: 0,
       id: null,
       local_tax: 0.09,
+      cleaning_charge: 100,
       max_guests: 0,
       min_stay: 0,
       review_count: 0,
@@ -52,8 +53,8 @@ class App extends React.Component {
           min_stay, review_count, star_rating } = response.data;
         
         this.setState({
-          base_rate, currency, extra_guest_cap, extra_guest_charge, id, local_tax, max_guests,
-          min_stay, review_count, star_rating
+          currency, extra_guest_cap, extra_guest_charge, id, local_tax, max_guests,
+          min_stay, review_count, star_rating, base_rate: Number(base_rate),
         }, () => {
           this.setState({
             displayCalendar: false,
@@ -152,7 +153,7 @@ class App extends React.Component {
     return (
       <div className="reservations-container">
         <div className="reservations-inner">
-          <div className="price-displayed">${Number(base_rate)}</div>
+          <div className="price-displayed">${base_rate}</div>
           <div className="ratings-displayed">***** {review_count}</div>
           <p></p>
           <span className="titles">Dates</span>
@@ -164,6 +165,19 @@ class App extends React.Component {
           <div id="guests-display" onClick={this.displayGuest}>{displayGuests} {displayInfants}</div>
           <Guest maxGuests={max_guests} getSelectedGuests={this.getSelectedGuests} />
           <Calendar id={id} view={view} getSelectedDates={this.getSelectedDates} />
+
+          <div id="text-base-fee">${base_rate} x 2 nights</div>
+
+          <div id="text-misc-fees">
+            Cleaning fee
+            <p></p>
+            Service charge
+          </div>
+
+          <div id="text-taxes">Occupancy taxes and fees</div>
+
+          <div id="total-price">Total</div>
+
         </div>
       </div>
     );

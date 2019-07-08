@@ -196,6 +196,7 @@ class Calendar extends React.Component {
         this.handleClickOutside();
       }}>
         <div id="overlay-calendar">
+          <div className="calendar-container">
           <div className="calendar-header">
             <button name="left" onClick={(event) => {this.handleMonthChange(event)}}>Left</button>
             <b>{`${month} ${currentYear}`}</b>
@@ -210,6 +211,7 @@ class Calendar extends React.Component {
             </tbody>
           </table>
           <button name="clear" onClick={(event) => {this.clearDates(event)}}>Clear</button>
+        </div>
         </div>
         </OutsideClickHandler>
     );
