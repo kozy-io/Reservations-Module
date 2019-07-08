@@ -23,11 +23,12 @@ class App extends React.Component {
       selectedCheckIn: "2019-01-01",
       selectedCheckOut: "2019-01-01",
       displayCalendar: false,
-      view: 'out',
+      view: null,
       adults: 1,
       children: 0,
       infants: 0,
       showGuest: false,
+      showCalendar: false,
       
     };
 
@@ -98,6 +99,27 @@ class App extends React.Component {
     }
   }
 
+  displayCalendar(event) {
+    const { name } = event.target;
+    this.setState({
+      view: name,
+    }, () => {
+      if (this.state.showCalendar === false) {
+        this.setState(prevState => ({
+          showCalendar: !prevState.showCalendar,
+        }), () => {
+          document.getElementById("overlay-calendar").style.display = "block";
+        });
+      } else {
+        this.setState(prevState => ({
+          showCalendar: !prevState.showCalendar,
+        }), () => {
+          document.getElementById("overlay-calendar").style.display = "none";
+        });
+      }
+    });
+  }
+
   changeView(event) {
     const { name } = event.target;
     this.setState(prevState => ({
@@ -135,21 +157,14 @@ class App extends React.Component {
           <p></p>
           <span className="titles">Dates</span>
           <div className="dates-options">
-            <a name="in" className="options-text-checkin" onClick={(event) => {this.changeView(event)}}>Check-in</a>
-            <a className="options-text-arrow"></a>
-            <a className="options-text-checkout" name="out" onClick={(event) => {this.changeView(event)}}>Checkout</a>
+            <a name="in" className="options-text-checkin" onClick={(event) => {this.displayCalendar(event);}}>Check-in</a>
+            <a className="options-text-checkout" name="out" onClick={(event) => {this.displayCalendar(event);}}>Checkout</a>
           </div>
           <span className="titles">Guests</span>
           <div id="guests-display" onClick={this.displayGuest}>{displayGuests} {displayInfants}</div>
-          {
-            displayCalendar ? <Calendar id={id} view={view} getSelectedDates={this.getSelectedDates} /> : null
-          }
-          
-          <Guest maxGuests={max_guests} getSelectedGuests={this.getSelectedGuests} /> 
-          
+          <Guest maxGuests={max_guests} getSelectedGuests={this.getSelectedGuests} />
+          <Calendar id={id} view={view} getSelectedDates={this.getSelectedDates} />
         </div>
-
-        
       </div>
     );
   }
