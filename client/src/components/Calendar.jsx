@@ -31,6 +31,7 @@ class Calendar extends React.Component {
 
   handleClickOutside() {
     document.getElementById('overlay-calendar').style.display = 'none';
+    this.props.hideCalendar();
   }
 
   getReservedDates() {
@@ -122,7 +123,16 @@ class Calendar extends React.Component {
 
   handleSelect(event, date) {
     const { currentMonth, currentYear } = this.state;
-    const fullDate = `${currentYear}-${currentMonth + 1}-${date}`;
+    date = date + "";
+    if (date.length === 1) {
+      date = "0" + date;
+    }
+
+    let month = currentMonth + 1 + "";
+    if (month.length === 1) {
+      month = "0" + month;
+    }
+    const fullDate = `${currentYear}-${month}-${date}`;
     this.props.getSelectedDates(fullDate);
     console.log(fullDate);
   }
@@ -137,7 +147,7 @@ class Calendar extends React.Component {
 
   render() {
     // eslint-disable-next-line react/destructuring-assignment
-    let selectedDate = 1;
+    let selectedDate = [0];
 
     const month = this.getMonth();
     const { currentYear, reserved } = this.state;
@@ -162,7 +172,7 @@ class Calendar extends React.Component {
     for (let j = 1; j <= daysInMonth; j += 1) {
       existingDays.push(
         <td onClick={(event, date) => { this.handleSelect(event, j)}} key={j}
-          className={`${this.getStatus(j)}${selectedDate === j ? '-selected' : '-normal'}`}>{j}</td>,
+          className={`${this.getStatus(j)}${selectedDate.includes(j) ? '-selected' : '-normal'}`}>{j}</td>,
       );
     }
 

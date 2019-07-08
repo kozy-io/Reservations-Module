@@ -7,12 +7,22 @@ body {
   position: relative;
 }
 
-#text-base-fee {
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+
+#text-base-fee-description {
   margin: 10px 0px 0px 0px;
   font-size: 13px;
 }
 
-#text-misc-fees {
+
+#text-misc-fees-description {
   margin: 10px 0px 10px 0px;
   font-size: 13px;
   border-top: 1px solid #eeeeee;
@@ -36,7 +46,7 @@ body {
   display: none; /* Hidden by default */
   position: absolute;
   border: 1px solid #eeeeee;
-  top: 226px;
+  top: 223px;
   left: 50px;
   z-index: 10;
   background: #ffffff;
@@ -127,7 +137,7 @@ body {
 }
 
 .dates-options {
-  width: 300px;
+  width: 310px;
   height: 30px;
   padding: 6px;
   border: 1px solid;
@@ -201,9 +211,9 @@ table {
 
 /* Guests */
 .guest-form {
-  width: 290px;
+  width: 300px;
   margin: 0px;
-  padding: 15px;
+  padding: 6px;
   border-top: 2px solid #02A699;
   box-shadow: 0 1px 1px 2px rgba(72, 72, 72, 0.16)
 
