@@ -101,7 +101,7 @@ class App extends React.Component {
     this.setState({
       [type]: number,
     }, () => {
-      this.calculateExtraGuests(previousTotal);
+      this.calculateExtraGuests();
     });
   }
 
@@ -174,7 +174,7 @@ class App extends React.Component {
         this.setState({
           duration,
         }, () => {
-          this.calculateBase();
+          this.calculateExtraGuests(this.calculateBase);
         });
       } else {
         console.log('this is not a valid stay');
@@ -227,7 +227,7 @@ class App extends React.Component {
       });
   }
 
-  calculateExtraGuests() {
+  calculateExtraGuests(callback = () => {}) {
     console.log("calculating extra guests...");
     const { adults, children, extra_guest_cap, extra_guest_charge, selectedCheckIn, selectedCheckOut } = this.state;
     let currTotal = adults + children;
@@ -250,6 +250,8 @@ class App extends React.Component {
 
     this.setState({
       extraGuestFee: currAddlCharge,
+    }, () => {
+      callback();
     });
   }
 
