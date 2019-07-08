@@ -36,6 +36,7 @@ class App extends React.Component {
       displayPricing: false,
       total_base: null,
       duration: null,
+      extraGuestFee: 0,
       
     };
 
@@ -48,6 +49,7 @@ class App extends React.Component {
     this.validateStay = this.validateStay.bind(this);
     this.calculateBase = this.calculateBase.bind(this);
     this.hideCalendar = this.hideCalendar.bind(this);
+    this.calculateExtraGuests = this.calculateExtraGuests.bind(this);
   }
 
   componentDidMount() {
@@ -94,8 +96,12 @@ class App extends React.Component {
 
   getSelectedGuests(type, number) {
     console.log('getting selected guests at parents');
+    const { adults, children } = this.state;
+    let previousTotal = adults + children;
     this.setState({
       [type]: number,
+    }, () => {
+      this.calculateExtraGuests();
     });
   }
 
@@ -168,7 +174,7 @@ class App extends React.Component {
         this.setState({
           duration,
         }, () => {
-          this.calculateBase();
+          this.calculateExtraGuests(this.calculateBase);
         });
       } else {
         console.log('this is not a valid stay');
@@ -181,6 +187,7 @@ class App extends React.Component {
     // make a get request for any custom pricing for the month you are in 
     // then, check each one (start at check in, end at check out ) 
     // keep track of total stay 
+    console.log("calculating stay...");
     const { id, selectedCheckIn, selectedCheckOut } = this.state;
 
     const dateIn = moment(selectedCheckIn);
@@ -201,15 +208,17 @@ class App extends React.Component {
       .then((response) => {
         const customDatesOnly = response.data.map(element => element.date);
         const customPricesOnly = response.data.map(item => item.price);
-
+        console.log("getting custom rates...");
+        console.log("here are the custom rates", response.data);
         for (let j = moment(dateIn); j.isBefore(dateOut); j.add(1, 'days')) {
           let item = (j.format('YYYY-MM-DD'));
           let index = customDatesOnly.indexOf(item);
-
           if (index >= 0) {
             total += Number(customPricesOnly[index]);
+            console.log("total is...", total);
           } else {
             total += this.state.base_rate;
+            console.log("total is...", total);
           }
         }
         this.setState({ total_base: total }, () => {
@@ -218,9 +227,37 @@ class App extends React.Component {
       });
   }
 
+  calculateExtraGuests(callback = () => {}) {
+    console.log("calculating extra guests...");
+    const { adults, children, extra_guest_cap, extra_guest_charge, selectedCheckIn, selectedCheckOut } = this.state;
+    let currTotal = adults + children;
+    let currAddlCharge;
+    let stayInDays = 1;
+    // the extra charge should actually be multiplied by the number of nights 
+    if (selectedCheckIn && selectedCheckOut) {
+      const dateIn = moment(selectedCheckIn);
+      const dateOut = moment(selectedCheckOut);
+      stayInDays = dateOut.diff(dateIn, 'days');
+    }
+
+    if (currTotal > extra_guest_cap) {
+      currAddlCharge = (currTotal - extra_guest_cap) * extra_guest_charge * stayInDays;
+    } else {
+      currAddlCharge = 0;
+    }
+    
+    console.log("aggregate extra guest fee", currAddlCharge);
+
+    this.setState({
+      extraGuestFee: currAddlCharge,
+    }, () => {
+      callback();
+    });
+  }
+
   render() {
     const { id, displayCalendar, view, max_guests, star_rating, review_count, base_rate, cleaning_charge, local_tax,
-      adults, children, infants, selectedCheckIn, selectedCheckOut, displayPricing, total_base, duration } = this.state;
+      adults, children, infants, selectedCheckIn, selectedCheckOut, displayPricing, total_base, duration, extraGuestFee } = this.state;
 
     let displayGuests = '';
     let displayInfants = '';
@@ -237,7 +274,18 @@ class App extends React.Component {
       displayInfants = `, ${infants} infants`;  
     }
 
-    let perNight = Math.round(total_base / duration);
+    // if duration does not exist (no dates have been selected), then display the base_rate
+    // if duration does not exist but adults + children > 1 (meaning guests have been selected), then display total base + extra guest / 1
+    // if duration does exist, display perNight 
+    let perNight;
+    if (duration) {
+      perNight = Math.round((total_base + extraGuestFee) / duration);
+    } else if (!duration && adults + children > 1) {
+      perNight = base_rate + extraGuestFee; // total base would only include the additional guest charge at this point since no dates selected
+    } else {
+      perNight = base_rate;
+    }
+
     let serviceCharge = total_base * .08;
     let occupancyFees = local_tax * (total_base + serviceCharge + cleaning_charge);
     let aggregate = total_base + serviceCharge + occupancyFees + cleaning_charge;
@@ -268,7 +316,7 @@ class App extends React.Component {
           <div className="pricing">
             <div id="text-base-fee-description">${perNight} x {duration} {duration > 1 ? 'nights' : 'night' }
               <div className="right">
-                <NumberFormat value={total_base} displayType={'text'} 
+                <NumberFormat value={total_base + extraGuestFee} displayType={'text'} 
                   thousandSeparator={true} prefix={'$'} decimalScale={0}/>
               </div>
             </div>
