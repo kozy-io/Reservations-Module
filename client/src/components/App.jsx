@@ -50,6 +50,8 @@ class App extends React.Component {
     this.calculateBase = this.calculateBase.bind(this);
     this.hideCalendar = this.hideCalendar.bind(this);
     this.calculateExtraGuests = this.calculateExtraGuests.bind(this);
+    this.styleNumber = this.styleNumber.bind(this);
+    this.clearSelectedDates = this.clearSelectedDates.bind(this);
   }
 
   componentDidMount() {
@@ -92,6 +94,14 @@ class App extends React.Component {
         this.validateStay();
       });
     }
+  }
+
+  clearSelectedDates() {
+    this.setState({
+      selectedCheckIn: null,
+      selectedCheckOut: null,
+      displayPricing: false,
+    });
   }
 
   getSelectedGuests(type, number) {
@@ -255,8 +265,13 @@ class App extends React.Component {
     });
   }
 
+  styleNumber(number) {
+    return <NumberFormat value={number} displayType={'text'} 
+    thousandSeparator={true} prefix={'$'} decimalScale={0}/>;
+  }
+
   render() {
-    const { id, displayCalendar, view, max_guests, star_rating, review_count, base_rate, cleaning_charge, local_tax,
+    const { id, displayCalendar, view, max_guests, star_rating, review_count, base_rate, cleaning_charge, local_tax, showGuest,
       adults, children, infants, selectedCheckIn, selectedCheckOut, displayPricing, total_base, duration, extraGuestFee } = this.state;
 
     let displayGuests = '';
@@ -286,16 +301,16 @@ class App extends React.Component {
       perNight = base_rate;
     }
 
-    let serviceCharge = total_base * .08;
-    let occupancyFees = local_tax * (total_base + serviceCharge + cleaning_charge);
-    let aggregate = total_base + serviceCharge + occupancyFees + cleaning_charge;
+    let serviceCharge = (total_base + extraGuestFee) * .08;
+    let occupancyFees = local_tax * (total_base + extraGuestFee + serviceCharge + cleaning_charge);
+    let aggregate = total_base + extraGuestFee + serviceCharge + occupancyFees + cleaning_charge;
 
 
     return (
       <div className="reservations-container">
         <div className="reservations-inner">
-          <div className="price-displayed">${ perNight || base_rate}</div>
-          <div className="ratings-displayed">***** {review_count}</div>
+          <div className="price-displayed">{ this.styleNumber(perNight) || this.styleNumber(base_rate)}</div>
+          <div className="ratings-displayed"><div className="star-reviews"></div>{review_count}</div>
           <p />
 
           <span className="titles">Dates</span>
@@ -306,18 +321,20 @@ class App extends React.Component {
               { selectedCheckOut ? this.styleDisplayDate(selectedCheckOut) : 'Checkout' }</a>
           </div>
 
-          <Calendar id={id} view={view} getSelectedDates={this.getSelectedDates} hideCalendar={this.hideCalendar} />
+          <Calendar id={id} view={view} getSelectedDates={this.getSelectedDates} hideCalendar={this.hideCalendar}
+            clearSelectedDates={this.clearSelectedDates} />
 
           <span className="titles">Guests</span>
-          <div id="guests-display" onClick={this.displayGuest}>{displayGuests} {displayInfants}</div>
+          <div id="guests-display" onClick={this.displayGuest}>{displayGuests} {displayInfants}
+            <div className="right"><i className={showGuest ? "arrow-up" : "arrow-down"} /></div>
+          </div>
           <Guest maxGuests={max_guests} getSelectedGuests={this.getSelectedGuests} />
 
           { displayPricing ?
           <div className="pricing">
-            <div id="text-base-fee-description">${perNight} x {duration} {duration > 1 ? 'nights' : 'night' }
+            <div id="text-base-fee-description">{this.styleNumber(perNight)} x {duration} {duration > 1 ? 'nights' : 'night' }
               <div className="right">
-                <NumberFormat value={total_base + extraGuestFee} displayType={'text'} 
-                  thousandSeparator={true} prefix={'$'} decimalScale={0}/>
+                {this.styleNumber(total_base + extraGuestFee)}
               </div>
             </div>
 
@@ -327,19 +344,20 @@ class App extends React.Component {
               <p></p>
               Service charge
               <div className="right">
-                <NumberFormat value={serviceCharge} displayType={'text'} 
-                  thousandSeparator={true} prefix={'$'} decimalScale={0}/>
+                {this.styleNumber(serviceCharge)}
               </div>
             </div>
             
             <div id="text-taxes">Occupancy taxes and fees
-            <div className="right">
-            <NumberFormat value={occupancyFees} displayType={'text'} 
-            thousandSeparator={true} prefix={'$'} decimalScale={0}/></div>
+            <div className="right">{this.styleNumber(occupancyFees)}
+            </div>
           </div>
             <div id="total-price">Total
-              <div className="right"><NumberFormat value={aggregate} displayType={'text'} 
-                thousandSeparator={true} prefix={'$'} decimalScale={0}/></div>
+              <div className="right">{this.styleNumber(aggregate)}</div>
+            </div>
+            <div id="booking-button">
+            <button type="submit" className="booking" aria-busy="false" data-veloute="book-it-button">
+            <div className="_10cu6uvp">Request to Book</div></button>
             </div>
           </div>
           : null }

@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import OutsideClickHandler from 'react-outside-click-handler';
+import moment from 'moment';
 
 class Calendar extends React.Component {
   constructor(props) {
@@ -83,11 +84,10 @@ class Calendar extends React.Component {
   }
 
   // eslint-disable-next-line react/sort-comp
-  handleMonthChange(event) {
-    const { name } = event.target;
+  handleMonthChange(event, direction) {
     const { currentMonth, currentYear } = this.state;
 
-    if (name === 'right') {
+    if (direction === 'right') {
       const newMonth = (currentMonth + 1) % 12;
       const newYear = (newMonth === 0 ? currentYear + 1 : currentYear );
 
@@ -116,8 +116,11 @@ class Calendar extends React.Component {
     this.setState({
       currentMonth: initialMonth,
       currentYear: initialYear,
+      selectCheckIn: null,
+      selectCheckOut: null,
     }, () => {
-      this.getReservedDates();
+      this.getReservedDates();  // repopulate calendar with current reserved dates
+      this.props.clearSelectedDates();
     });
   }
 
@@ -133,7 +136,20 @@ class Calendar extends React.Component {
       month = "0" + month;
     }
     const fullDate = `${currentYear}-${month}-${date}`;
-    this.props.getSelectedDates(fullDate);
+    
+    if (this.props.view === "in") {
+      this.setState({
+        selectCheckIn: fullDate,
+      }, () => {
+        this.props.getSelectedDates(fullDate);
+      });
+    } else {
+      this.setState({
+        selectCheckOut: fullDate,
+      }, () => {
+        this.props.getSelectedDates(fullDate);
+      });
+    }
     console.log(fullDate);
   }
 
@@ -147,7 +163,8 @@ class Calendar extends React.Component {
 
   render() {
     // eslint-disable-next-line react/destructuring-assignment
-    let selectedDate = [0];
+    const { selectCheckIn, selectCheckOut, currentMonth } = this.state;
+    let selectedDates = [selectCheckIn].concat([selectCheckOut]);
 
     const month = this.getMonth();
     const { currentYear, reserved } = this.state;
@@ -170,9 +187,13 @@ class Calendar extends React.Component {
     const daysInMonth = this.getDaysInMonth();
 
     for (let j = 1; j <= daysInMonth; j += 1) {
+      let dateFormat = currentYear + '-' + (currentMonth+1) + '-' + j;
+      dateFormat = moment(dateFormat, 'YYYY-MM-DD');
+      let clickDate = (dateFormat.format('YYYY-MM-DD'));
+
       existingDays.push(
         <td onClick={(event, date) => { this.handleSelect(event, j)}} key={j}
-          className={`${this.getStatus(j)}${selectedDate.includes(j) ? '-selected' : '-normal'}`}>{j}</td>,
+          className={`${this.getStatus(j)}${selectedDates.includes(clickDate) ? '-selected' : '-normal'}`}>{j}</td>,
       );
     }
 
@@ -208,10 +229,21 @@ class Calendar extends React.Component {
         <div id="overlay-calendar">
           <div className="calendar-container">
           <div className="calendar-header">
-            <button name="left" onClick={(event) => {this.handleMonthChange(event)}}>Left</button>
+            <div id="calendar-left-arrow">
+            <svg className="svg-left-arrow" focusable="false" viewBox="0 0 1000 1000" 
+              onClick={(event, direction) => {this.handleMonthChange(event, "left")}}>
+                <path d="M336 275L126 485h806c13 
+                0 23 10 23 23s-10 23-23 23H126l210 210c11 11 11 21 0 32-5 
+                5-10 7-16 7s-11-2-16-7L55 524c-11-11-11-21 0-32l249-249c21-22 
+                53 10 32 32z"></path></svg>
+            </div>
             <b>{`${month} ${currentYear}`}</b>
-            <button name="right" onClick={(event) => {this.handleMonthChange(event)}}>Right</button>
-          </div>
+            <div id="calendar-right-arrow">
+            <svg className="svg-right-arrow" focusable="false" viewBox="0 0 1000 1000"
+             onClick={(event, direction) => {this.handleMonthChange(event, "right")}}><path d="M694 242l249 250c12 11 12 21 
+             1 32L694 773c-5 5-10 7-16 7s-11-2-16-7c-11-11-11-21 0-32l210-210H68c-13 0-23-10-23-23s10-23 
+             23-23h806L662 275c-21-22 11-54 32-33z"></path></svg>
+            </div></div>
           <table>
             <tbody>
               <tr>
