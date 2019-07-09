@@ -21,6 +21,7 @@ class Calendar extends React.Component {
       selectCheckOut: 0,
       reserved: [],
       invalidCheckIn: false,
+      invalidCheckOut: false,
       display: false,
     };
 
@@ -31,7 +32,7 @@ class Calendar extends React.Component {
     this.handleMonthChange = this.handleMonthChange.bind(this);
     this.clearDates = this.clearDates.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
-    this.getStatusAfterSelect = this.getStatusAfterSelect.bind(this);
+    this.getStatusAfterSelectCheckIn = this.getStatusAfterSelectCheckIn.bind(this);
     this.validateStay = this.validateStay.bind(this);
   }
 
@@ -61,7 +62,7 @@ class Calendar extends React.Component {
 
     const {
       currentMonth, currentYear, initialMonth, initialYear, reserved,
-      currentDay 
+      currentDay, selectCheckIn, selectCheckOut, invalidCheckIn, invalidCheckOut,
     } = this.state;
 
     const { view } = this.props;
@@ -88,15 +89,21 @@ class Calendar extends React.Component {
         return 'week-days-disabled';
       }
     }
-    if (this.state.selectCheckIn || this.state.selectCheckOut) {
-      return this.getStatusAfterSelect(date);
+    if (selectCheckIn && !selectCheckOut) {
+      return this.getStatusAfterSelectCheckIn(date);
     }
+    if (selectCheckOut && !selectCheckIn) {
+      return this.getStatusAfterSelectCheckOut(date);
+    }
+    // if (selectCheckIn && selectCheckOut && invalidCheckIn && invalidCheckOut) {
+    //   return 
+    // }
+
     return 'week-days-active';
   }
 
-  getStatusAfterSelect() {
+  getStatusAfterSelectCheckIn() {
     const { invalidCheckIn } = this.state;
-    const { view } = this.props;
     if (invalidCheckIn) {
       return 'week-days-disabled';
     } else {
@@ -104,26 +111,50 @@ class Calendar extends React.Component {
     }
   }
 
-  validateStay() {
-    const { selectCheckIn, reserved, currentYear, currentMonth } = this.state;
-    const { minStay } = this.props;
-    let checkIn = moment(selectCheckIn);
-    let validCheckOut = checkIn.clone().add(minStay, 'days');
-    const range = moment.range(checkIn, moment(validCheckOut));
+  getStatusAfterSelectCheckOut(date) {
+    const { invalidCheckOut } = this.state;
+    if (invalidCheckOut) {
+      return 'week-days-disabled';
+    } else {
+      return 'week-days-active';
+    }
+  }
+
+  validateStay(callback) {
+    const { selectCheckIn, reserved, currentYear, currentMonth, selectCheckOut } = this.state;
+    const { minStay, view } = this.props;
+
 
     let fullReservedDates = reserved.map((day) => {
       const date = `${currentYear}-${currentMonth + 1}-${day}`;
       return moment(date, 'YYYY-MM-DD');
     });
 
-
-    for (let i = 0; i < fullReservedDates.length; i += 1) {
-      if (range.contains(fullReservedDates[i])) {
-        console.log('here');
-        // eslint-disable-next-line react/no-unused-state
-        this.setState({ invalidCheckIn: true });
+    if (view === 'in') {
+      let checkIn = moment(selectCheckIn);
+      let validCheckOut = checkIn.clone().add(minStay, 'days');
+      const range = moment.range(checkIn, moment(validCheckOut));
+  
+      for (let i = 0; i < fullReservedDates.length; i += 1) {
+        if (range.contains(fullReservedDates[i])) {
+          // eslint-disable-next-line react/no-unused-state
+          this.setState({ invalidCheckIn: true });
+        }
       }
     }
+
+    if (view === 'out') {
+      let checkOut = moment(selectCheckOut);
+      let validCheckIn = checkOut.clone().subtract(minStay, 'days');
+      const range = moment.range(moment(validCheckIn), checkOut);
+      for (let j = 0; j < fullReservedDates.length; j += 1) {
+        if (range.contains(fullReservedDates[j])) {
+          this.setState({ invalidCheckOut: true });
+        }
+      }
+      console.log("invalid checkout? ", this.state.invalidCheckOut);
+    }
+    callback();
   }
 
   getStartingDay() {
@@ -174,6 +205,7 @@ class Calendar extends React.Component {
       selectCheckIn: null,
       selectCheckOut: null,
       invalidCheckIn: false,
+      invalidCheckOut: false,
     }, () => {
       this.getReservedDates();  // repopulate calendar with current reserved dates
       this.props.clearSelectedDates();
@@ -198,15 +230,17 @@ class Calendar extends React.Component {
       this.setState({
         selectCheckIn: fullDate,
       }, () => {
-        this.validateStay();
-        this.props.getSelectedDates(fullDate);
+        this.validateStay(() => {
+          this.props.getSelectedDates(fullDate);
+        });
       });
     } else {
       this.setState({
         selectCheckOut: fullDate,
       }, () => {
-        this.validateStay();
-        this.props.getSelectedDates(fullDate);
+        this.validateStay(() => {
+          this.props.getSelectedDates(fullDate);
+        });
       });
     }
     console.log(fullDate);
