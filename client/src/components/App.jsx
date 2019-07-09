@@ -50,6 +50,8 @@ class App extends React.Component {
     this.calculateBase = this.calculateBase.bind(this);
     this.hideCalendar = this.hideCalendar.bind(this);
     this.calculateExtraGuests = this.calculateExtraGuests.bind(this);
+    this.styleNumber = this.styleNumber.bind(this);
+    this.clearSelectedDates = this.clearSelectedDates.bind(this);
   }
 
   componentDidMount() {
@@ -82,22 +84,32 @@ class App extends React.Component {
     if (view === 'in') {
       this.setState({
         selectedCheckIn: date,
+        view: 'out',
       }, () => {
         this.validateStay();
       });
     } else {
       this.setState({
         selectedCheckOut: date,
+        view: 'in',
       }, () => {
         this.validateStay();
       });
     }
   }
 
+  // eslint-disable-next-line react/sort-comp
+  clearSelectedDates() {
+    this.setState({
+      selectedCheckIn: null,
+      selectedCheckOut: null,
+      displayPricing: false,
+    });
+  }
+
   getSelectedGuests(type, number) {
     console.log('getting selected guests at parents');
     const { adults, children } = this.state;
-    let previousTotal = adults + children;
     this.setState({
       [type]: number,
     }, () => {
@@ -145,7 +157,8 @@ class App extends React.Component {
   hideCalendar() {
     this.setState({
       showCalendar: false,
-    })
+      view: null,
+    });
   }
 
   changeView(event) {
@@ -158,19 +171,18 @@ class App extends React.Component {
 
   styleDisplayDate(date) {
     let data = date.split('-');
-    return data[1] + '/' + data[2] + '/' + data[0];
+      return data[1] + '/' + data[2] + '/' + data[0];
   }
 
   validateStay(reserved) {
+    console.log('here');
     const { selectedCheckIn, selectedCheckOut, min_stay } = this.state;
-    // work only with the current month 
     if (selectedCheckIn && selectedCheckOut) {
       const dateIn = moment(selectedCheckIn);
       const dateOut = moment(selectedCheckOut);
       const duration = dateOut.diff(dateIn, 'days');
 
       if (duration >= min_stay) {
-        console.log('this is a valid stay!');
         this.setState({
           duration,
         }, () => {
@@ -208,17 +220,13 @@ class App extends React.Component {
       .then((response) => {
         const customDatesOnly = response.data.map(element => element.date);
         const customPricesOnly = response.data.map(item => item.price);
-        console.log("getting custom rates...");
-        console.log("here are the custom rates", response.data);
         for (let j = moment(dateIn); j.isBefore(dateOut); j.add(1, 'days')) {
           let item = (j.format('YYYY-MM-DD'));
           let index = customDatesOnly.indexOf(item);
           if (index >= 0) {
             total += Number(customPricesOnly[index]);
-            console.log("total is...", total);
           } else {
             total += this.state.base_rate;
-            console.log("total is...", total);
           }
         }
         this.setState({ total_base: total }, () => {
@@ -255,8 +263,13 @@ class App extends React.Component {
     });
   }
 
+  styleNumber(number) {
+    return <NumberFormat value={number} displayType={'text'} 
+    thousandSeparator={true} prefix={'$'} decimalScale={0}/>;
+  }
+
   render() {
-    const { id, displayCalendar, view, max_guests, star_rating, review_count, base_rate, cleaning_charge, local_tax,
+    const { id, displayCalendar, view, max_guests, star_rating, review_count, min_stay, base_rate, cleaning_charge, local_tax, showGuest,
       adults, children, infants, selectedCheckIn, selectedCheckOut, displayPricing, total_base, duration, extraGuestFee } = this.state;
 
     let displayGuests = '';
@@ -274,9 +287,19 @@ class App extends React.Component {
       displayInfants = `, ${infants} infants`;  
     }
 
-    // if duration does not exist (no dates have been selected), then display the base_rate
-    // if duration does not exist but adults + children > 1 (meaning guests have been selected), then display total base + extra guest / 1
-    // if duration does exist, display perNight 
+    let checkInView;
+    let checkOutView;
+    if (view === 'out') {
+      checkOutView = <div className="check-background">Checkout</div>;
+      checkInView = 'Check-in';
+    } else if (view === 'in') {
+      checkInView = <div className="check-background">Check-in</div>;
+      checkOutView = 'Checkout';
+    } else {
+      checkInView = 'Check-in';
+      checkOutView = 'Checkout';
+    }
+
     let perNight;
     if (duration) {
       perNight = Math.round((total_base + extraGuestFee) / duration);
@@ -286,38 +309,48 @@ class App extends React.Component {
       perNight = base_rate;
     }
 
-    let serviceCharge = total_base * .08;
-    let occupancyFees = local_tax * (total_base + serviceCharge + cleaning_charge);
-    let aggregate = total_base + serviceCharge + occupancyFees + cleaning_charge;
+    let serviceCharge = (total_base + extraGuestFee) * .08;
+    let occupancyFees = local_tax * (total_base + extraGuestFee + serviceCharge + cleaning_charge);
+    let aggregate = total_base + extraGuestFee + serviceCharge + occupancyFees + cleaning_charge;
 
 
     return (
       <div className="reservations-container">
         <div className="reservations-inner">
-          <div className="price-displayed">${ perNight || base_rate}</div>
-          <div className="ratings-displayed">***** {review_count}</div>
+          <div className="price-displayed">{ this.styleNumber(perNight) || this.styleNumber(base_rate)}</div>
+          <div className="ratings-displayed"><div className="star-reviews"></div>{review_count}</div>
           <p />
 
           <span className="titles">Dates</span>
           <div className="dates-options">
             <a name="in" className="options-text-checkin" onClick={(event) => {this.displayCalendar(event);}}>
-              { selectedCheckIn ? this.styleDisplayDate(selectedCheckIn) : 'Check-in' }</a>
-            <a className="options-text-checkout" name="out" onClick={(event) => {this.displayCalendar(event);}}>
-              { selectedCheckOut ? this.styleDisplayDate(selectedCheckOut) : 'Checkout' }</a>
-          </div>
+              { selectedCheckIn ? this.styleDisplayDate(selectedCheckIn) : checkInView}</a>
 
-          <Calendar id={id} view={view} getSelectedDates={this.getSelectedDates} hideCalendar={this.hideCalendar} />
+
+
+
+            
+            
+            
+              <a className="options-text-checkout" name="out" onClick={(event) => {this.displayCalendar(event);}}>
+              { selectedCheckOut ? this.styleDisplayDate(selectedCheckOut) : checkOutView }</a>
+          </div>
+          { this.state.id ? 
+          <Calendar id={id} view={view} getSelectedDates={this.getSelectedDates} hideCalendar={this.hideCalendar}
+            clearSelectedDates={this.clearSelectedDates} minStay={min_stay} />
+            : null }
 
           <span className="titles">Guests</span>
-          <div id="guests-display" onClick={this.displayGuest}>{displayGuests} {displayInfants}</div>
+          <div id="guests-display" onClick={this.displayGuest}>{displayGuests} {displayInfants}
+            <div className="right"><i className={showGuest ? "arrow-up" : "arrow-down"} /></div>
+          </div>
           <Guest maxGuests={max_guests} getSelectedGuests={this.getSelectedGuests} />
 
           { displayPricing ?
           <div className="pricing">
-            <div id="text-base-fee-description">${perNight} x {duration} {duration > 1 ? 'nights' : 'night' }
+            <div id="text-base-fee-description">{this.styleNumber(perNight)} x {duration} {duration > 1 ? 'nights' : 'night' }
               <div className="right">
-                <NumberFormat value={total_base + extraGuestFee} displayType={'text'} 
-                  thousandSeparator={true} prefix={'$'} decimalScale={0}/>
+                {this.styleNumber(total_base + extraGuestFee)}
               </div>
             </div>
 
@@ -327,19 +360,20 @@ class App extends React.Component {
               <p></p>
               Service charge
               <div className="right">
-                <NumberFormat value={serviceCharge} displayType={'text'} 
-                  thousandSeparator={true} prefix={'$'} decimalScale={0}/>
+                {this.styleNumber(serviceCharge)}
               </div>
             </div>
             
             <div id="text-taxes">Occupancy taxes and fees
-            <div className="right">
-            <NumberFormat value={occupancyFees} displayType={'text'} 
-            thousandSeparator={true} prefix={'$'} decimalScale={0}/></div>
+            <div className="right">{this.styleNumber(occupancyFees)}
+            </div>
           </div>
             <div id="total-price">Total
-              <div className="right"><NumberFormat value={aggregate} displayType={'text'} 
-                thousandSeparator={true} prefix={'$'} decimalScale={0}/></div>
+              <div className="right">{this.styleNumber(aggregate)}</div>
+            </div>
+            <div id="booking-button">
+            <button type="submit" className="booking" aria-busy="false" data-veloute="book-it-button">
+            <div className="_10cu6uvp">Request to Book</div></button>
             </div>
           </div>
           : null }

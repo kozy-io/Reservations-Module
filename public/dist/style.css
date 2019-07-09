@@ -1,9 +1,9 @@
 div {
-  color: #484848;
   font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue";
 }
 
 body {
+  color: #484848;
   position: relative;
 }
 
@@ -15,6 +15,83 @@ body {
   float: right;
 }
 
+.check-background {
+  white-space: nowrap !important;
+  color: rgb(0, 122, 135) !important;
+  padding: 0px 6px !important;
+  overflow: hidden !important;
+  background: rgb(153, 237, 230) !important;
+  border-color: rgb(153, 237, 230) !important;
+  border-radius: 3px !important;
+}
+
+.check-arrow {
+    display: table-cell !important;
+    vertical-align: middle !important;
+    width: 24px !important;
+    height: 24px;
+    display: block; 
+    fill: currentcolor;
+}
+
+.arrow-up {
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+  border: solid #484848;
+  border-height: 1px;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 5px;
+  margin: 8px;
+}
+
+.arrow-down {
+  cursor: pointer;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  border: solid #484848;
+  border-height: 1px;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 5px;
+  margin: 4px;
+}
+
+.star-reviews {
+  width: 50px;
+  display: block !important;
+  background-size: 10px 8px !important;
+  height: 16px !important;
+  background-image: url('/star.svg') !important;
+  transform: none !important;
+  background-repeat: space no-repeat !important;
+}
+
+.booking {
+  color: #ffffff !important;
+  border-radius: 4px !important;
+  border-width: 2px !important;
+  border-style: solid !important;
+  background: rgb(255, 90, 95) !important;
+  border-color: transparent !important;
+  font-size: 14px !important;
+  line-height: 24px !important;
+  letter-spacing: normal !important;
+  font-family: Circular,-apple-system,BlinkMacSystemFont,Roboto,Helvetica Neue,sans-serif !important;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  font-weight: 700 !important;
+  padding-left: 22px !important;
+  padding-right: 22px !important;
+  box-shadow: none !important;
+  width: 300px;
+}
+
+#booking-button {
+  color: #ffffff !important;
+  text-align: center;
+  margin: 10px;
+}
 
 #text-base-fee-description {
   margin: 10px 0px 0px 0px;
@@ -46,7 +123,7 @@ body {
   display: none; /* Hidden by default */
   position: absolute;
   border: 1px solid #eeeeee;
-  top: 223px;
+  top: 230px;
   left: 50px;
   z-index: 10;
   background: #ffffff;
@@ -56,9 +133,9 @@ body {
   display: none; /* Hidden by default */
   position: absolute;
   border: 1px solid #eeeeee;
-  top: 143px;
-  left: 49px;
-  width: 310px;
+  top: 170px;
+  left: 42px;
+  width: 340px;
   z-index: 20;
   background: #ffffff;
 }
@@ -81,8 +158,9 @@ body {
 }
 
 .reservations-container {
+  display: inline-block;
   width: 370px;
-  height: 400px;
+  /* height: 410px; */
   background-color: #ffffff;
   border: 1px solid #eeeeee;
   padding: 16px 24px;
@@ -111,7 +189,7 @@ body {
 
 /* Calendar */
 .calendar-header {
-  width: 300px;
+  width: 320px;
   padding: 0px;
   margin: 0px;
   
@@ -136,6 +214,62 @@ body {
   margin: 0 auto;
 }
 
+.calendar-arrow-header {
+  position: relative !important;
+  z-index: 2 !important;
+  height: 0px !important;
+}
+
+.svg-left-arrow {
+    height: 19px !important;
+    width: 19px !important;
+    fill: rgb(130, 136, 138) !important;
+    display: block !important;
+}
+
+.svg-right-arrow {
+  height: 19px !important;
+  width: 19px !important;
+  fill: rgb(130, 136, 138) !important;
+  display: block !important;
+}
+
+#calendar-right-arrow {
+  cursor: pointer !important;
+  user-select: none !important;
+  background-color: rgb(255, 255, 255) !important;
+  color: rgb(117, 117, 117) !important;
+  position: absolute !important;
+  top: 18px !important;
+  line-height: 0.78 !important;
+  right: 22px !important;
+  margin: 0px !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+  border-color: rgb(228, 231, 231) !important;
+  border-image: initial !important;
+  border-radius: 3px !important;
+  padding: 6px 9px !important;
+}
+
+#calendar-left-arrow {
+  cursor: pointer !important;
+  user-select: none !important;
+  background-color: rgb(255, 255, 255) !important;
+  color: rgb(117, 117, 117) !important;
+  position: absolute !important;
+  top: 18px !important;
+  line-height: 0.78 !important;
+  left: 22px !important;
+  margin: 0px !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+  border-color: rgb(228, 231, 231) !important;
+  border-image: initial !important;
+  border-radius: 3px !important;
+  padding: 6px 9px !important;
+}
+
 .dates-options {
   width: 310px;
   height: 30px;
@@ -148,20 +282,23 @@ body {
 
 #guests-display {
   height: 30px;
-  padding: 6px;
+  padding: 6px !important;
   margin: 4px 0px 0px 0px;
   border: 1px solid #eeeeee;
 }
 
 
 table {
-  padding: 8px;
+  padding: 16px;
   border-spacing: 0rem;
-  width: 270px;
-  table-layout: fixed;
+  width: 320px;
   color: #484848;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
+}
+
+td:hover {
+  background-color:#B3F1EC;
 }
 
 .titles {
@@ -171,7 +308,7 @@ table {
 
 .week-days-active-normal {
   border: 0.5px solid #eeeeee;
-  padding: 2px;
+  padding: 10px;
   margin: 0px;
   width: 2em;
   height: 2em;
@@ -180,7 +317,18 @@ table {
 
 .week-days-active-selected {
   border: 0.5px solid #eeeeee;
-  padding: 2px;
+  padding: 10px;
+  margin: 0px;
+  width: 2em;
+  height: 2em;
+  background: #02A699;
+  color: #ffffff;
+  text-align: center;
+}
+
+.week-days-disabled-selected {
+  border: 0.5px solid #eeeeee;
+  padding: 10px;
   margin: 0px;
   width: 2em;
   height: 2em;
@@ -191,7 +339,7 @@ table {
 
 .week-days-disabled-normal {
   border: 0.5px solid #eeeeee;
-  padding: 2px;
+  padding: 10px;
   align-content: center;
   margin: 0px;
   width: 2em;
@@ -203,18 +351,20 @@ table {
 }
 
 .week-names {
-  padding: 5px;
+  padding: 10px;
   align-content: center;
+  width: 2em;
+  height: 2em;
   margin: 0px;
   color: #484848;
 }
 
 /* Guests */
 .guest-form {
-  width: 300px;
+  width: 307px;
   margin: 0px;
-  padding: 6px;
-  border-top: 2px solid #02A699;
+  padding: 6px !important;
+  border-top: 2px solid #007479;
   box-shadow: 0 1px 1px 2px rgba(72, 72, 72, 0.16)
 
 }
@@ -231,4 +381,199 @@ table {
 .button-disabled {
   pointer-events: none; 
   color: #d8d8d8;
+}
+
+
+
+.button-plus-outer {
+  display: inline-block !important;
+  cursor: pointer !important;
+  text-align: center !important;
+  line-height: 1 !important;
+  position: relative !important;
+  touch-action: manipulation !important;
+  height: 32px !important;
+  width: 32px !important;
+  box-shadow: none !important;
+  border-radius: 50% !important;
+  border-style: solid !important;
+  border-color: rgb(0, 132, 137) !important;
+  background: transparent !important;
+  border-width: 1px !important;
+}
+
+.button-plus-outer-disabled {
+  display: inline-block !important;
+  cursor: pointer !important;
+  text-align: center !important;
+  line-height: 1 !important;
+  position: relative !important;
+  touch-action: manipulation !important;
+  height: 32px !important;
+  width: 32px !important;
+  box-shadow: none !important;
+  border-radius: 50% !important;
+  border-style: solid !important;
+  background: transparent !important;
+  border-width: 1px !important;
+  cursor: default !important;
+  border-color: rgba(0, 132, 137, 0.3) !important;
+  background: transparent !important;
+  pointer-events: none; 
+
+}
+
+.button-plus-inner {
+  color: #008489 !important;
+  font-size: var(--size-flat-button-icon-size-small, 16px) !important;
+  height: 1em; 
+  width: 1em; 
+  display: block; 
+  fill: currentcolor;
+}
+
+.button-minus-outer {
+  display: inline-block !important;
+  cursor: pointer !important;
+  text-align: center !important;
+  line-height: 1 !important;
+  position: relative !important;
+  touch-action: manipulation !important;
+  height: 32px !important;
+  width: 32px !important;
+  box-shadow: none !important;
+  border-radius: 50% !important;
+  border-style: solid !important;
+  border-color: rgb(0, 132, 137) !important;
+  background: transparent !important;
+  border-width: 1px !important;
+}
+
+.button-minus-inner {
+  display: inline-block !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  color: rgb(0, 132, 137) !important;
+  font-size: 16px !important;
+  height: 1em; 
+  width: 1em; 
+  display: block; 
+  fill: currentcolor;
+}
+
+.button-minus-outer-disabled {
+  display: inline-block !important;
+  cursor: pointer !important;
+  text-align: center !important;
+  line-height: 1 !important;
+  position: relative !important;
+  touch-action: manipulation !important;
+  height: 32px !important;
+  width: 32px !important;
+  box-shadow: none !important;
+  border-radius: 50% !important;
+  border-style: solid !important;
+  background: transparent !important;
+  border-width: 1px !important;
+  cursor: default !important;
+  border-color: rgba(0, 132, 137, 0.3) !important;
+  background: transparent !important;
+  pointer-events: none; 
+
+}
+
+._1fb7ddvw {
+  display: table !important;
+  width: 120px !important;
+}
+
+._7eamzqx {
+  display: table-cell !important;
+  vertical-align: middle !important;
+  text-align: left !important;
+}
+
+._zac1rbz {
+  display: table-cell !important;
+  vertical-align: middle !important;
+  text-align: center !important;
+}
+
+._1a72ixey {
+    display: table-cell !important;
+    vertical-align: middle !important;
+    text-align: right !important;
+}
+
+._10ejfg4u {
+  display: table-cell !important;
+  width: 100% !important;
+  vertical-align: middle !important;
+}
+
+._mke2gl1 {
+  display: table !important;
+  margin-right: 12px !important;
+}
+
+._sk1dbeq {
+  position: absolute !important;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 6px, rgba(0, 0, 0, 0.07) 0px 0px 0px 1px !important;
+  width: 100% !important;
+  min-width: 319px !important;
+  text-align: left !important;
+  margin-bottom: 16px !important;
+  box-sizing: border-box !important;
+  z-index: 2 !important;
+  left: 0px !important;
+  background: rgb(255, 255, 255) !important;
+  border-radius: 3px !important;
+  padding: 16px !important;
+}
+
+._ni9axhe {
+  display: table-cell !important;
+  vertical-align: middle !important;
+}
+
+._1pjh0qr {
+  font-size: 14px !important;
+  line-height: 18px !important;
+  letter-spacing: normal !important;
+  font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
+  color: rgb(72, 72, 72) !important;
+  padding-top: 4px !important;
+  display: block !important;
+}
+
+._1jlnvra2 {
+  margin: 0px !important;
+  word-wrap: break-word !important;
+  font-family: Circular,-apple-system,BlinkMacSystemFont,Roboto,Helvetica Neue,sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  line-height: 1.2857142857142858em !important;
+  color: #484848 !important;
+}
+
+/* calendar arrow */
+._dpszbt {
+  position: absolute !important;
+  width: 20px !important;
+  height: 10px !important;
+  left: 22px !important;
+  z-index: 2 !important;
+  top: -10px !important;
+
+}
+
+._whdw9f {
+  fill: rgb(255, 255, 255) !important;
+}
+
+._c3dsty {
+  stroke: rgb(235, 235, 235) !important;
+  fill: transparent !important;
 }
