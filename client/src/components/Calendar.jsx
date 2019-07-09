@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
 import axios from 'axios';
 import OutsideClickHandler from 'react-outside-click-handler';
@@ -19,6 +20,8 @@ class Calendar extends React.Component {
       selectCheckIn: 0,
       selectCheckOut: 0,
       reserved: [],
+      invalidCheckIn: false,
+      display: false,
     };
 
     this.getReservedDates = this.getReservedDates.bind(this);
@@ -29,6 +32,7 @@ class Calendar extends React.Component {
     this.clearDates = this.clearDates.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
     this.getStatusAfterSelect = this.getStatusAfterSelect.bind(this);
+    this.validateStay = this.validateStay.bind(this);
   }
 
   componentDidMount() {
@@ -45,6 +49,10 @@ class Calendar extends React.Component {
     axios.get(`/reserved/month?id=${this.props.id}&month=${currentMonth+1}&year=${currentYear}`)
       .then(response => this.setState({
         reserved: response.data,
+      }, () => {
+        this.setState({
+          display: true,
+        });
       }))
       .catch((error) => { throw error });
   }
@@ -81,19 +89,24 @@ class Calendar extends React.Component {
       }
     }
     if (this.state.selectCheckIn || this.state.selectCheckOut) {
-      return this.getStatusAfterSelect();
+      return this.getStatusAfterSelect(date);
     }
     return 'week-days-active';
   }
 
   getStatusAfterSelect() {
+    const { invalidCheckIn } = this.state;
+    const { view } = this.props;
+    if (invalidCheckIn) {
+      return 'week-days-disabled';
+    } else {
+      return 'week-days-active';
+    }
+  }
+
+  validateStay() {
+    const { selectCheckIn, reserved, currentYear, currentMonth } = this.state;
     const { minStay } = this.props;
-    const {
-      selectCheckIn, reserved, currentMonth, currentYear,
-    } = this.state;
-
-    let status = false;
-
     let checkIn = moment(selectCheckIn);
     let validCheckOut = checkIn.clone().add(minStay, 'days');
     const range = moment.range(checkIn, moment(validCheckOut));
@@ -103,16 +116,14 @@ class Calendar extends React.Component {
       return moment(date, 'YYYY-MM-DD');
     });
 
+
     for (let i = 0; i < fullReservedDates.length; i += 1) {
       if (range.contains(fullReservedDates[i])) {
-        status = true;
-        return 'week-days-disabled';
+        console.log('here');
+        // eslint-disable-next-line react/no-unused-state
+        this.setState({ invalidCheckIn: true });
       }
     }
-    if (!status) {
-      return 'week-days-active';
-    }
-    return 'week-days-active';
   }
 
   getStartingDay() {
@@ -162,6 +173,7 @@ class Calendar extends React.Component {
       currentYear: initialYear,
       selectCheckIn: null,
       selectCheckOut: null,
+      invalidCheckIn: false,
     }, () => {
       this.getReservedDates();  // repopulate calendar with current reserved dates
       this.props.clearSelectedDates();
@@ -170,6 +182,7 @@ class Calendar extends React.Component {
 
   handleSelect(event, date) {
     const { currentMonth, currentYear } = this.state;
+
     date = date + "";
     if (date.length === 1) {
       date = "0" + date;
@@ -185,12 +198,14 @@ class Calendar extends React.Component {
       this.setState({
         selectCheckIn: fullDate,
       }, () => {
+        this.validateStay();
         this.props.getSelectedDates(fullDate);
       });
     } else {
       this.setState({
         selectCheckOut: fullDate,
       }, () => {
+        this.validateStay();
         this.props.getSelectedDates(fullDate);
       });
     }
@@ -207,7 +222,7 @@ class Calendar extends React.Component {
 
   render() {
     // eslint-disable-next-line react/destructuring-assignment
-    const { selectCheckIn, selectCheckOut, currentMonth } = this.state;
+    const { selectCheckIn, selectCheckOut, currentMonth, display } = this.state;
     let selectedDates = [selectCheckIn].concat([selectCheckOut]);
 
     const month = this.getMonth();
@@ -266,16 +281,21 @@ class Calendar extends React.Component {
     });
 
     return (
+
+      <div>
       <OutsideClickHandler
       onOutsideClick={() => {
         this.handleClickOutside();
       }}>
         <div id="overlay-calendar">
         <svg role="presentation" focusable="false" className="_dpszbt">
-        <path className="_whdw9f" d="M0,10 20,10 10,0z"></path>
-        <path className="_c3dsty" d="M0,10 10,0 20,10"></path></svg>
-          <div className="calendar-container">
+          <path className="_whdw9f" d="M0,10 20,10 10,0z"></path>
+          <path className="_c3dsty" d="M0,10 10,0 20,10"></path>
+        </svg>
+
+        <div className="calendar-container">
           <div className="calendar-header">
+
             <div id="calendar-left-arrow">
             <svg className="svg-left-arrow" focusable="false" viewBox="0 0 1000 1000" 
               onClick={(event, direction) => {this.handleMonthChange(event, "left")}}>
@@ -284,13 +304,20 @@ class Calendar extends React.Component {
                 5-10 7-16 7s-11-2-16-7L55 524c-11-11-11-21 0-32l249-249c21-22 
                 53 10 32 32z"></path></svg>
             </div>
+
             <b>{`${month} ${currentYear}`}</b>
+            
             <div id="calendar-right-arrow">
             <svg className="svg-right-arrow" focusable="false" viewBox="0 0 1000 1000"
-             onClick={(event, direction) => {this.handleMonthChange(event, "right")}}><path d="M694 242l249 250c12 11 12 21 
-             1 32L694 773c-5 5-10 7-16 7s-11-2-16-7c-11-11-11-21 0-32l210-210H68c-13 0-23-10-23-23s10-23 
-             23-23h806L662 275c-21-22 11-54 32-33z"></path></svg>
-            </div></div>
+             onClick={(event, direction) => {this.handleMonthChange(event, "right")}}>
+              <path d="M694 242l249 250c12 11 12 21 
+              1 32L694 773c-5 5-10 7-16 7s-11-2-16-7c-11-11-11-21 0-32l210-210H68c-13 0-23-10-23-23s10-23 
+              23-23h806L662 275c-21-22 11-54 32-33z"></path>
+             </svg>
+            </div>
+
+          </div>
+
           <table>
             <tbody>
               <tr>
@@ -300,9 +327,11 @@ class Calendar extends React.Component {
             </tbody>
           </table>
           <button name="clear" onClick={(event) => {this.clearDates(event)}}>Clear</button>
-        </div>
-        </div>
+        </div></div>
+
+
         </OutsideClickHandler>
+        </div>
     );
   }
 }
