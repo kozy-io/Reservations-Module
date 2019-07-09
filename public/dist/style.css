@@ -308,6 +308,17 @@ td:hover {
   text-align: center;
 }
 
+.week-days-disabled-selected {
+  border: 0.5px solid #eeeeee;
+  padding: 10px;
+  margin: 0px;
+  width: 2em;
+  height: 2em;
+  background: #02A699;
+  color: #ffffff;
+  text-align: center;
+}
+
 .week-days-disabled-normal {
   border: 0.5px solid #eeeeee;
   padding: 10px;
@@ -527,4 +538,24 @@ td:hover {
   font-weight: 400 !important;
   line-height: 1.2857142857142858em !important;
   color: #484848 !important;
+}
+
+/* calendar arrow */
+._dpszbt {
+  position: absolute !important;
+  width: 20px !important;
+  height: 10px !important;
+  left: 22px !important;
+  z-index: 2 !important;
+  top: -10px !important;
+
+}
+
+._whdw9f {
+  fill: rgb(255, 255, 255) !important;
+}
+
+._c3dsty {
+  stroke: rgb(235, 235, 235) !important;
+  fill: transparent !important;
 }

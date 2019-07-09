@@ -107,7 +107,6 @@ class App extends React.Component {
   getSelectedGuests(type, number) {
     console.log('getting selected guests at parents');
     const { adults, children } = this.state;
-    let previousTotal = adults + children;
     this.setState({
       [type]: number,
     }, () => {
@@ -173,7 +172,6 @@ class App extends React.Component {
 
   validateStay(reserved) {
     const { selectedCheckIn, selectedCheckOut, min_stay } = this.state;
-    // work only with the current month 
     if (selectedCheckIn && selectedCheckOut) {
       const dateIn = moment(selectedCheckIn);
       const dateOut = moment(selectedCheckOut);
@@ -271,7 +269,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { id, displayCalendar, view, max_guests, star_rating, review_count, base_rate, cleaning_charge, local_tax, showGuest,
+    const { id, displayCalendar, view, max_guests, star_rating, review_count, min_stay, base_rate, cleaning_charge, local_tax, showGuest,
       adults, children, infants, selectedCheckIn, selectedCheckOut, displayPricing, total_base, duration, extraGuestFee } = this.state;
 
     let displayGuests = '';
@@ -322,7 +320,7 @@ class App extends React.Component {
           </div>
 
           <Calendar id={id} view={view} getSelectedDates={this.getSelectedDates} hideCalendar={this.hideCalendar}
-            clearSelectedDates={this.clearSelectedDates} />
+            clearSelectedDates={this.clearSelectedDates} minStay={min_stay} />
 
           <span className="titles">Guests</span>
           <div id="guests-display" onClick={this.displayGuest}>{displayGuests} {displayInfants}

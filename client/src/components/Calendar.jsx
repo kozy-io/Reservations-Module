@@ -1,13 +1,17 @@
 import React from 'react';
 import axios from 'axios';
 import OutsideClickHandler from 'react-outside-click-handler';
-import moment from 'moment';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+
+const moment = extendMoment(Moment);
 
 class Calendar extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      currentDay: new Date().getDate(),
       initialMonth: new Date().getMonth(),
       initialYear: new Date().getFullYear(),
       currentMonth: new Date().getMonth(),
@@ -24,6 +28,7 @@ class Calendar extends React.Component {
     this.handleMonthChange = this.handleMonthChange.bind(this);
     this.clearDates = this.clearDates.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
+    this.getStatusAfterSelect = this.getStatusAfterSelect.bind(this);
   }
 
   componentDidMount() {
@@ -45,8 +50,10 @@ class Calendar extends React.Component {
   }
 
   getStatus(date) {
+
     const {
       currentMonth, currentYear, initialMonth, initialYear, reserved,
+      currentDay 
     } = this.state;
 
     const { view } = this.props;
@@ -54,6 +61,11 @@ class Calendar extends React.Component {
     if (currentYear === initialYear) {
       if (currentMonth < initialMonth) {
         return 'week-days-disabled';
+      }
+      if (currentMonth === initialMonth) {
+        if (date < currentDay) {
+          return 'week-days-disabled';
+        }
       }
     } else if (currentYear < initialYear) {
       return 'week-days-disabled';
@@ -67,6 +79,38 @@ class Calendar extends React.Component {
       if (reserved.includes(date - 1)) {
         return 'week-days-disabled';
       }
+    }
+    if (this.state.selectCheckIn || this.state.selectCheckOut) {
+      return this.getStatusAfterSelect();
+    }
+    return 'week-days-active';
+  }
+
+  getStatusAfterSelect() {
+    const { minStay } = this.props;
+    const {
+      selectCheckIn, reserved, currentMonth, currentYear,
+    } = this.state;
+
+    let status = false;
+
+    let checkIn = moment(selectCheckIn);
+    let validCheckOut = checkIn.clone().add(minStay, 'days');
+    const range = moment.range(checkIn, moment(validCheckOut));
+
+    let fullReservedDates = reserved.map((day) => {
+      const date = `${currentYear}-${currentMonth + 1}-${day}`;
+      return moment(date, 'YYYY-MM-DD');
+    });
+
+    for (let i = 0; i < fullReservedDates.length; i += 1) {
+      if (range.contains(fullReservedDates[i])) {
+        status = true;
+        return 'week-days-disabled';
+      }
+    }
+    if (!status) {
+      return 'week-days-active';
     }
     return 'week-days-active';
   }
@@ -193,7 +237,7 @@ class Calendar extends React.Component {
 
       existingDays.push(
         <td onClick={(event, date) => { this.handleSelect(event, j)}} key={j}
-          className={`${this.getStatus(j)}${selectedDates.includes(clickDate) ? '-selected' : '-normal'}`}>{j}</td>,
+          className={`${this.getStatus(j)}${selectCheckIn === clickDate || selectCheckOut === clickDate ? '-selected' : '-normal'}`}>{j}</td>,
       );
     }
 
@@ -227,6 +271,9 @@ class Calendar extends React.Component {
         this.handleClickOutside();
       }}>
         <div id="overlay-calendar">
+        <svg role="presentation" focusable="false" className="_dpszbt">
+        <path className="_whdw9f" d="M0,10 20,10 10,0z"></path>
+        <path className="_c3dsty" d="M0,10 10,0 20,10"></path></svg>
           <div className="calendar-container">
           <div className="calendar-header">
             <div id="calendar-left-arrow">
