@@ -59,7 +59,6 @@ class Calendar extends React.Component {
   }
 
   getStatus(date) {
-
     const {
       currentMonth, currentYear, initialMonth, initialYear, reserved,
       currentDay, selectCheckIn, selectCheckOut, invalidCheckIn, invalidCheckOut,
@@ -67,16 +66,26 @@ class Calendar extends React.Component {
 
     const { view } = this.props;
 
-    if (currentYear === initialYear) {
-      if (currentMonth < initialMonth) {
-        return 'week-days-disabled';
+    if (selectCheckIn && !selectCheckOut) {
+      return this.getStatusAfterSelectCheckIn(date);
+    }
+    if (selectCheckOut && !selectCheckIn) {
+      return this.getStatusAfterSelectCheckOut(date);
+    }
+
+    if (selectCheckIn && selectCheckOut && !invalidCheckIn && !invalidCheckOut) {
+      let currentCheckIn = moment(selectCheckIn, 'YYYY-MM-DD').get('date');
+      let currentCheckOut = moment(selectCheckOut, 'YYYY-MM-DD').get('date');
+      // fix this bug
+      if (date > currentCheckIn && date < currentCheckOut) {
+        return 'week-days-between';
+      } else {
+        return 'week-days-disabled'; // this should take into consideration all of the below too..... 
       }
-      if (currentMonth === initialMonth) {
-        if (date < currentDay) {
-          return 'week-days-disabled';
-        }
-      }
-    } else if (currentYear < initialYear) {
+    }
+    // if the calendar date is before today, should show as disabled:
+    let compare = currentYear + "-" + (currentMonth+1) + "-" + date;
+    if (moment(compare, 'YYYY-MM-DD').isBefore()) {
       return 'week-days-disabled';
     }
 
@@ -89,41 +98,62 @@ class Calendar extends React.Component {
         return 'week-days-disabled';
       }
     }
-    if (selectCheckIn && !selectCheckOut) {
-      return this.getStatusAfterSelectCheckIn(date);
-    }
-    if (selectCheckOut && !selectCheckIn) {
-      return this.getStatusAfterSelectCheckOut(date);
-    }
-    // if (selectCheckIn && selectCheckOut && invalidCheckIn && invalidCheckOut) {
-    //   return 
-    // }
-
     return 'week-days-active';
   }
 
-  getStatusAfterSelectCheckIn() {
-    const { invalidCheckIn } = this.state;
-    if (invalidCheckIn) {
-      return 'week-days-disabled';
+  getStatusAfterSelectCheckIn(date) {
+    const { invalidCheckIn, selectCheckIn, currentMonth, currentYear, reserved } = this.state;
+    let compare = currentYear + "-" + (currentMonth+1) + "-" + date;
+
+    if (moment(compare, 'YYYY-MM-DD').isBefore(selectCheckIn, 'YYYY-MM-DD')) {
+      return 'week-days-disabled';  // if the date is before the check in date, it should be disabled
     } else {
-      return 'week-days-active';
+      if (invalidCheckIn) {
+        return 'week-days-disabled';  // if the check in date is invalid, everything should be disabled
+      } else if (reserved.includes(date)) {
+        return 'week-days-disabled';
+      } else {
+        return 'week-days-active';
+      }
     }
   }
 
   getStatusAfterSelectCheckOut(date) {
-    const { invalidCheckOut } = this.state;
+    const { invalidCheckOut, currentYear, currentDay, currentMonth, 
+      initialYear, initialMonth, reserved, view, selectCheckOut } = this.state;
+
+    let compare = currentYear + "-" + (currentMonth+1) + "-" + date;
+    if (moment(compare, 'YYYY-MM-DD').isAfter(selectCheckOut, 'YYYY-MM-DD')) {
+      return 'week-days-disabled';
+    }
+
     if (invalidCheckOut) {
       return 'week-days-disabled';
     } else {
-      return 'week-days-active';
+      if (currentYear === initialYear) {
+        if (currentMonth < initialMonth) {
+          return 'week-days-disabled';
+        }
+        if (currentMonth === initialMonth) {
+          if (date < currentDay) {
+            return 'week-days-disabled';
+          }
+        }
+      } else if (currentYear < initialYear) {
+        return 'week-days-disabled';
+      }
+      if (reserved.includes(date - 1)) {
+        return 'week-days-disabled';
+      } else {
+        return 'week-days-active';
+      }
     }
   }
 
   validateStay(callback) {
     const { selectCheckIn, reserved, currentYear, currentMonth, selectCheckOut } = this.state;
     const { minStay, view } = this.props;
-
+    // the view remains on SELECTION, the callback to parent will then change the view
 
     let fullReservedDates = reserved.map((day) => {
       const date = `${currentYear}-${currentMonth + 1}-${day}`;
@@ -137,19 +167,21 @@ class Calendar extends React.Component {
   
       for (let i = 0; i < fullReservedDates.length; i += 1) {
         if (range.contains(fullReservedDates[i])) {
-          // eslint-disable-next-line react/no-unused-state
           this.setState({ invalidCheckIn: true });
         }
       }
     }
 
     if (view === 'out') {
+      console.log('view = out');
       let checkOut = moment(selectCheckOut);
       let validCheckIn = checkOut.clone().subtract(minStay, 'days');
       const range = moment.range(moment(validCheckIn), checkOut);
       for (let j = 0; j < fullReservedDates.length; j += 1) {
-        if (range.contains(fullReservedDates[j])) {
-          this.setState({ invalidCheckOut: true });
+        let reservedCheckOut = fullReservedDates[j].clone().add(1, 'days');
+        if (range.contains(reservedCheckOut)) {
+          this.setState({ invalidCheckOut: true }, () => {
+          });
         }
       }
       console.log("invalid checkout? ", this.state.invalidCheckOut);
@@ -243,7 +275,6 @@ class Calendar extends React.Component {
         });
       });
     }
-    console.log(fullDate);
   }
 
 

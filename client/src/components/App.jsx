@@ -3,6 +3,7 @@ import React from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import NumberFormat from 'react-number-format';
+// import regeneratorRuntime from "regenerator-runtime";
 
 import Calendar from './Calendar.jsx';
 import Guest from './Guest.jsx';
@@ -37,7 +38,6 @@ class App extends React.Component {
       total_base: null,
       duration: null,
       extraGuestFee: 0,
-      
     };
 
     this.getListing = this.getListing.bind(this);
@@ -75,6 +75,9 @@ class App extends React.Component {
             displayCalendar: false,
           });
         });
+      })
+      .catch((error) => {
+        return;
       });
   }
 
@@ -196,10 +199,6 @@ class App extends React.Component {
   }
 
   calculateBase() {
-    // make a get request for any custom pricing for the month you are in 
-    // then, check each one (start at check in, end at check out ) 
-    // keep track of total stay 
-    console.log("calculating stay...");
     const { id, selectedCheckIn, selectedCheckOut } = this.state;
 
     const dateIn = moment(selectedCheckIn);
