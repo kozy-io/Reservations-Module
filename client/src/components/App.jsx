@@ -290,10 +290,10 @@ class App extends React.Component {
     let checkInView;
     let checkOutView;
     if (view === 'out') {
-      checkOutView = <div className="check-background">Checkout</div>;
+      checkOutView = <div id="check-background">Checkout</div>;
       checkInView = 'Check-in';
     } else if (view === 'in') {
-      checkInView = <div className="check-background">Check-in</div>;
+      checkInView = <div id="check-background">Check-in</div>;
       checkOutView = 'Checkout';
     } else {
       checkInView = 'Check-in';
@@ -322,28 +322,46 @@ class App extends React.Component {
           <p />
 
           <span className="titles">Dates</span>
-          <div className="dates-options">
-            <a name="in" className="options-text-checkin" onClick={(event) => {this.displayCalendar(event);}}>
-              { selectedCheckIn ? this.styleDisplayDate(selectedCheckIn) : checkInView}</a>
-
-
-
-
-            
-            
-            
-              <a className="options-text-checkout" name="out" onClick={(event) => {this.displayCalendar(event);}}>
-              { selectedCheckOut ? this.styleDisplayDate(selectedCheckOut) : checkOutView }</a>
+          <div className="date-display-wrapper">
+            <div className="date-checkin-wrapper">
+              <div className="date-checkin-text">
+                <a name="in" onClick={(event) => {this.displayCalendar(event);}}>
+                { selectedCheckIn ? this.styleDisplayDate(selectedCheckIn) : checkInView}</a>
+              </div>
+            </div>
+                  
+            <div className="date-arrow-wrapper">
+              <svg viewBox="0 0 24 24">
+                <path d="m0 12.5a.5.5 0 0 0 .5.5h21.79l-6.15 6.15a.5.5 0 1 0 .71.71l7-7v-.01a.5.5 0 0 0 
+                  .14-.35.5.5 0 0 0 -.14-.35v-.01l-7-7a .5.5 0 0 0 -.71.71l6.15 6.15h-21.79a.5.5 
+                  0 0 0 -.5.5z" fillRule="evenodd">
+                </path>
+              </svg>
+            </div>
+                  
+            <div className="date-checkout-wrapper">
+              <div className="date-checkout-text">
+                <a name="out" onClick={(event) => {this.displayCalendar(event);}}>
+                { selectedCheckOut ? this.styleDisplayDate(selectedCheckOut) : checkOutView }</a>
+              </div>
+            </div>
           </div>
+
           { this.state.id ? 
           <Calendar id={id} view={view} getSelectedDates={this.getSelectedDates} hideCalendar={this.hideCalendar}
             clearSelectedDates={this.clearSelectedDates} minStay={min_stay} />
             : null }
 
-          <span className="titles">Guests</span>
-          <div id="guests-display" onClick={this.displayGuest}>{displayGuests} {displayInfants}
-            <div className="right"><i className={showGuest ? "arrow-up" : "arrow-down"} /></div>
-          </div>
+            <span className="titles">Guests</span>
+            <div className="guests-display-table">
+            <div id="guests-display" onClick={this.displayGuest}>
+              <div className="guests-display-text">
+                {displayGuests} {displayInfants}
+              </div>
+            
+            </div>
+            </div>
+  
           <Guest maxGuests={max_guests} getSelectedGuests={this.getSelectedGuests} />
 
           { displayPricing ?
