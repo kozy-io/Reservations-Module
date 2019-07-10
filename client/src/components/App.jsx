@@ -3,6 +3,7 @@ import React from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import NumberFormat from 'react-number-format';
+// import regeneratorRuntime from "regenerator-runtime";
 
 import Calendar from './Calendar.jsx';
 import Guest from './Guest.jsx';
