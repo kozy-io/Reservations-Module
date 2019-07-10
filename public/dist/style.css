@@ -350,6 +350,18 @@ td:hover {
   text-align: center;
 }
 
+
+.week-days-between-normal {
+  border: 0.5px solid #eeeeee;
+  padding: 10px;
+  margin: 0px;
+  width: 2em;
+  height: 2em;
+  background: #02A699;
+  color: #ffffff;
+  text-align: center;
+}
+
 .week-days-disabled-selected {
   border: 0.5px solid #eeeeee;
   padding: 10px;
@@ -542,11 +554,11 @@ td:hover {
   margin-right: 12px !important;
 }
 
-._sk1dbeq {
+.guest-outer-container {
   position: absolute !important;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 6px, rgba(0, 0, 0, 0.07) 0px 0px 0px 1px !important;
-  width: 100% !important;
-  min-width: 275px !important;
+  width: 100% !important; 
+  min-width: 348px;
   text-align: left !important;
   margin-bottom: 16px !important;
   box-sizing: border-box !important;

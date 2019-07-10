@@ -116,7 +116,7 @@ class Guest extends React.Component {
     return (
       <div ref={node => this.node = node}>
         <div id="overlay-guest">
-          <div className="_sk1dbeq">
+          <div className="guest-outer-container">
           <div className="_10ejfg4u">
             <div className="_mke2gl1">
               Adults

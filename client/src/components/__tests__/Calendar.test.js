@@ -9,9 +9,7 @@ describe('Calendar Structure', () => {
   // eslint-disable-next-line no-undef
   it('should generate a table with 7 days of the week', () => {
     const wrapper = shallow(<Calendar />);
-    const table = wrapper.find('table');
-    const tbody = table.find('tbody');
-    const headers = tbody.find('th');
+    const headers = wrapper.find('th');
 
     // eslint-disable-next-line no-undef
     expect(headers).toHaveLength(7);
@@ -22,11 +20,35 @@ describe('Calendar Structure', () => {
     let currentMonth = new Date().getMonth();
     let numOfDays = new Date(2019, currentMonth + 1, 0).getDate();
     const wrapper = shallow(<Calendar />);
-    const table = wrapper.find('table');
-    const tbody = table.find('tbody');
-    const days = tbody.find('td.week-days-active');
-
-    // eslint-disable-next-line no-undef
-    expect(days).toHaveLength(numOfDays);
+    const days = wrapper.find('td.week-days-active-normal');
+    const reserved =wrapper.find('td.week-days-disabled-normal');
+    expect(days.length + reserved.length).toBe(numOfDays);
   });
+
+  it('should disable pointers (click functionality) for dates that are in the past', () => {
+
+  });
+
+  it('should disable pointers (click functionality) for dates that are reserved (based on the listing displayed)', () => {
+
+  });
+
 });
+
+describe('Calendar Functionality', () => {
+
+  // eslint-disable-next-line no-undef
+  it('clearing the calendar should reset all previously selected dates, and revert to the initial view', () => {
+
+  });
+
+  it('clicking on a check-in date with an invalid check-out date should render all days disabled', () => {
+
+  });
+
+  it('clicking on a check-out date with an invalid check-in date should render all days disabled', () => {
+
+  });
+
+});
+
