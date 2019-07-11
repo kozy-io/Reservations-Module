@@ -40,11 +40,6 @@ class Calendar extends React.Component {
     this.getReservedDates();
   }
 
-  handleClickOutside() {
-    document.getElementById('overlay-calendar').style.display = 'none';
-    this.props.hideCalendar();
-  }
-
   getReservedDates() {
     const { currentMonth, currentYear } = this.state;
     axios.get(`/reserved/month?id=${this.props.id}&month=${currentMonth+1}&year=${currentYear}`)
@@ -60,10 +55,11 @@ class Calendar extends React.Component {
 
   getStatus(date) {
     const {
-      currentMonth, currentYear, initialMonth, initialYear, reserved,
-      currentDay, selectCheckIn, selectCheckOut, invalidCheckIn, invalidCheckOut,
+      currentMonth, currentYear, reserved, selectCheckIn, selectCheckOut, invalidCheckIn, 
+      invalidCheckOut,
     } = this.state;
 
+    // eslint-disable-next-line react/prop-types
     const { view } = this.props;
 
     if (selectCheckIn && !selectCheckOut) {
@@ -74,17 +70,16 @@ class Calendar extends React.Component {
     }
 
     if (selectCheckIn && selectCheckOut && !invalidCheckIn && !invalidCheckOut) {
-      let currentCheckIn = moment(selectCheckIn, 'YYYY-MM-DD').get('date');
-      let currentCheckOut = moment(selectCheckOut, 'YYYY-MM-DD').get('date');
+      const currentCheckIn = moment(selectCheckIn, 'YYYY-MM-DD').get('date');
+      const currentCheckOut = moment(selectCheckOut, 'YYYY-MM-DD').get('date');
       // fix this bug
       if (date > currentCheckIn && date < currentCheckOut) {
         return 'week-days-between';
-      } else {
-        return 'week-days-disabled'; // this should take into consideration all of the below too..... 
       }
+      return 'week-days-disabled'; // this should take into consideration all of the below too..... 
     }
     // if the calendar date is before today, should show as disabled:
-    let compare = currentYear + "-" + (currentMonth+1) + "-" + date;
+    const compare = `${currentYear}-${currentMonth + 1}-${date}`;
     if (moment(compare, 'YYYY-MM-DD').isBefore()) {
       return 'week-days-disabled';
     }
@@ -102,52 +97,53 @@ class Calendar extends React.Component {
   }
 
   getStatusAfterSelectCheckIn(date) {
-    const { invalidCheckIn, selectCheckIn, currentMonth, currentYear, reserved } = this.state;
-    let compare = currentYear + "-" + (currentMonth+1) + "-" + date;
+    const {
+      invalidCheckIn, selectCheckIn, currentMonth, currentYear, reserved,
+    } = this.state;
+
+    const compare = `${currentYear}-${currentMonth + 1}-${date}`;
 
     if (moment(compare, 'YYYY-MM-DD').isBefore(selectCheckIn, 'YYYY-MM-DD')) {
-      return 'week-days-disabled';  // if the date is before the check in date, it should be disabled
-    } else {
-      if (invalidCheckIn) {
-        return 'week-days-disabled';  // if the check in date is invalid, everything should be disabled
-      } else if (reserved.includes(date)) {
-        return 'week-days-disabled';
-      } else {
-        return 'week-days-active';
-      }
+      return 'week-days-disabled'; // if the date is before the check in date, it should be disabled
     }
+    if (invalidCheckIn) {
+      return 'week-days-disabled'; // if the check in date is invalid, everything should be disabled
+    } if (reserved.includes(date)) {
+      return 'week-days-disabled';
+    }
+    return 'week-days-active';
   }
 
   getStatusAfterSelectCheckOut(date) {
-    const { invalidCheckOut, currentYear, currentDay, currentMonth, 
-      initialYear, initialMonth, reserved, view, selectCheckOut } = this.state;
+    const {
+      invalidCheckOut, currentYear, currentDay, currentMonth,
+      initialYear, initialMonth, reserved, selectCheckOut,
+    } = this.state;
 
-    let compare = currentYear + "-" + (currentMonth+1) + "-" + date;
+    const compare = `${currentYear}-${currentMonth + 1}-${date}`;
     if (moment(compare, 'YYYY-MM-DD').isAfter(selectCheckOut, 'YYYY-MM-DD')) {
       return 'week-days-disabled';
     }
 
     if (invalidCheckOut) {
       return 'week-days-disabled';
-    } else {
-      if (currentYear === initialYear) {
-        if (currentMonth < initialMonth) {
+    }
+    if (currentYear === initialYear) {
+      if (currentMonth < initialMonth) {
+        return 'week-days-disabled';
+      }
+      if (currentMonth === initialMonth) {
+        if (date < currentDay) {
           return 'week-days-disabled';
         }
-        if (currentMonth === initialMonth) {
-          if (date < currentDay) {
-            return 'week-days-disabled';
-          }
-        }
-      } else if (currentYear < initialYear) {
-        return 'week-days-disabled';
       }
-      if (reserved.includes(date - 1)) {
-        return 'week-days-disabled';
-      } else {
-        return 'week-days-active';
-      }
+    } else if (currentYear < initialYear) {
+      return 'week-days-disabled';
     }
+    if (reserved.includes(date - 1)) {
+      return 'week-days-disabled';
+    }
+    return 'week-days-active';
   }
 
   validateStay(callback) {
@@ -285,13 +281,19 @@ class Calendar extends React.Component {
     return months[currentMonth];
   }
 
+  handleClickOutside() {
+    // eslint-disable-next-line react/prop-types
+    const { hideCalendar } = this.props;
+    document.getElementById('overlay-calendar').style.display = 'none';
+    hideCalendar();
+  }
+
   render() {
     // eslint-disable-next-line react/destructuring-assignment
-    const { selectCheckIn, selectCheckOut, currentMonth, display } = this.state;
-    let selectedDates = [selectCheckIn].concat([selectCheckOut]);
-
+    const {
+      selectCheckIn, selectCheckOut, currentMonth, currentYear,
+    } = this.state;
     const month = this.getMonth();
-    const { currentYear, reserved } = this.state;
 
     const days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
     const daysOfTheWeek = days.map((day) => {

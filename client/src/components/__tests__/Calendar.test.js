@@ -2,16 +2,16 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import Calendar from '../Calendar';
 import moment from 'moment';
-
+import axios from 'axios';
 
 
 // eslint-disable-next-line no-undef
 describe('Calendar Structure', () => {
-
   // eslint-disable-next-line no-undef
   it('should generate a table with 7 days of the week', () => {
     const wrapper = shallow(<Calendar />);
     const headers = wrapper.find('th');
+
 
     // eslint-disable-next-line no-undef
     expect(headers).toHaveLength(7);
@@ -22,6 +22,9 @@ describe('Calendar Structure', () => {
     let currentMonth = new Date().getMonth();
     let numOfDays = new Date(2019, currentMonth + 1, 0).getDate();
     const wrapper = shallow(<Calendar />);
+    wrapper.instance().getReservedDates = jest.fn();
+    wrapper.update();
+
     const days = wrapper.find('td.week-days-active-normal');
     const reserved =wrapper.find('td.week-days-disabled-normal');
     expect(days.length + reserved.length).toBe(numOfDays);
@@ -32,6 +35,9 @@ describe('Calendar Structure', () => {
     let prevMoDays = prevMo.daysInMonth();
 
     const wrapper = shallow(<Calendar />);
+    wrapper.instance().getReservedDates = jest.fn();
+    wrapper.update();
+
     const arrow = wrapper.find('svg.svg-left-arrow');
     arrow.simulate('click');
     const disabled = wrapper.find('td.week-days-disabled-normal');
@@ -42,6 +48,9 @@ describe('Calendar Structure', () => {
 
   it('should disable pointers (click functionality) for dates that are reserved (based on the listing displayed)', () => {
     const wrapper = shallow(<Calendar id={1} view={'in'} />);
+    wrapper.instance().getReservedDates = jest.fn();
+    wrapper.update();
+
     const mockReserveDates = [1, 2, 3, 4, 5];
     wrapper.setState({ reserved: mockReserveDates });
 
@@ -55,6 +64,9 @@ describe('Calendar Structure', () => {
 
   it('clicking on the right arrow should change the calendar month to the next month (and year if applicable)', () => {
     const wrapper = shallow(<Calendar />);
+    wrapper.instance().getReservedDates = jest.fn();
+    wrapper.update();
+
     const today = moment();
     const arrowMove = 10;
 
@@ -76,6 +88,9 @@ describe('Calendar Structure', () => {
 
   it('clicking on the left arrow should change the calendar month to the previous month (and year if applicable)', () => {
     const wrapper = shallow(<Calendar />);
+    wrapper.instance().getReservedDates = jest.fn();
+    wrapper.update();
+
     const today = moment();
     const arrowMove = 10;
 
@@ -98,7 +113,9 @@ describe('Calendar Structure', () => {
 
 describe('Calendar Functionality', () => {
   it('clearing the calendar should reset all previously selected dates, and revert to the initial view', () => {
-    const wrapper = shallow(<Calendar id={1} view={'in'} clearSelectedDates={() => {}}/>);
+    const wrapper = shallow(<Calendar id={1} view={'in'} clearSelectedDates={() => {}} />);
+    wrapper.instance().getReservedDates = jest.fn();
+    wrapper.update();
 
     let currentMonth = moment().month();
 
@@ -119,6 +136,9 @@ describe('Calendar Functionality', () => {
 
   it('clicking on a check-in date should render all previous dates disabled (to prevent check out before check in)', () => {
     const wrapper = shallow(<Calendar view={'in'} getSelectedDates={() => {}} />);
+    wrapper.instance().getReservedDates = jest.fn();
+    wrapper.update();
+
     const table = wrapper.find('td').last();
     table.simulate('click');
 
@@ -131,6 +151,9 @@ describe('Calendar Functionality', () => {
 
   it('clicking on a check-out date should render all future dates disabled (to prevent check in after check out)', () => {
     const wrapper = shallow(<Calendar view={'out'} getSelectedDates={() => {}} />);
+    wrapper.instance().getReservedDates = jest.fn();
+    wrapper.update();
+    
     wrapper.setState({reserved: []});
 
     // go to next month (so no past days are interfering)
