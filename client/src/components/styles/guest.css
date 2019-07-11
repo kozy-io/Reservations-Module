@@ -58,7 +58,6 @@ body {
   background-size: 9px 9px !important;
   height: 10px !important;
   transform: translateX(-0.5px) !important;
-  background-image: url(star.svg) !important;
   background-repeat: space no-repeat !important;
 }
 
