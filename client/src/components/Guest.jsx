@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import style from '/Users/katherinewang/Desktop/Reservations/public/dist/styles/guest.css';
 
 class Guest extends React.Component {
   constructor(props) {
@@ -82,6 +83,7 @@ class Guest extends React.Component {
   }
 
   render() {
+    console.log(styles.reservations-inner);
     const { maxGuests } = this.props;
     const { adult, child, infant } = this.state;
     let adultStatusPlus = "button-plus-outer";

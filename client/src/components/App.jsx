@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable react/jsx-wrap-multilines */
 import React from 'react';
 import axios from 'axios';
@@ -77,12 +78,12 @@ class App extends React.Component {
         });
       })
       .catch((error) => {
-        return;
+        console.log(error);
       });
   }
 
   getSelectedDates(date) {
-    let { view } = this.state;
+    const { view } = this.state;
 
     if (view === 'in') {
       this.setState({
@@ -111,7 +112,6 @@ class App extends React.Component {
   }
 
   getSelectedGuests(type, number) {
-    console.log('getting selected guests at parents');
     const { adults, children } = this.state;
     this.setState({
       [type]: number,
@@ -178,7 +178,6 @@ class App extends React.Component {
   }
 
   validateStay(reserved) {
-    console.log('here');
     const { selectedCheckIn, selectedCheckOut, min_stay } = this.state;
     if (selectedCheckIn && selectedCheckOut) {
       const dateIn = moment(selectedCheckIn);
@@ -263,6 +262,7 @@ class App extends React.Component {
     });
   }
 
+  // eslint-disable-next-line class-methods-use-this
   styleNumber(number) {
     return <NumberFormat value={number} displayType={'text'} 
     thousandSeparator={true} prefix={'$'} decimalScale={0}/>;
@@ -271,6 +271,8 @@ class App extends React.Component {
   render() {
     const { id, displayCalendar, view, max_guests, star_rating, review_count, min_stay, base_rate, cleaning_charge, local_tax, showGuest,
       adults, children, infants, selectedCheckIn, selectedCheckOut, displayPricing, total_base, duration, extraGuestFee } = this.state;
+
+    let ratingClass = Math.ceil(star_rating);
 
     let displayGuests = '';
     let displayInfants = '';
@@ -317,27 +319,42 @@ class App extends React.Component {
     return (
       <div className="reservations-container">
         <div className="reservations-inner">
-          <div className="price-displayed">{ this.styleNumber(perNight) || this.styleNumber(base_rate)}</div>
-          <div className="ratings-displayed"><div className="star-reviews"></div>{review_count}</div>
-          <p />
 
-          <span className="titles">Dates</span>
-          <div className="date-display-wrapper">
-            <div className="date-checkin-wrapper">
-              <div className="date-checkin-text">
-                <a name="in" onClick={(event) => {this.displayCalendar(event);}}>
-                { selectedCheckIn ? this.styleDisplayDate(selectedCheckIn) : checkInView}</a>
+          <div className="reservations-header">
+            <div className="reservations-header-price">
+              <span className="price-displayed">{ this.styleNumber(perNight) || this.styleNumber(base_rate)}</span>
+              <span className="price-text">per night</span>
+            </div>
+
+            <div>
+              <button className="reviews-button"><span role="img" className={`ratings-image ratings-${ratingClass}`}></span>
+              <span className="reviews-number"> {review_count}</span></button>
+            </div>
+
+          </div>
+
+          <div className="dates-container">
+            <span className="titles">Dates</span>
+            
+            <div className="date-display-wrapper">
+              <div className="date-checkin-wrapper">
+                <div className="date-checkin-text">
+                  <a name="in" onClick={(event) => {this.displayCalendar(event);}}>
+                  { selectedCheckIn ? this.styleDisplayDate(selectedCheckIn) : checkInView}
+                  </a>
+                </div>
               </div>
-            </div>
-                  
-            <div className="date-arrow-wrapper">
-              <svg viewBox="0 0 24 24">
-                <path d="m0 12.5a.5.5 0 0 0 .5.5h21.79l-6.15 6.15a.5.5 0 1 0 .71.71l7-7v-.01a.5.5 0 0 0 
-                  .14-.35.5.5 0 0 0 -.14-.35v-.01l-7-7a .5.5 0 0 0 -.71.71l6.15 6.15h-21.79a.5.5 
-                  0 0 0 -.5.5z" fillRule="evenodd">
-                </path>
-              </svg>
-            </div>
+
+              <div className="date-arrow-wrapper">
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="m0 12.5a.5.5 0 0 0 .5.5h21.79l-6.15 6.15a.5.5 0 1 0 .71.71l7-7v-.01a.5.5 0 0 0 
+                    .14-.35.5.5 0 0 0 -.14-.35v-.01l-7-7a .5.5 0 0 0 -.71.71l6.15 6.15h-21.79a.5.5 
+                    0 0 0 -.5.5z"
+                    fillRule="evenodd"
+                  />
+                </svg>
+              </div>
                   
             <div className="date-checkout-wrapper">
               <div className="date-checkout-text">
@@ -345,56 +362,118 @@ class App extends React.Component {
                 { selectedCheckOut ? this.styleDisplayDate(selectedCheckOut) : checkOutView }</a>
               </div>
             </div>
+
           </div>
+        </div>
 
           { this.state.id ? 
           <Calendar id={id} view={view} getSelectedDates={this.getSelectedDates} hideCalendar={this.hideCalendar}
             clearSelectedDates={this.clearSelectedDates} minStay={min_stay} />
             : null }
-
+          
+          <div className="guest-bar-container">
             <span className="titles">Guests</span>
+          
             <div className="guests-display-table">
-            <div id="guests-display" onClick={this.displayGuest}>
-              <div className="guests-display-text">
+          
+              <div id="guests-display" onClick={this.displayGuest}>
+                <div className="guests-display-text">
                 {displayGuests} {displayInfants}
+                </div>
               </div>
-            
             </div>
-            </div>
+          </div>
   
           <Guest maxGuests={max_guests} getSelectedGuests={this.getSelectedGuests} />
 
           { displayPricing ?
-          <div className="pricing">
-            <div id="text-base-fee-description">{this.styleNumber(perNight)} x {duration} {duration > 1 ? 'nights' : 'night' }
-              <div className="right">
-                {this.styleNumber(total_base + extraGuestFee)}
+            <div className="pricing">
+              <div className="pricing-inner-container">
+                <div className="pricing-description-container">
+                  <span className="pricing-description">
+                    {this.styleNumber(perNight)} x {duration} {duration > 1 ? 'nights' : 'night' }
+                  </span>
+                </div>
+                <div className="pricing-amount-container">
+                  <span className="pricing-amount">{this.styleNumber(total_base + extraGuestFee)}</span>
+                </div>
               </div>
-            </div>
 
-            <div id="text-misc-fees-description">
-              Cleaning fee
-              <div className="right">${cleaning_charge}</div>
-              <p></p>
-              Service charge
-              <div className="right">
-                {this.styleNumber(serviceCharge)}
+              <div className="pricing-separation-container">
+                <div className="separation"></div>
+              </div>
+
+              <div className="pricing-inner-container">
+                <div className="pricing-description-container">
+                  <span className="pricing-description">
+                    Cleaning fee
+                  </span>
+                </div>
+                
+                <div className="pricing-amount-container">
+                  <span className="pricing-amount">${cleaning_charge}</span>
+                </div>
+              </div>
+
+              <div className="pricing-separation-container">
+                <div className="separation"></div>
+              </div>
+
+              <div className="pricing-inner-container">
+                <div className="pricing-description-container">
+                  <span className="pricing-description">
+                    Service charge
+                  </span>
+                </div>
+                <div className="pricing-amount-container">
+                  <span className="pricing-amount">
+                    {this.styleNumber(serviceCharge)}
+                  </span>
+                </div>
+              </div>
+
+              <div className="pricing-separation-container">
+                <div className="separation"></div>
+              </div>
+
+              <div className="pricing-inner-container">
+                <div className="pricing-description-container">
+                  <span className="pricing-description">
+                    Occupancy taxes and fees
+                  </span>
+                </div>
+                <div className="pricing-amount-container">
+                  <span className="pricing-amount">
+                    {this.styleNumber(occupancyFees)}
+                  </span>
+                </div>
+              </div>
+
+              <div className="pricing-separation-container-outer">
+              </div>
+
+              <div className="pricing-inner-container">
+                <div className="pricing-description-container">
+                  <span className="pricing-total">
+                    Total
+                  </span>
+                </div>
+                <div className="pricing-amount-container">
+                  <span className="pricing-total">
+                    {this.styleNumber(aggregate)}
+                  </span>
+                </div>
+              </div>
+
+              <div id="booking-button">
+                <button type="submit" className="booking" aria-busy="false" data-veloute="book-it-button">
+                  <div className="_10cu6uvp">
+                    Request to Book
+                  </div>
+                </button>
               </div>
             </div>
-            
-            <div id="text-taxes">Occupancy taxes and fees
-            <div className="right">{this.styleNumber(occupancyFees)}
-            </div>
-          </div>
-            <div id="total-price">Total
-              <div className="right">{this.styleNumber(aggregate)}</div>
-            </div>
-            <div id="booking-button">
-            <button type="submit" className="booking" aria-busy="false" data-veloute="book-it-button">
-            <div className="_10cu6uvp">Request to Book</div></button>
-            </div>
-          </div>
-          : null }
+            : null }
 
         </div>
       </div>

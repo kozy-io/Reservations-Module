@@ -1,25 +1,62 @@
+/* eslint-disable no-undef */
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import App from '../App';
 
+const mockAxios = require('axios');
 
 // eslint-disable-next-line no-undef
 describe('App Display', () => {
-  // eslint-disable-next-line no-undef
-  
+  // eslint-disable-next-line no-undef 
+  const wrapper = shallow(<App />);    
   it('renders without crashing', () => {
-    const wrapper = shallow(<App />);    
     expect(wrapper.exists()).toBe(true);
   });
 
+  it('test', () => {
+    mockAxios.get.mockClear();
+    const instance = wrapper.instance();
+    instance.getListing();
+    console.log(mockAxios.get.getMockName());
+    console.log(mockAxios.get.mock.results);
+    console.log(mockAxios.get.mock.calls);
+    console.log(wrapper.state());
 
+    expect(mockAxios.get).toHaveBeenCalledTimes(1);
+  });
 });
 
-describe('Pricing Validation', () => {
+describe('Date and Price Display', () => {
+  const wrapper = shallow(<App />);
+  it('should appropriately style the date passed in', () => {
+    const instance = wrapper.instance();
+    expect(instance.styleDisplayDate("2019-01-01")).toBe("01/01/2019");
+  });
+
+  it('if displayPricing is set to true, the pricing module should be shown ', () => {
+    wrapper.setState({
+      displayPricing: true,
+    });
+
+    const pricing = wrapper.find('.pricing');
+    expect(pricing.length).toBe(1);
+  });
+});
+
+describe.only('Pricing Validation', () => {
   // eslint-disable-next-line no-undef
   const wrapper = shallow(<App />)
   it('should properly calculate base cost given number of nights and base price per the respective listing', () => {
+    wrapper.setState({
+      id: 1,
+      selectedCheckIn: '2019-07-21',
+      selectedCheckOut: '2019-07-27',
+      base_rate: 100,
+    });
     
+    const instance = wrapper.instance();
+    instance.calculateBase();
+    console.log(wrapper.state());
   });
   
   it('should display pricing screen after calculating the total base cost', () => {
@@ -44,15 +81,10 @@ describe('Pricing Validation', () => {
 });
 
 describe('Display of Components', () => {
-  const wrapper = mount(<App />);
+  const wrapper = shallow(<App />);
 
   it('guest bar should be hidden, when displayGuest state property is false', () => {
-    wrapper.setState({
-      showGuest: true,
-    });
 
-    let display = wrapper.find('#overlay-guest');
-    // finish this test
   });
 
   it('should hide calendar when hideCalendar is called', () => {
@@ -67,18 +99,18 @@ describe('Display of Components', () => {
     expect(wrapper.state('view')).toBe(null);
   });
 
-  it('should change the view of the calendar and display status when changeView is called', () => {
-    const instance = wrapper.instance();
-    wrapper.setState({
-      view: 'in',
-    });
+  // it('should change the view of the calendar and display status when changeView is called', () => {
+  //   const instance = wrapper.instance();
+  //   wrapper.setState({
+  //     view: 'in',
+  //   });
 
-    instance.changeView({
-      target: 'out',
-    });
+  //   instance.changeView({
+  //     target: 'out',
+  //   });
 
-    expect(wrapper.state('view')).toBe('out');
-  })
+  //   expect(wrapper.state('view')).toBe('out');
+  // })
 
   // it ('should change the view property when calendar is clicked', () => {
   // const wrapper = shallow(<App />);
