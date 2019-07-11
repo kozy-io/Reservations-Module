@@ -235,10 +235,13 @@ class App extends React.Component {
   }
 
   calculateExtraGuests(callback = () => {}) {
-    console.log("calculating extra guests...");
-    const { adults, children, extra_guest_cap, extra_guest_charge, selectedCheckIn, selectedCheckOut } = this.state;
-    let currTotal = adults + children;
-    let currAddlCharge;
+    const {
+      adults, children, extra_guest_cap, extra_guest_charge,
+      selectedCheckIn, selectedCheckOut,
+    } = this.state;
+
+    let totalGuests = adults + children;
+    let extraCharge;
     let stayInDays = 1;
     // the extra charge should actually be multiplied by the number of nights 
     if (selectedCheckIn && selectedCheckOut) {
@@ -247,16 +250,14 @@ class App extends React.Component {
       stayInDays = dateOut.diff(dateIn, 'days');
     }
 
-    if (currTotal > extra_guest_cap) {
-      currAddlCharge = (currTotal - extra_guest_cap) * extra_guest_charge * stayInDays;
+    if (totalGuests > extra_guest_cap) {
+      extraCharge = (totalGuests - extra_guest_cap) * extra_guest_charge * stayInDays;
     } else {
-      currAddlCharge = 0;
+      extraCharge = 0;
     }
-    
-    console.log("aggregate extra guest fee", currAddlCharge);
 
     this.setState({
-      extraGuestFee: currAddlCharge,
+      extraGuestFee: extraCharge,
     }, () => {
       callback();
     });
