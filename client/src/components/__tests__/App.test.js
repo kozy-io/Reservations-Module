@@ -7,6 +7,9 @@ import App from '../App';
 describe('First React component test with Enzyme', () => {
   // eslint-disable-next-line no-undef
   it('renders without crashing', () => {
-    shallow(<App />);    
+    const wrapper = shallow(<App />);    
+    expect(wrapper.exists()).toBe(true);
   });
+
+  
 });
