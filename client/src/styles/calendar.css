@@ -100,6 +100,13 @@ display: block !important;
   text-align: center;
 }
 
+
+.weekDaysActiveNormal:hover {
+  background-color:#B3F1EC;
+  color: #ffffff;
+  cursor: pointer !important;
+}
+
 .weekDaysActiveSelected {
   border: 0.5px solid #eeeeee;
   padding: 10px;
@@ -109,6 +116,7 @@ display: block !important;
   background: #02A699;
   color: #ffffff;
   text-align: center;
+  cursor: pointer !important;
 }
 
 .weekDaysDisabledSelected {
@@ -153,11 +161,45 @@ display: block !important;
   font-size: 14px !important;
   font-weight: 600 !important;
   border: 0px;
+  cursor: pointer !important;
+
 }
 
 .clearContainer {
   margin: 6px !important;
   text-align: right;
+}
+
+
+.calendarTable {
+  padding: 16px;
+  border-spacing: 0rem;
+  width: 320px;
+  color: #484848;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.fillerDays {
+  padding: 10px;
+  align-content: center;
+  margin: 0px;
+  width: 2em;
+  height: 2em;
+  text-decoration: line-through;
+  text-align: center;
+  pointer-events: none; 
+  color: #d8d8d8;
+
+}
+
+.weekNames {
+  padding: 10px;
+  align-content: center;
+  width: 2em;
+  height: 2em;
+  margin: 0px;
+  color: #484848;
 }
 
 

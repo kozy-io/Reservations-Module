@@ -58,8 +58,8 @@ class App extends React.Component {
   }
 
   getListing() {
-    const random = Math.floor(Math.random() * 100);
-    axios.get(`/listing/${random}`)
+    let id = window.location.href.split('/')[4];
+    axios.get(`/listing/${id}`)
       .then((response) => {
         const { base_rate, currency, extra_guest_cap, extra_guest_charge, id, local_tax, max_guests,
           min_stay, review_count, star_rating,

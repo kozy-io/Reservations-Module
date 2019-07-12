@@ -156,6 +156,8 @@
   padding: 0px 6px !important;
   overflow: hidden !important;
   font-size: 16px !important;
+  cursor: pointer !important;
+  
 }
 
 .dateCheckinTextSelected {
@@ -195,6 +197,7 @@
   padding: 0px 6px !important;
   overflow: hidden !important;
   font-size: 16px !important;
+  cursor: pointer !important;
 }
 
 .dateCheckoutTextSelected {
@@ -229,6 +232,11 @@
   border-image: initial !important;
 }
 
+#guestsDisplay:focus {
+  outline: 1px dotted #212121;
+  outline: 5px auto -webkit-focus-ring-color;
+}
+
 .guestsDisplayText {
   margin: 0px !important;
   word-wrap: break-word !important;
@@ -237,6 +245,8 @@
   font-weight: 400 !important;
   line-height: 1.375em !important;
   color: #484848 !important;
+  cursor: pointer !important;
+  
 }
 
 /* Pricing */
