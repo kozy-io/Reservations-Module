@@ -125,13 +125,13 @@ class App extends React.Component {
       this.setState(prevState => ({
         showGuest: !prevState.showGuest,
       }), () => {
-        document.getElementById('overlay-guest').style.display = 'block';
+        document.getElementById('overlayGuest').style.display = 'block';
       });
     } else {
       this.setState(prevState => ({
         showGuest: !prevState.showGuest,
       }), () => {
-        document.getElementById('overlay-guest').style.display = 'none';
+        document.getElementById('overlayGuest').style.display = 'none';
       });
     }
   }
@@ -145,13 +145,13 @@ class App extends React.Component {
         this.setState(prevState => ({
           showCalendar: !prevState.showCalendar,
         }), () => {
-          document.getElementById('overlay-calendar').style.display = 'block';
+          document.getElementById('overlayCalendar').style.display = 'block';
         });
       } else {
         this.setState(prevState => ({
           showCalendar: !prevState.showCalendar,
         }), () => {
-          document.getElementById('overlay-calendar').style.display = 'none';
+          document.getElementById('overlayCalendar').style.display = 'none';
         });
       }
     });

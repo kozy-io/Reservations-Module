@@ -1,6 +1,7 @@
+/* eslint-disable react/button-has-type */
 import React, { Component } from 'react';
-import styles from './styles/guest.css';
-
+import styles from '../styles/guest.css';
+console.log(styles);
 class Guest extends React.Component {
   constructor(props) {
     super(props);
@@ -32,7 +33,7 @@ class Guest extends React.Component {
   }
 
   handleClickOutside() {
-    document.getElementById('overlay-guest').style.display = 'none';
+    document.getElementById('overlayGuest').style.display = 'none';
   }
 
   selectGuests(event, name) {
@@ -86,152 +87,169 @@ class Guest extends React.Component {
     // console.log(styles.reservations-inner);
     const { maxGuests } = this.props;
     const { adult, child, infant } = this.state;
-    let adultStatusPlus = "button-plus-outer";
-    let adultStatusMinus = "button-minus-outer";
-    let childStatusPlus = "button-plus-outer";
-    let childStatusMinus = "button-minus-outer";
-    let infantStatusPlus = "button-plus-outer";
-    let infantStatusMinus = "button-minus-outer";
+    let adultStatusPlus = 'buttonPlusOuter';
+    let adultStatusMinus = 'buttonMinusOuter';
+    let childStatusPlus = 'buttonPlusOuter';
+    let childStatusMinus = 'buttonMinusOuter';
+    let infantStatusPlus = 'buttonPlusOuter';
+    let infantStatusMinus = 'buttonMinusOuter';
 
     // it max guests are reached, add buttons are disabled for adult and child
     // infants do not count toward total guests
     if (adult + child >= maxGuests) {
-      adultStatusPlus = 'button-plus-outer-disabled';
-      childStatusPlus = 'button-plus-outer-disabled';
+      adultStatusPlus = 'buttonPlusOuterDisabled';
+      childStatusPlus = 'buttonPlusOuterDisabled';
     }
     // adults cannot go below 1
     if (adult === 1) {
-      adultStatusMinus = 'button-minus-outer-disabled';
+      adultStatusMinus = 'buttonMinusOuterDisabled';
     }
     // child and infant cannot go below 0
     if (child === 0) {
-      childStatusMinus = 'button-minus-outer-disabled';
+      childStatusMinus = 'buttonMinusOuterDisabled';
     }
     if (infant === 0) {
-      infantStatusMinus = 'button-minus-outer-disabled';
+      infantStatusMinus = 'buttonMinusOuterDisabled';
     }
     // infants cannot be above 5
     if (infant >= 5) {
-      infantStatusPlus = 'button-plus-outer-disabled';
+      infantStatusPlus = 'buttonPlusOuterDisabled';
     }
 
     return (
       <div ref={node => this.node = node}>
-        <div id="overlay-guest">
-          <div className="guest-outer-container">
-          <div className="_10ejfg4u">
-            <div className="_mke2gl1">
-              Adults
-            </div>
-          </div>
-          
-          <div className="_ni9axhe">
-            <div className="_1fb7ddvw">
-              <div className="_7eamzqx">
-                <button type="button" className={adultStatusMinus}>
-                <span className="button-minus-inner">
-                <svg viewBox="0 0 24 24" role="img" aria-label="subtract" focusable="false"
-                onClick={(event) => {this.selectGuests(event, "adult-minus")}}>
-                <rect height="2" rx="1" width="12" x="6" y="11" /></svg>
-                </span>
-                </button>
-              </div>
-            
-            <div className="_zac1rbz">{adult}</div>
-              <div className="_1a72ixey">
-                <button name="adult-plus" className={adultStatusPlus}>
-                <span className="button-plus-inner">
-                <svg viewBox="0 0 24 24" role="img" aria-label="add" focusable="false" 
-                onClick={(event) => {this.selectGuests(event, "adult-plus")}}>
-                <rect height="2" rx="1" width="12" x="6" y="11" />
-                <rect height="12" rx="1" width="2" x="11" y="6" />
-                </svg>
-                </span>          
-                </button>
-              </div>
-            </div>
-          </div>
-          <p></p>
-          <div className="_10ejfg4u">
-          <div className="_mke2gl1">
-            Children
-            <div className="_1pjh0qr">
-              <div className="_1jlnvra2">
-                Ages 2–12
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div className="_ni9axhe">
-          <div className="_1fb7ddvw">
-            <div className="_7eamzqx">
-              <button type="button" className={childStatusMinus}>
-              <span className="button-minus-inner">
-              <svg viewBox="0 0 24 24" role="img" aria-label="subtract" focusable="false"
-              onClick={(event) => {this.selectGuests(event, "child-minus")}}>
-              <rect height="2" rx="1" width="12" x="6" y="11" /></svg>
-              </span>
-              </button>
-            </div>
-          
-          <div className="_zac1rbz">{child}</div>
-            <div className="_1a72ixey">
-              <button name="adult-plus" className={childStatusPlus}>
-              <span className="button-plus-inner">
-              <svg viewBox="0 0 24 24" role="img" aria-label="add" focusable="false" 
-              onClick={(event) => {this.selectGuests(event, "child-plus")}}>
-              <rect height="2" rx="1" width="12" x="6" y="11" />
-              <rect height="12" rx="1" width="2" x="11" y="6" />
-              </svg>
-              </span>          
-              </button>
-            </div>
-          </div>
-        </div>
-        <p></p>
-        <div className="_10ejfg4u">
-            <div className="_mke2gl1">
-              Infants
-              <div className="_1pjh0qr">
-              <div className="_1jlnvra2">
-                Under 2
-              </div>
-            </div>
-            </div>
-          </div>
-          
-          <div className="_ni9axhe">
-            <div className="_1fb7ddvw">
-              <div className="_7eamzqx">
-                <button type="button" className={infantStatusMinus}>
-                <span className="button-minus-inner">
-                <svg viewBox="0 0 24 24" role="img" aria-label="subtract" focusable="false"
-                onClick={(event) => {this.selectGuests(event, "infant-minus")}}>
-                <rect height="2" rx="1" width="12" x="6" y="11" /></svg>
-                </span>
-                </button>
-              </div>
-            
-            <div className="_zac1rbz">{infant}</div>
-              <div className="_1a72ixey">
-                <button name="adult-plus" className={infantStatusPlus}>
-                <span className="button-plus-inner">
-                <svg viewBox="0 0 24 24" role="img" aria-label="add" focusable="false" 
-                onClick={(event) => {this.selectGuests(event, "infant-plus")}}>
-                <rect height="2" rx="1" width="12" x="6" y="11" />
-                <rect height="12" rx="1" width="2" x="11" y="6" />
-                </svg>
-                </span>          
-                </button>
-              </div>
-            </div>
-          </div>
+        <div id={styles.overlayGuest}>
+          <div className={styles.guestOuterContainer}>
 
+            <div className={styles.guestOptionOuter}>
+              <div className={styles.guestOptionText}>
+                Adults
+              </div>
+            </div>
+          
+            <div className={styles.buttonOuterContainer}>
+              <div className={styles.buttonInnerContainer}>
+
+                <div className={styles.buttonLeftAlign}>
+                  <button type="button" className={styles[adultStatusMinus]}>
+                    <span className={styles.buttonMinusInner}>
+                      <svg viewBox="0 0 24 24" role="img" aria-label="subtract" focusable="false"
+                        onClick={(event) => {this.selectGuests(event, 'adult-minus')}}>
+                        <rect height="2" rx="1" width="12" x="6" y="11" />
+                      </svg>
+                    </span>
+                  </button>
+                </div>
+            
+                <div className={styles.guestOptionText}>
+                  {adult}
+                </div>
+              
+                <div className={styles.buttonRightAlign}>
+                  <button name="adult-plus" className={styles[adultStatusPlus]}>
+                    <span className={styles.buttonPlusInner}>
+                      <svg viewBox="0 0 24 24" role="img" aria-label="add" focusable="false" 
+                        onClick={(event) => {this.selectGuests(event, 'adult-plus')}}>
+                        <rect height="2" rx="1" width="12" x="6" y="11" />
+                        <rect height="12" rx="1" width="2" x="11" y="6" />
+                      </svg>
+                    </span>
+                  </button>
+                </div>
+
+              </div>
+            </div>
+            <p></p>
+
+            <div className={styles.guestOptionOuter}>
+              <div className={styles.guestOptionText}>
+              Children
+                <div className={styles.guestAdditionalOuter}>
+                  <div className={styles.guestAdditionalText}>
+                    Ages 2–12
+                  </div>
+                </div>
+              </div>
+            </div>
+        
+            <div className={styles.buttonOuterContainer}>
+              <div className={styles.buttonInnerContainer}>
+
+                <div className={styles.buttonLeftAlign}>
+                  <button type="button" className={styles[childStatusMinus]}>
+                    <span className={styles.buttonMinusInner}>
+                      <svg viewBox="0 0 24 24" role="img" aria-label="subtract" focusable="false"
+                        onClick={(event) => {this.selectGuests(event, 'child-minus')}}>
+                        <rect height="2" rx="1" width="12" x="6" y="11" />
+                      </svg>
+                    </span>
+                  </button>
+                </div>
+          
+                <div className={styles.guestOptionText}>
+                  {child}
+                </div>
+                
+                <div className={styles.buttonRightAlign}>
+                  <button name="adult-plus" className={styles[childStatusPlus]}>
+                    <span className={styles.buttonPlusInner}>
+                      <svg viewBox="0 0 24 24" role="img" aria-label="add" focusable="false"
+                        onClick={(event) => {this.selectGuests(event, 'child-plus')}}>
+                        <rect height="2" rx="1" width="12" x="6" y="11" />
+                        <rect height="12" rx="1" width="2" x="11" y="6" />
+                      </svg>
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <p />
+
+            <div className={styles.guestOptionOuter}>
+              <div className={styles.guestOptionText}>
+                Infants
+                <div className={styles.guestAdditionalOuter}>
+                  <div className={styles.guestAdditionalText}>
+                    Under 2
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <div className={styles.buttonOuterContainer}>
+              <div className={styles.buttonInnerContainer}>
+                <div className={styles.buttonLeftAlign}>
+                  <button type="button" className={styles[infantStatusMinus]}>
+                    <span className={styles.buttonMinusInner}>
+                      <svg viewBox="0 0 24 24" role="img" aria-label="subtract" focusable="false"
+                        onClick={(event) => {this.selectGuests(event, 'infant-minus')}}>
+                        <rect height="2" rx="1" width="12" x="6" y="11" />
+                      </svg>
+                    </span>
+                  </button>
+                </div>
+            
+                <div className={styles.guestOptionText}>
+                  {infant}
+                </div>
+                
+                <div className={styles.buttonRightAlign}>
+                  <button name="adult-plus" className={styles[infantStatusPlus]}>
+                    <span className={styles.buttonPlusInner}>
+                      <svg viewBox="0 0 24 24" role="img" aria-label="add" focusable="false" 
+                        onClick={(event) => {this.selectGuests(event, 'infant-plus')}}>
+                        <rect height="2" rx="1" width="12" x="6" y="11" />
+                        <rect height="12" rx="1" width="2" x="11" y="6" />
+                      </svg>
+                    </span>          
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-
     );
   }
 }

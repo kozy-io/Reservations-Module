@@ -1,0 +1,149 @@
+#overlayCalendar {
+  display: block; /* Hidden by default */
+  position: absolute;
+  border: 1px solid #eeeeee;
+  top: 170px;
+  left: 42px;
+  width: 340px;
+  z-index: 20;
+  background: #ffffff;
+}
+
+.attachOuter {
+  position: absolute !important;
+  width: 20px !important;
+  height: 10px !important;
+  left: 22px !important;
+  z-index: 2 !important;
+  top: -10px !important;
+
+}
+
+.attachFill {
+  fill: rgb(255, 255, 255) !important;
+}
+
+.attachInnerFill {
+  stroke: rgb(235, 235, 235) !important;
+  fill: transparent !important;
+}
+
+.container {
+  box-shadow: 0 1px 1px 1px rgba(72, 72, 72, 0.16);
+  padding: 16px;
+  text-align: center;
+}
+
+.header {
+  width: 320px;
+  padding: 0px;
+  margin: 0px;
+}
+
+
+#rightArrow {
+  cursor: pointer !important;
+  user-select: none !important;
+  background-color: rgb(255, 255, 255) !important;
+  color: rgb(117, 117, 117) !important;
+  position: absolute !important;
+  top: 18px !important;
+  line-height: 0.78 !important;
+  right: 22px !important;
+  margin: 0px !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+  border-color: rgb(228, 231, 231) !important;
+  border-image: initial !important;
+  border-radius: 3px !important;
+  padding: 6px 9px !important;
+}
+
+#leftArrow {
+  cursor: pointer !important;
+  user-select: none !important;
+  background-color: rgb(255, 255, 255) !important;
+  color: rgb(117, 117, 117) !important;
+  position: absolute !important;
+  top: 18px !important;
+  line-height: 0.78 !important;
+  left: 22px !important;
+  margin: 0px !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+  border-color: rgb(228, 231, 231) !important;
+  border-image: initial !important;
+  border-radius: 3px !important;
+  padding: 6px 9px !important;
+}
+
+.svgLeftArrow {
+  height: 19px !important;
+  width: 19px !important;
+  fill: rgb(130, 136, 138) !important;
+  display: block !important;
+}
+
+.svgRightArrow {
+height: 19px !important;
+width: 19px !important;
+fill: rgb(130, 136, 138) !important;
+display: block !important;
+}
+
+.weekDaysActiveNormal {
+  border: 0.5px solid #eeeeee;
+  padding: 10px;
+  margin: 0px;
+  width: 2em;
+  height: 2em;
+  text-align: center;
+}
+
+.weekDaysActiveSelected {
+  border: 0.5px solid #eeeeee;
+  padding: 10px;
+  margin: 0px;
+  width: 2em;
+  height: 2em;
+  background: #02A699;
+  color: #ffffff;
+  text-align: center;
+}
+
+.weekDaysDisabledSelected {
+  border: 0.5px solid #eeeeee;
+  padding: 10px;
+  margin: 0px;
+  width: 2em;
+  height: 2em;
+  background: #02A699;
+  color: #ffffff;
+  text-align: center;
+}
+
+.weekDaysDisabledNormal {
+  border: 0.5px solid #eeeeee;
+  padding: 10px;
+  align-content: center;
+  margin: 0px;
+  width: 2em;
+  height: 2em;
+  text-decoration: line-through;
+  text-align: center;
+  pointer-events: none; 
+  color: #d8d8d8;
+}
+
+.weekDaysBetweenNormal {
+  border: 0.5px solid #eeeeee;
+  padding: 10px;
+  margin: 0px;
+  width: 2em;
+  height: 2em;
+  background: #02A699;
+  color: #ffffff;
+  text-align: center;
+}
+
+
