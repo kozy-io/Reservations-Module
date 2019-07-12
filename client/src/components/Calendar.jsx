@@ -58,6 +58,11 @@ class Calendar extends React.Component {
     const currentYear = current.year();
     const fullDate = moment(`${currentYear}-${currentMonth + 1}-${date}`, 'YYYY-MM-DD');
 
+    let reservedDates = reserved.map((day) => {
+      const date = `${currentYear}-${currentMonth + 1}-${day}`;
+      return moment(date, 'YYYY-MM-DD');
+    });
+
     if (fullDate.isSame(selectCheckIn)) {
       return 'Between';
     }
@@ -86,13 +91,15 @@ class Calendar extends React.Component {
       return 'Disabled';
     }
     if (selectCheckIn && !selectCheckOut) {
-      let firstCheckOut = moment(selectCheckIn).clone().add(minStay - 1, 'days').format('YYYY-MM-DD');
-      if (fullDate.isBetween(selectCheckIn, firstCheckOut, null, [])) {
+      let firstCheckOut = moment(selectCheckIn).clone().add(minStay, 'days').format('YYYY-MM-DD');
+
+      if (fullDate.isBetween(selectCheckIn, firstCheckOut, null, '[)')) {
         return 'Disabled';
       }
     }
     if (selectCheckOut && !selectCheckIn) {
       let firstCheckIn = moment(selectCheckOut).clone().subtract(minStay, 'days').format('YYYY-MM-DD');
+      // check if there is a reserved date between check in and check out
       if (fullDate.isBetween(firstCheckIn, selectCheckOut, null, '(]')) {
         return 'Disabled';
       }
@@ -180,7 +187,6 @@ class Calendar extends React.Component {
       const range = moment.range(checkIn, moment(validCheckOut));
       for (let i = 0; i < fullReservedDates.length; i += 1) {
         if (range.contains(fullReservedDates[i], { excludeEnd: true })) {
-          console.log('invalid');
           this.setState({ invalidCheckIn: true });
         }
       }
@@ -190,9 +196,9 @@ class Calendar extends React.Component {
       let checkOut = selectCheckOut.format('YYYY-MM-DD');
       let validCheckIn = moment(checkOut).clone().subtract(minStay, 'days').format('YYYY-MM-DD');
       const range = moment.range(moment(validCheckIn), checkOut);
+      console.log(range);
       for (let j = 0; j < fullReservedDates.length; j += 1) {
-        let reservedCheckOut = fullReservedDates[j].clone().add(1, 'days').format('YYYY-MM-DD');
-        if (range.contains(reservedCheckOut)) {
+        if (range.contains(fullReservedDates[j], { excludeEnd: true })) {
           this.setState({ invalidCheckOut: true }, () => {
           });
         }
