@@ -1,3 +1,4 @@
+/* eslint-disable react/button-has-type */
 import React from 'react';
 import axios from 'axios';
 import OutsideClickHandler from 'react-outside-click-handler';
@@ -248,12 +249,14 @@ class Calendar extends React.Component {
             <Month period={month} startingDay={startingDay} daysInMonth={daysInMonth}
               handleSelect={this.handleSelect} getStatus={this.getStatus} />
             
-            <button name="clear" onClick={(event) => { this.handleReset(event); }}>
-            Clear
-          </button>
-        </div>
-      </div>
-      </OutsideClickHandler>
+            <div className="clearContainer">
+              <button name="clear" className={styles.clear} onClick={(event) => { this.handleReset(event); }}>
+                Clear dates
+              </button>
+            </div>
+          </div>
+          </div>
+        </OutsideClickHandler>
       </div>
     );
   }

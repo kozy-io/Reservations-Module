@@ -146,4 +146,18 @@ display: block !important;
   text-align: center;
 }
 
+.clear {
+  color: #008489 !important;
+  font-family: Circular,-apple-system,BlinkMacSystemFont,Roboto,Helvetica Neue,sans-serif) !important;
+  overflow-wrap: break-word !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  border: 0px;
+}
+
+.clearContainer {
+  margin: 6px !important;
+  text-align: right;
+}
+
 

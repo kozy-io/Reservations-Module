@@ -57,26 +57,21 @@ class App extends React.Component {
     this.getListing();
   }
 
-
   getListing() {
     const random = Math.floor(Math.random() * 100);
     axios.get(`/listing/${random}`)
       .then((response) => {
         const { base_rate, currency, extra_guest_cap, extra_guest_charge, id, local_tax, max_guests,
-          min_stay, review_count, star_rating } = response.data;
+          min_stay, review_count, star_rating,
+        } = response.data;
         
         this.setState({
           currency, extra_guest_cap, extra_guest_charge, id, local_tax, max_guests,
           min_stay, review_count, star_rating, base_rate: Number(base_rate),
         }, () => {
-          this.setState({
-            displayCalendar: false,
-          });
+          this.setState({ displayCalendar: false });
         });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      }).catch((error) => { console.log(error); });
   }
 
   getSelectedDates(date) {
@@ -86,16 +81,12 @@ class App extends React.Component {
       this.setState({
         selectedCheckIn: date,
         view: 'out',
-      }, () => {
-        this.validateStay();
-      });
+      }, () => { this.validateStay(); });
     } else {
       this.setState({
         selectedCheckOut: date,
         view: 'in',
-      }, () => {
-        this.validateStay();
-      });
+      }, () => { this.validateStay(); });
     }
   }
 
@@ -109,47 +100,38 @@ class App extends React.Component {
   }
 
   getSelectedGuests(type, number) {
-    const { adults, children } = this.state;
     this.setState({
       [type]: number,
-    }, () => {
-      this.calculateExtraGuests();
-    });
+    }, () => { this.calculateExtraGuests(); });
   }
 
   displayGuest() {
-    if (this.state.showGuest === false) {
+    const { showGuest } = this.state;
+    if (showGuest === false) {
       this.setState(prevState => ({
         showGuest: !prevState.showGuest,
-      }), () => {
-        document.getElementById('overlayGuest').style.display = 'block';
-      });
+      }), () => { document.getElementById('overlayGuest').style.display = 'block'; });
     } else {
       this.setState(prevState => ({
         showGuest: !prevState.showGuest,
-      }), () => {
-        document.getElementById('overlayGuest').style.display = 'none';
-      });
+      }), () => { document.getElementById('overlayGuest').style.display = 'none'; });
     }
   }
 
   displayCalendar(event) {
     const { name } = event.target;
+    const { showCalendar } = this.state;
     this.setState({
       view: name,
     }, () => {
-      if (this.state.showCalendar === false) {
+      if (showCalendar === false) {
         this.setState(prevState => ({
           showCalendar: !prevState.showCalendar,
-        }), () => {
-          document.getElementById('overlayCalendar').style.display = 'block';
-        });
+        }), () => { document.getElementById('overlayCalendar').style.display = 'block'; });
       } else {
         this.setState(prevState => ({
           showCalendar: !prevState.showCalendar,
-        }), () => {
-          document.getElementById('overlayCalendar').style.display = 'none';
-        });
+        }), () => { document.getElementById('overlayCalendar').style.display = 'none'; });
       }
     });
   }
@@ -177,16 +159,13 @@ class App extends React.Component {
       const duration = dateOut.diff(dateIn, 'days');
 
       if (duration >= min_stay) {
-        this.setState({
-          duration,
-        }, () => {
+        this.setState({ duration }, () => {
           this.calculateExtraGuests(this.calculateBase);
         });
       } else {
-        console.log('this is not a valid stay');
+        console.log(`This is not a valid stay! The minimum stay requirement for this listing is ${min_stay} days.`);
       }
     }
-    return;
   }
 
   calculateBase() {
@@ -203,7 +182,7 @@ class App extends React.Component {
     }
 
     for (let i = 0; i < daysBetween.length; i += 1) {
-      query += '&time=' + daysBetween[i];
+      query += `&time=${daysBetween[i]}`;
     }
 
     axios.get(`/custom/month?id=${id}${query}`)
@@ -231,27 +210,19 @@ class App extends React.Component {
       selectedCheckIn, selectedCheckOut,
     } = this.state;
 
-    let totalGuests = adults + children;
-    let extraCharge;
+    const totalGuests = adults + children;
+    let extraCharge = 0;
     let stayInDays = 1;
-    // the extra charge should actually be multiplied by the number of nights 
+
     if (selectedCheckIn && selectedCheckOut) {
-      const dateIn = moment(selectedCheckIn);
-      const dateOut = moment(selectedCheckOut);
-      stayInDays = dateOut.diff(dateIn, 'days');
+      stayInDays = selectedCheckOut.diff(selectedCheckIn, 'days');
     }
 
     if (totalGuests > extra_guest_cap) {
       extraCharge = (totalGuests - extra_guest_cap) * extra_guest_charge * stayInDays;
-    } else {
-      extraCharge = 0;
     }
 
-    this.setState({
-      extraGuestFee: extraCharge,
-    }, () => {
-      callback();
-    });
+    this.setState({ extraGuestFee: extraCharge }, () => { callback(); });
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -264,7 +235,7 @@ class App extends React.Component {
     const { id, displayCalendar, view, max_guests, star_rating, review_count, min_stay, base_rate, cleaning_charge, local_tax, showGuest,
       adults, children, infants, selectedCheckIn, selectedCheckOut, displayPricing, total_base, duration, extraGuestFee } = this.state;
 
-    let ratingClass = Math.ceil(star_rating);
+    const ratingClass = 'ratings' + Math.ceil(star_rating);
 
     let displayGuests = '';
     let displayInfants = '';
@@ -284,10 +255,10 @@ class App extends React.Component {
     let checkInView;
     let checkOutView;
     if (view === 'out') {
-      checkOutView = <div id="check-background">Checkout</div>;
+      checkOutView = <div id={styles.checkBackground}>Checkout</div>;
       checkInView = 'Check-in';
     } else if (view === 'in') {
-      checkInView = <div id="check-background">Check-in</div>;
+      checkInView = <div id={styles.checkBackground}>Check-in</div>;
       checkOutView = 'Checkout';
     } else {
       checkInView = 'Check-in';
@@ -309,35 +280,37 @@ class App extends React.Component {
 
 
     return (
-      <div className="reservations-container">
-        <div className="reservations-inner">
+      <div className={styles.reservationsContainer}>
+        <div className={styles.reservationsInner}>
 
-          <div className="reservations-header">
-            <div className="reservations-header-price">
-              <span className="price-displayed">{ this.styleNumber(perNight) || this.styleNumber(base_rate)}</span>
-              <span className="price-text">per night</span>
+          <div className={styles.reservationsHeader}>
+            <div className={styles.reservationsHeaderPrice}>
+              <span className={styles.priceDisplayed}>{ this.styleNumber(perNight) || this.styleNumber(base_rate)}</span>
+              <span className={styles.priceText}>per night</span>
             </div>
 
             <div>
-              <button className="reviews-button"><span role="img" className={`ratings-image ratings-${ratingClass}`}></span>
-              <span className="reviews-number"> {review_count}</span></button>
+              <button className={styles.reviewsButton}>
+              <span role="img" className={`${styles.ratingsImage} ${styles[ratingClass]}`}></span>
+              </button>
+              <span className={styles.reviewsNumber}> {review_count}</span>
             </div>
 
           </div>
 
-          <div className="dates-container">
-            <span className="titles">Dates</span>
+          <div className={styles.datesContainer}>
+            <span className={styles.titles}>Dates</span>
             
-            <div className="date-display-wrapper">
-              <div className="date-checkin-wrapper">
-                <div className="date-checkin-text">
+            <div className={styles.dateDisplayWrapper}>
+              <div className={styles.dateCheckinWrapper}>
+                <div className={styles.dateCheckinText}>
                   <a name="in" onClick={(event) => {this.displayCalendar(event);}}>
                   { selectedCheckIn ? selectedCheckIn.format('MM/DD/YYYY') : checkInView}
                   </a>
                 </div>
               </div>
 
-              <div className="date-arrow-wrapper">
+              <div className={styles.dateArrowWrapper}>
                 <svg viewBox="0 0 24 24">
                   <path
                     d="m0 12.5a.5.5 0 0 0 .5.5h21.79l-6.15 6.15a.5.5 0 1 0 .71.71l7-7v-.01a.5.5 0 0 0 
@@ -348,8 +321,8 @@ class App extends React.Component {
                 </svg>
               </div>
                   
-            <div className="date-checkout-wrapper">
-              <div className="date-checkout-text">
+            <div className={styles.dateCheckoutWrapper}>
+              <div className={styles.dateCheckoutText}>
                 <a name="out" onClick={(event) => {this.displayCalendar(event);}}>
                 { selectedCheckOut ? selectedCheckOut.format('MM/DD/YYYY') : checkOutView }</a>
               </div>
@@ -363,13 +336,13 @@ class App extends React.Component {
             clearSelectedDates={this.clearSelectedDates} minStay={min_stay} />
             : null }
           
-          <div className="guest-bar-container">
-            <span className="titles">Guests</span>
+          <div className={styles.guestBarContainer}>
+            <span className={styles.titles}>Guests</span>
           
             <div className="guests-display-table">
           
-              <div id="guests-display" onClick={this.displayGuest}>
-                <div className="guests-display-text">
+              <div id={styles.guestsDisplay} onClick={this.displayGuest}>
+                <div className={styles.guestsDisplayText}>
                 {displayGuests} {displayInfants}
                 </div>
               </div>
@@ -379,89 +352,87 @@ class App extends React.Component {
           <Guest maxGuests={max_guests} getSelectedGuests={this.getSelectedGuests} />
 
           { displayPricing ?
-            <div className="pricing">
-              <div className="pricing-inner-container">
-                <div className="pricing-description-container">
-                  <span className="pricing-description">
+            <div className={styles.pricing}>
+              <div className={styles.pricingInnerContainer}>
+                <div className={styles.pricingDescriptionContainer}>
+                  <span className={styles.pricingDescription}>
                     {this.styleNumber(perNight)} x {duration} {duration > 1 ? 'nights' : 'night' }
                   </span>
                 </div>
-                <div className="pricing-amount-container">
-                  <span className="pricing-amount">{this.styleNumber(total_base + extraGuestFee)}</span>
+                <div className={styles.pricingAmountContainer}>
+                  <span className={styles.pricingAmount}>{this.styleNumber(total_base + extraGuestFee)}</span>
                 </div>
               </div>
 
-              <div className="pricing-separation-container">
-                <div className="separation"></div>
+              <div className={styles.pricingSeparationContainer}>
+                <div className={styles.separation}></div>
               </div>
 
-              <div className="pricing-inner-container">
-                <div className="pricing-description-container">
-                  <span className="pricing-description">
+              <div className={styles.pricingInnerContainer}>
+                <div className={styles.pricingDescriptionContainer}>
+                  <span className={styles.pricingDescription}>
                     Cleaning fee
                   </span>
                 </div>
                 
-                <div className="pricing-amount-container">
-                  <span className="pricing-amount">${cleaning_charge}</span>
+                <div className={styles.pricingAmountContainer}>
+                  <span className={styles.pricingAmount}>${cleaning_charge}</span>
                 </div>
               </div>
 
-              <div className="pricing-separation-container">
-                <div className="separation"></div>
+              <div className={styles.pricingSeparationContainer}>
+                <div className={styles.separation}></div>
               </div>
 
-              <div className="pricing-inner-container">
-                <div className="pricing-description-container">
-                  <span className="pricing-description">
+              <div className={styles.pricingInnerContainer}>
+                <div className={styles.pricingDescriptionContainer}>
+                  <span className={styles.pricingDescription}>
                     Service charge
                   </span>
                 </div>
-                <div className="pricing-amount-container">
-                  <span className="pricing-amount">
+                <div className={styles.pricingAmountContainer}>
+                  <span className={styles.pricingAmount}>
                     {this.styleNumber(serviceCharge)}
                   </span>
                 </div>
               </div>
 
-              <div className="pricing-separation-container">
-                <div className="separation"></div>
+              <div className={styles.pricingSeparationContainer}>
+                <div className={styles.separation}></div>
               </div>
 
-              <div className="pricing-inner-container">
-                <div className="pricing-description-container">
-                  <span className="pricing-description">
+              <div className={styles.pricingInnerContainer}>
+                <div className={styles.pricingDescriptionContainer}>
+                  <span className={styles.pricingDescription}>
                     Occupancy taxes and fees
                   </span>
                 </div>
-                <div className="pricing-amount-container">
-                  <span className="pricing-amount">
+                <div className={styles.pricingAmountContainer}>
+                  <span className={styles.pricingAmount}>
                     {this.styleNumber(occupancyFees)}
                   </span>
                 </div>
               </div>
 
-              <div className="pricing-separation-container-outer">
+              <div className={styles.pricingSeparationContainerOuter}>
               </div>
 
-              <div className="pricing-inner-container">
-                <div className="pricing-description-container">
-                  <span className="pricing-total">
+              <div className={styles.pricingInnerContainer}>
+                <div className={styles.pricingDescriptionContainer}>
+                  <span className={styles.pricingTotal}>
                     Total
                   </span>
                 </div>
-                <div className="pricing-amount-container">
-                  <span className="pricing-total">
+                <div className={styles.pricingAmountContainer}>
+                  <span className={styles.pricingTotal}>
                     {this.styleNumber(aggregate)}
                   </span>
                 </div>
               </div>
 
-              <div id="booking-button">
-                <button type="submit" className="booking" aria-busy="false" data-veloute="book-it-button">
-                  <div className="_10cu6uvp">
+              <div id={styles.bookingButton}>
+                <button type="submit" className={styles.booking} aria-busy="false" data-veloute="book-it-button">
                     Request to Book
-                  </div>
                 </button>
               </div>
             </div>
