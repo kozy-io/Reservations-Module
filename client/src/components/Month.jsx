@@ -19,7 +19,7 @@ class Month extends React.Component {
     const days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
     const header = days.map((day) => {
       return (
-        <th key={day} className="week-names">{day}</th>
+        <th key={day} className={styles.weekNames}>{day}</th>
       );
     });
 
@@ -27,7 +27,7 @@ class Month extends React.Component {
     for (let i = 0; i < startingDay; i += 1) {
       filler.push(
         // <Date />
-        <td key={`${i}-null`} className="week-days">{null}</td>,
+        <td key={`${i}-null`} className={styles.fillerDays}>{null}</td>,
       );
     }
 
@@ -61,7 +61,7 @@ class Month extends React.Component {
     });
 
     return (
-      <table>
+      <table className={styles.calendarTable}>
         <tbody>
           <tr>
             {header}

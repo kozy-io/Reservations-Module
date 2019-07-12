@@ -53,7 +53,7 @@ class Calendar extends React.Component {
 
   getStatus(date) {
     const { reserved, current, selectCheckIn, selectCheckOut, invalidCheckIn, invalidCheckOut } = this.state;
-    const { view } = this.props;
+    const { view, minStay } = this.props;
     const currentMonth = current.month();
     const currentYear = current.year();
     const fullDate = moment(`${currentYear}-${currentMonth + 1}-${date}`, 'YYYY-MM-DD');
@@ -84,6 +84,18 @@ class Calendar extends React.Component {
     }
     if (fullDate.isAfter(selectCheckOut)) {
       return 'Disabled';
+    }
+    if (selectCheckIn && !selectCheckOut) {
+      let firstCheckOut = moment(selectCheckIn).clone().add(minStay - 1, 'days').format('YYYY-MM-DD');
+      if (fullDate.isBetween(selectCheckIn, firstCheckOut, null, [])) {
+        return 'Disabled';
+      }
+    }
+    if (selectCheckOut && !selectCheckIn) {
+      let firstCheckIn = moment(selectCheckOut).clone().subtract(minStay, 'days').format('YYYY-MM-DD');
+      if (fullDate.isBetween(firstCheckIn, selectCheckOut, null, '(]')) {
+        return 'Disabled';
+      }
     }
     if (!invalidCheckIn && !invalidCheckOut && selectCheckIn && selectCheckOut) {
       if (fullDate.isBetween(selectCheckIn, selectCheckOut, null, [])) {
@@ -151,7 +163,7 @@ class Calendar extends React.Component {
   }
 
   validateStay(callback) {
-    const { 
+    const {
       selectCheckIn, selectCheckOut, reserved, current,
     } = this.state;
     const { minStay, view } = this.props;
@@ -163,23 +175,23 @@ class Calendar extends React.Component {
       return moment(date, 'YYYY-MM-DD');
     });
     if (view === 'in') {
-      let checkIn = moment(selectCheckIn);
-      let validCheckOut = checkIn.clone().add(minStay, 'days');
+      let checkIn = selectCheckIn.format('YYYY-MM-DD');
+      let validCheckOut = moment(checkIn).clone().add(minStay, 'days').format('YYYY-MM-DD');
       const range = moment.range(checkIn, moment(validCheckOut));
-  
       for (let i = 0; i < fullReservedDates.length; i += 1) {
-        if (range.contains(fullReservedDates[i])) {
+        if (range.contains(fullReservedDates[i], { excludeEnd: true })) {
+          console.log('invalid');
           this.setState({ invalidCheckIn: true });
         }
       }
     }
 
     if (view === 'out') {
-      let checkOut = moment(selectCheckOut);
-      let validCheckIn = checkOut.clone().subtract(minStay, 'days');
+      let checkOut = selectCheckOut.format('YYYY-MM-DD');
+      let validCheckIn = moment(checkOut).clone().subtract(minStay, 'days').format('YYYY-MM-DD');
       const range = moment.range(moment(validCheckIn), checkOut);
       for (let j = 0; j < fullReservedDates.length; j += 1) {
-        let reservedCheckOut = fullReservedDates[j].clone().add(1, 'days');
+        let reservedCheckOut = fullReservedDates[j].clone().add(1, 'days').format('YYYY-MM-DD');
         if (range.contains(reservedCheckOut)) {
           this.setState({ invalidCheckOut: true }, () => {
           });

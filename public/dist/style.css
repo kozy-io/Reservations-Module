@@ -578,9 +578,9 @@ table {
   font-weight: bold;
 }
 
-td:hover {
+/* td:hover {
   background-color:#B3F1EC;
-}
+} */
 
 
 .week-days-active-normal {
