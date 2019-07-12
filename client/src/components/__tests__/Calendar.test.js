@@ -14,7 +14,7 @@ describe.only('Calendar Structure', () => {
 
 
     // eslint-disable-next-line no-undef
-    expect(headers).toHaveLength(7);
+    expect(headers).toHaveLength(7); 
   });
 
   // eslint-disable-next-line no-undef
