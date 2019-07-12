@@ -6,7 +6,7 @@ import axios from 'axios';
 
 
 // eslint-disable-next-line no-undef
-describe('Calendar Structure', () => {
+describe.only('Calendar Structure', () => {
   // eslint-disable-next-line no-undef
   it('should generate a table with 7 days of the week', () => {
     const wrapper = shallow(<Calendar />);

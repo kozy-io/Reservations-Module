@@ -1,8 +1,8 @@
 #overlayCalendar {
-  display: block; /* Hidden by default */
+  display: none; /* Hidden by default */
   position: absolute;
   border: 1px solid #eeeeee;
-  top: 170px;
+  top: 145px;
   left: 42px;
   width: 340px;
   z-index: 20;

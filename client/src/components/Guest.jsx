@@ -1,7 +1,7 @@
 /* eslint-disable react/button-has-type */
 import React, { Component } from 'react';
 import styles from '../styles/guest.css';
-console.log(styles);
+
 class Guest extends React.Component {
   constructor(props) {
     super(props);

@@ -4,10 +4,9 @@ import React from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import NumberFormat from 'react-number-format';
-// import regeneratorRuntime from "regenerator-runtime";
-
 import Calendar from './Calendar.jsx';
 import Guest from './Guest.jsx';
+import styles from '../styles/app.css';
 
 
 class App extends React.Component {
@@ -46,7 +45,6 @@ class App extends React.Component {
     this.getSelectedGuests = this.getSelectedGuests.bind(this);
     this.displayGuest = this.displayGuest.bind(this);
     this.changeView = this.changeView.bind(this);
-    this.styleDisplayDate = this.styleDisplayDate.bind(this);
     this.validateStay = this.validateStay.bind(this);
     this.calculateBase = this.calculateBase.bind(this);
     this.hideCalendar = this.hideCalendar.bind(this);
@@ -61,8 +59,7 @@ class App extends React.Component {
 
 
   getListing() {
-    // const random = Math.floor(Math.random() * 100);
-    const random = 1;
+    const random = Math.floor(Math.random() * 100);
     axios.get(`/listing/${random}`)
       .then((response) => {
         const { base_rate, currency, extra_guest_cap, extra_guest_charge, id, local_tax, max_guests,
@@ -172,16 +169,11 @@ class App extends React.Component {
     }));
   }
 
-  styleDisplayDate(date) {
-    let data = date.split('-');
-      return data[1] + '/' + data[2] + '/' + data[0];
-  }
-
   validateStay(reserved) {
     const { selectedCheckIn, selectedCheckOut, min_stay } = this.state;
     if (selectedCheckIn && selectedCheckOut) {
-      const dateIn = moment(selectedCheckIn);
-      const dateOut = moment(selectedCheckOut);
+      const dateIn = selectedCheckIn;
+      const dateOut = selectedCheckOut;
       const duration = dateOut.diff(dateIn, 'days');
 
       if (duration >= min_stay) {
@@ -340,7 +332,7 @@ class App extends React.Component {
               <div className="date-checkin-wrapper">
                 <div className="date-checkin-text">
                   <a name="in" onClick={(event) => {this.displayCalendar(event);}}>
-                  { selectedCheckIn ? this.styleDisplayDate(selectedCheckIn) : checkInView}
+                  { selectedCheckIn ? selectedCheckIn.format('MM/DD/YYYY') : checkInView}
                   </a>
                 </div>
               </div>
@@ -359,7 +351,7 @@ class App extends React.Component {
             <div className="date-checkout-wrapper">
               <div className="date-checkout-text">
                 <a name="out" onClick={(event) => {this.displayCalendar(event);}}>
-                { selectedCheckOut ? this.styleDisplayDate(selectedCheckOut) : checkOutView }</a>
+                { selectedCheckOut ? selectedCheckOut.format('MM/DD/YYYY') : checkOutView }</a>
               </div>
             </div>
 

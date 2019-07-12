@@ -43,7 +43,7 @@ describe('Date and Price Display', () => {
   });
 });
 
-describe.only('Pricing Validation', () => {
+describe('Pricing Validation', () => {
   // eslint-disable-next-line no-undef
   const wrapper = shallow(<App />)
   it('should properly calculate base cost given number of nights and base price per the respective listing', () => {

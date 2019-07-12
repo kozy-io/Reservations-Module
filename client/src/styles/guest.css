@@ -2,7 +2,7 @@
   display: none; /* Hidden by default */
   position: absolute;
   border: 1px solid #eeeeee;
-  top: 230px;
+  top: 214px;
   left: 50px;
   z-index: 10;
   background: #ffffff;
@@ -12,7 +12,7 @@
   position: absolute !important;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 6px, rgba(0, 0, 0, 0.07) 0px 0px 0px 1px !important;
   width: 100% !important; 
-  min-width: 348px;
+  min-width: 326px;
   text-align: left !important;
   margin-bottom: 16px !important;
   box-sizing: border-box !important;
@@ -21,6 +21,7 @@
   background: rgb(255, 255, 255) !important;
   border-radius: 3px !important;
   padding: 16px !important;
+  border-top: 1px solid #007479;
 }
 
 .guestOptionOuter {
