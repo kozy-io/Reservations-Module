@@ -13,8 +13,18 @@ module.exports = {
         },
       },
       {
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: {
+                localIdentName: '[local]',
+              },
+            },
+          },
+        ],
       },
     ],
   },
@@ -22,4 +32,5 @@ module.exports = {
     filename: 'bundle.js',
     path: __dirname + '/public/dist',
   },
+  watch: true,
 };
