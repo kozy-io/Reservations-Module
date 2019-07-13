@@ -117,10 +117,6 @@ class Calendar extends React.Component {
     const currentYear = current.year();
     const fullDate = moment(`${currentYear}-${currentMonth}-${date}`, 'YYYY-MM-DD');
 
-    if (fullDate.isSame(moment('2020-01-08', 'YYYY-MM-DD'))) {
-      alert('hi honey! i love you');
-    }
-
     if (view === 'in') {
       this.setState({ selectCheckIn: fullDate }, () => {
         this.validateStay(fullDate, (date, status) => { getSelectedDates(date, status); });
