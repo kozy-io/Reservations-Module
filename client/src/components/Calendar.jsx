@@ -217,6 +217,7 @@ class Calendar extends React.Component {
     const { current } = this.state;
     const allMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
       'September', 'October', 'November', 'December'];
+    const { minStay } = this.props;
     const month = current.month();
     const year = current.year();
     const startingDay = current.weekday();
@@ -271,7 +272,10 @@ class Calendar extends React.Component {
               getStatus={this.getStatus}
             />
             
-            <div className="clearContainer">
+            <div className={styles.clearContainer}>
+              <span className={styles.clearDisclaimer}>
+                {minStay} night minimum stay.
+              </span>
               <button name="clear" className={styles.clear} onClick={(event) => { this.handleReset(event); }}>
                 Clear dates
               </button>

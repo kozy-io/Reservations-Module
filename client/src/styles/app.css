@@ -67,7 +67,7 @@
   border-style: initial !important;
   border-color: initial !important;
   border-image: initial !important;
-  margin: 0px !important;
+  margin-bottom: 2px !important;
   padding: 0px !important;
 }
 
@@ -154,7 +154,7 @@
   color: rgb(117, 117, 117) !important;
   position: relative !important;
   display: inline-block !important;
-  width: 100% !important;
+  width: 90% !important;
   vertical-align: middle !important;
   margin: 0px !important;
   padding: 8px !important;

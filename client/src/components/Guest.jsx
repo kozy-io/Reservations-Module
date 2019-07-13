@@ -248,7 +248,7 @@ class Guest extends React.Component {
               </div>
             </div>
             <p />
-            <div className={styles.guestDisclaimer}>{maxGuests} guests minimum. Infants don't count toward the number of guests.</div>
+            <div className={styles.guestDisclaimer}>{maxGuests} guests maximum. Infants don't count toward the number of guests.</div>
             
           </div>
         </div>
