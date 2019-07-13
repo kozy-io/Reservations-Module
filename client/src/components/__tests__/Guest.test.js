@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import Guest from '../Guest';
 
 // eslint-disable-next-line no-undef
-describe('Guest Bar', () => {
+describe.only('Guest Bar', () => {
   const wrapper = shallow(<Guest getSelectedGuests={()=>{}} maxGuests={5} />);
 
   it('should exist', () => {
@@ -90,8 +90,8 @@ describe('Guest Bar', () => {
       adult: 2,
     });
 
-    let infant = wrapper.find('.button-minus-inner').at(2).parent();
-    expect(infant.hasClass('button-minus-outer-disabled')).toBe(true);
+    let infant = wrapper.find('.buttonMinusInner').at(2).parent();
+    expect(infant.hasClass('buttonMinusOuterDisabled')).toBe(true);
 
     wrapper.setState({
       child: 0,
@@ -99,8 +99,8 @@ describe('Guest Bar', () => {
       adult: 2,
     });
 
-    let child = wrapper.find('.button-minus-inner').at(1).parent();
-    expect(child.hasClass('button-minus-outer-disabled')).toBe(true);
+    let child = wrapper.find('.buttonMinusInner').at(1).parent();
+    expect(child.hasClass('buttonMinusOuterDisabled')).toBe(true);
 
   });
 
@@ -111,8 +111,8 @@ describe('Guest Bar', () => {
       infant: 2,
     });
 
-    let adult = wrapper.find('.button-minus-inner').at(0).parent();
-    expect(adult.hasClass('button-minus-outer-disabled')).toBe(true);
+    let adult = wrapper.find('.buttonMinusInner').at(0).parent();
+    expect(adult.hasClass('buttonMinusOuterDisabled')).toBe(true);
   });
 
   it ('+ button should disable when max guests are reached, so that adults and children cannot increment past the maximum guests allowed, respective to the listing', () => {
@@ -122,11 +122,11 @@ describe('Guest Bar', () => {
       infant: 2,
     });
 
-    let adult = wrapper.find('.button-plus-inner').at(0).parent();
-    let child = wrapper.find('.button-plus-inner').at(1).parent();
+    let adult = wrapper.find('.buttonPlusInner').at(0).parent();
+    let child = wrapper.find('.buttonPlusInner').at(1).parent();
 
-    expect(adult.hasClass('button-plus-outer-disabled')).toBe(true);
-    expect(child.hasClass('button-plus-outer-disabled')).toBe(true);
+    expect(adult.hasClass('buttonPlusOuterDisabled')).toBe(true);
+    expect(child.hasClass('buttonPlusOuterDisabled')).toBe(true);
   });
 
   it ('infants should not increment past 5', () => {
@@ -136,8 +136,8 @@ describe('Guest Bar', () => {
       infant: 5,
     });
 
-    let infant = wrapper.find('.button-plus-inner').at(2).parent();
-    expect(infant.hasClass('button-plus-outer-disabled')).toBe(true);
+    let infant = wrapper.find('.buttonPlusInner').at(2).parent();
+    expect(infant.hasClass('buttonPlusOuterDisabled')).toBe(true);
 
   });
 });

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react/button-has-type */
 import React from 'react';
 import axios from 'axios';
@@ -37,8 +38,8 @@ class Calendar extends React.Component {
   getReservedDates() {
     const { current } = this.state;
     const {id} = this.props;
-    let month = current.month();
-    let year = current.year();
+    const month = current.month();
+    const year = current.year();
 
     axios.get(`/reserved/month?id=${id}&month=${month+1}&year=${year}`)
       .then(response => this.setState({
@@ -58,7 +59,7 @@ class Calendar extends React.Component {
     const currentYear = current.year();
     const fullDate = moment(`${currentYear}-${currentMonth + 1}-${date}`, 'YYYY-MM-DD');
 
-    let reservedDates = reserved.map((day) => {
+    const reservedDates = reserved.map((day) => {
       const date = `${currentYear}-${currentMonth + 1}-${day}`;
       return moment(date, 'YYYY-MM-DD');
     });
@@ -91,14 +92,14 @@ class Calendar extends React.Component {
       return 'Disabled';
     }
     if (selectCheckIn && !selectCheckOut) {
-      let firstCheckOut = moment(selectCheckIn).clone().add(minStay, 'days').format('YYYY-MM-DD');
+      const firstCheckOut = moment(selectCheckIn).clone().add(minStay, 'days').format('YYYY-MM-DD');
 
       if (fullDate.isBetween(selectCheckIn, firstCheckOut, null, '[)')) {
         return 'Disabled';
       }
     }
     if (selectCheckOut && !selectCheckIn) {
-      let firstCheckIn = moment(selectCheckOut).clone().subtract(minStay, 'days').format('YYYY-MM-DD');
+      const firstCheckIn = moment(selectCheckOut).clone().subtract(minStay, 'days').format('YYYY-MM-DD');
       // check if there is a reserved date between check in and check out
       if (fullDate.isBetween(firstCheckIn, selectCheckOut, null, '(]')) {
         return 'Disabled';
@@ -177,13 +178,13 @@ class Calendar extends React.Component {
     const currentMonth = current.month();
     const currentYear = current.year();
 
-    let fullReservedDates = reserved.map((day) => {
+    const fullReservedDates = reserved.map((day) => {
       const date = `${currentYear}-${currentMonth + 1}-${day}`;
       return moment(date, 'YYYY-MM-DD');
     });
     if (view === 'in') {
-      let checkIn = selectCheckIn.format('YYYY-MM-DD');
-      let validCheckOut = moment(checkIn).clone().add(minStay, 'days').format('YYYY-MM-DD');
+      const checkIn = selectCheckIn.format('YYYY-MM-DD');
+      const validCheckOut = moment(checkIn).clone().add(minStay, 'days').format('YYYY-MM-DD');
       const range = moment.range(checkIn, moment(validCheckOut));
       for (let i = 0; i < fullReservedDates.length; i += 1) {
         if (range.contains(fullReservedDates[i], { excludeEnd: true })) {
@@ -193,10 +194,9 @@ class Calendar extends React.Component {
     }
 
     if (view === 'out') {
-      let checkOut = selectCheckOut.format('YYYY-MM-DD');
-      let validCheckIn = moment(checkOut).clone().subtract(minStay, 'days').format('YYYY-MM-DD');
+      const checkOut = selectCheckOut.format('YYYY-MM-DD');
+      const validCheckIn = moment(checkOut).clone().subtract(minStay, 'days').format('YYYY-MM-DD');
       const range = moment.range(moment(validCheckIn), checkOut);
-      console.log(range);
       for (let j = 0; j < fullReservedDates.length; j += 1) {
         if (range.contains(fullReservedDates[j], { excludeEnd: true })) {
           this.setState({ invalidCheckOut: true }, () => {
