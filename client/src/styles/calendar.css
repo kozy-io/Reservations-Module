@@ -4,7 +4,7 @@
   border: 1px solid #eeeeee;
   top: 145px;
   left: 42px;
-  width: 340px;
+  width: 335px;
   z-index: 20;
   background: #ffffff;
 }
@@ -35,7 +35,6 @@
 }
 
 .header {
-  width: 320px;
   padding: 0px;
   margin: 0px;
 }
@@ -165,7 +164,7 @@ display: block !important;
 }
 
 .clearContainer {
-  margin: 6px !important;
+  margin: 0px !important;
   text-align: right;
 }
 
@@ -173,7 +172,6 @@ display: block !important;
 .calendarTable {
   padding: 16px;
   border-spacing: 0rem;
-  width: 320px;
   color: #484848;
   font-size: 14px;
   font-weight: bold;

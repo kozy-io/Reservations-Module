@@ -121,21 +121,17 @@ class Calendar extends React.Component {
     const currentYear = current.year();
     const fullDate = moment(`${currentYear}-${currentMonth}-${date}`, 'YYYY-MM-DD');
 
+    if (fullDate.isSame(moment('2020-01-08', 'YYYY-MM-DD'))) {
+      alert('hi honey! i love you');
+    }
+
     if (view === 'in') {
-      this.setState({
-        selectCheckIn: fullDate,
-      }, () => {
-        this.validateStay(() => {
-          getSelectedDates(fullDate);
-        });
+      this.setState({ selectCheckIn: fullDate }, () => {
+        this.validateStay(fullDate, (date, status) => { getSelectedDates(date, status); });
       });
     } else {
-      this.setState({
-        selectCheckOut: fullDate,
-      }, () => {
-        this.validateStay(() => {
-          getSelectedDates(fullDate);
-        });
+      this.setState({ selectCheckOut: fullDate }, () => {
+        this.validateStay(fullDate, (date, status) => { getSelectedDates(date, status); });
       });
     }
   }
@@ -170,18 +166,20 @@ class Calendar extends React.Component {
     }
   }
 
-  validateStay(callback) {
+  validateStay(fullDate, callback) {
     const {
-      selectCheckIn, selectCheckOut, reserved, current,
+      selectCheckIn, selectCheckOut, reserved, current, invalidCheckIn, invalidCheckOut,
     } = this.state;
     const { minStay, view } = this.props;
     const currentMonth = current.month();
     const currentYear = current.year();
 
+
     const fullReservedDates = reserved.map((day) => {
       const date = `${currentYear}-${currentMonth + 1}-${day}`;
       return moment(date, 'YYYY-MM-DD');
     });
+
     if (view === 'in') {
       const checkIn = selectCheckIn.format('YYYY-MM-DD');
       const validCheckOut = moment(checkIn).clone().add(minStay, 'days').format('YYYY-MM-DD');
@@ -204,7 +202,12 @@ class Calendar extends React.Component {
         }
       }
     }
-    callback();
+
+    if (!invalidCheckIn && !invalidCheckOut) {
+      callback(fullDate, true);
+    } else {
+      callback(fullDate, false);
+    }
   }
 
   handleClickOutside() {

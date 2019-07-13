@@ -1,11 +1,14 @@
 /* Reservations Display */
 .reservationsContainer {
   display: inline-block;
-  width: 376px;
+  width: 350px;
   background-color: #ffffff;
   border: 1px solid #eeeeee;
   padding: 16px 24px;
-  box-shadow: 0 -1px 0 0 rgba(72, 72, 72, 0.16)
+  box-shadow: 0 -1px 0 0 rgba(72, 72, 72, 0.16);
+  color: #484848;
+  position: relative;
+  font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue";
 }
 
 .reservationsInner {
@@ -218,7 +221,7 @@
 #guestsDisplay{
   height: 30px;
   padding: 6px !important;
-  margin: 4px 0px 0px 0px;
+  margin: 4px 0px 20px 0px;
   border: 1px solid #eeeeee;
   text-align: left !important;
   line-height: normal !important;
@@ -336,17 +339,18 @@
   font-family: Circular,-apple-system,BlinkMacSystemFont,Roboto,Helvetica Neue,sans-serif !important;
   padding-top: 10px !important;
   padding-bottom: 10px !important;
-  font-weight: 700 !important;
+  font-weight: 800 !important;
   padding-left: 22px !important;
   padding-right: 22px !important;
   box-shadow: none !important;
   width: 100% !important;
+  margin: 0px 0px 10px 0px;
 }
 
 #bookingButton {
   color: #ffffff !important;
   text-align: center;
-  margin: 10px;
+  margin: 16px 0px 10px 0px;
 }
 
 #checkBackground {
@@ -358,3 +362,40 @@
   border-color: rgb(153, 237, 230) !important;
   border-radius: 3px !important;
 }
+
+.disclaimer {
+  text-align: center !important;
+  font-weight: 600 !important;
+}
+
+.highlights {
+  background-size: 48px !important;
+  border-top: 1px solid #eeeeee;
+  margin-top: 10px !important;
+  padding-top: 20px;
+  transition: margin-top 0.4s ease 0s !important;
+  background-repeat: no-repeat !important;
+  background-position: right center !important;
+  background-image: url(https://a0.muscache.com/airbnb/static/packages/icon-uc-light-bulb.1ffc0407.gif);
+}
+
+.highlightsText {
+  min-height: 34px !important;
+  width: 84% !important;
+}
+
+.highlightsTextMain {
+  overflow-wrap: break-word !important;
+  font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  line-height: 1.28571em !important;
+  color: rgb(72, 72, 72) !important;
+  margin: 0px !important;
+}
+
+.highlightsTextBottom {
+  font-size: 12px !important;
+  margin-top: 6px;
+}
+
