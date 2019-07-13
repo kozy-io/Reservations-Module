@@ -1,3 +1,11 @@
+.error{
+  font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
+  font-size: 20px;
+  font-weight: 800;
+  color: #484848;
+
+}
+
 /* Reservations Display */
 .reservationsContainer {
   display: inline-block;

@@ -6,6 +6,7 @@ import moment from 'moment';
 import NumberFormat from 'react-number-format';
 import Calendar from './Calendar.jsx';
 import Guest from './Guest.jsx';
+
 import styles from '../styles/app.css';
 
 
@@ -72,7 +73,7 @@ class App extends React.Component {
         }, () => {
           this.setState({ displayCalendar: false });
         });
-      }).catch((error) => { console.log(error); });
+      }).catch((error) => { throw error; });
   }
 
   getSelectedDates(date, status) {
@@ -344,9 +345,15 @@ class App extends React.Component {
         </div>
 
           { this.state.id ? 
-          <Calendar id={id} view={view} getSelectedDates={this.getSelectedDates} hideCalendar={this.hideCalendar}
-            clearSelectedDates={this.clearSelectedDates} minStay={min_stay} />
-            : null }
+            <Calendar
+              id={id}
+              view={view}
+              getSelectedDates={this.getSelectedDates}
+              hideCalendar={this.hideCalendar}
+              clearSelectedDates={this.clearSelectedDates}
+              minStay={min_stay}
+            />
+          : null }
           
           <div className={styles.guestBarContainer}>
             <span className={styles.titles}>Guests</span>
