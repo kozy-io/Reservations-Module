@@ -463,10 +463,10 @@ class App extends React.Component {
         <div className={styles.highlights}>
             <div className={styles.highlightsText}>
               <span className={styles.highlightsTextMain}>
-                This place is getting a lot of attention.
+                This place is a rare find.
               </span>
               <div className={styles.highlightsTextBottom}>
-              It's been viewed 1000+ times in the past week.
+              Katherine's place is usually booked. Grab it while you can!
               </div>
             </div>
         </div>

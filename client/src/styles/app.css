@@ -3,7 +3,6 @@
   font-size: 20px;
   font-weight: 800;
   color: #484848;
-
 }
 
 /* Reservations Display */
@@ -384,7 +383,8 @@
   transition: margin-top 0.4s ease 0s !important;
   background-repeat: no-repeat !important;
   background-position: right center !important;
-  background-image: url(https://a0.muscache.com/airbnb/static/packages/icon-uc-light-bulb.1ffc0407.gif);
+  background-image: url(https://a0.muscache.com/airbnb/static/packages/icon-uc-diamond.296a9c25.gif);
+  /* background-image: url(https://a0.muscache.com/airbnb/static/packages/icon-uc-light-bulb.1ffc0407.gif); */
 }
 
 .highlightsText {

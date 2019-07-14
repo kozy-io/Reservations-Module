@@ -9,7 +9,17 @@
 }
 
 
-
+#footer {
+  display: block;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #eeeeee;
+  color: #d8d8d8;
+  text-align: left;
+  height: 20%;
+}
 
 
 
