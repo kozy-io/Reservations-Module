@@ -6,6 +6,7 @@ import moment from 'moment';
 import NumberFormat from 'react-number-format';
 import Calendar from './Calendar.jsx';
 import Guest from './Guest.jsx';
+
 import styles from '../styles/app.css';
 
 
@@ -45,12 +46,13 @@ class App extends React.Component {
     this.getSelectedGuests = this.getSelectedGuests.bind(this);
     this.displayGuest = this.displayGuest.bind(this);
     this.changeView = this.changeView.bind(this);
-    this.validateStay = this.validateStay.bind(this);
+    this.getDuration = this.getDuration.bind(this);
     this.calculateBase = this.calculateBase.bind(this);
     this.hideCalendar = this.hideCalendar.bind(this);
     this.calculateExtraGuests = this.calculateExtraGuests.bind(this);
     this.styleNumber = this.styleNumber.bind(this);
     this.clearSelectedDates = this.clearSelectedDates.bind(this);
+    this.getCustomRates = this.getCustomRates.bind(this);
   }
 
   componentDidMount() {
@@ -71,22 +73,29 @@ class App extends React.Component {
         }, () => {
           this.setState({ displayCalendar: false });
         });
-      }).catch((error) => { console.log(error); });
+      }).catch((error) => { throw error; });
   }
 
-  getSelectedDates(date) {
+  getSelectedDates(date, status) {
     const { view } = this.state;
-
     if (view === 'in') {
       this.setState({
         selectedCheckIn: date,
         view: 'out',
-      }, () => { this.validateStay(); });
+      }, () => {
+        if (status === true) {
+          this.getDuration();
+        }
+      });
     } else {
       this.setState({
         selectedCheckOut: date,
         view: 'in',
-      }, () => { this.validateStay(); });
+      }, () => {
+        if (status === true) {
+          this.getDuration();
+        }
+      });
     }
   }
 
@@ -151,31 +160,25 @@ class App extends React.Component {
     }));
   }
 
-  validateStay(reserved) {
-    const { selectedCheckIn, selectedCheckOut, min_stay } = this.state;
+  getDuration() {
+    const { selectedCheckIn, selectedCheckOut } = this.state;
     if (selectedCheckIn && selectedCheckOut) {
       const dateIn = selectedCheckIn;
       const dateOut = selectedCheckOut;
       const duration = dateOut.diff(dateIn, 'days');
 
-      if (duration >= min_stay) {
-        this.setState({ duration }, () => {
-          this.calculateExtraGuests(this.calculateBase);
-        });
-      } else {
-        console.log(`This is not a valid stay! The minimum stay requirement for this listing is ${min_stay} days.`);
-      }
+      this.setState({ duration }, () => {
+        this.calculateExtraGuests(this.getCustomRates);
+      });
     }
   }
 
-  calculateBase() {
+  getCustomRates() {
     const { id, selectedCheckIn, selectedCheckOut } = this.state;
-
-    const dateIn = moment(selectedCheckIn);
-    const dateOut = moment(selectedCheckOut);
+    const dateIn = selectedCheckIn;
+    const dateOut = selectedCheckOut;
     const daysBetween = [];
     let query = '';
-    let total = 0;
     
     for (let m = moment(dateIn); m.isBefore(dateOut); m.add(1, 'days')) {
       daysBetween.push(m.format('YYYY-MM-DD'));
@@ -187,21 +190,31 @@ class App extends React.Component {
 
     axios.get(`/custom/month?id=${id}${query}`)
       .then((response) => {
-        const customDatesOnly = response.data.map(element => element.date);
-        const customPricesOnly = response.data.map(item => item.price);
-        for (let j = moment(dateIn); j.isBefore(dateOut); j.add(1, 'days')) {
-          let item = (j.format('YYYY-MM-DD'));
-          let index = customDatesOnly.indexOf(item);
-          if (index >= 0) {
-            total += Number(customPricesOnly[index]);
-          } else {
-            total += this.state.base_rate;
-          }
-        }
-        this.setState({ total_base: total }, () => {
-          this.setState({ displayPricing: true });
-        });
+        this.calculateBase(response.data);
       });
+  }
+
+  calculateBase(data) {
+    const { id, selectedCheckIn, selectedCheckOut, base_rate } = this.state;
+    const dateIn = selectedCheckIn;
+    const dateOut = selectedCheckOut;
+    let total = 0;
+  
+    const customDatesOnly = data.map(element => element.date);
+    const customPricesOnly = data.map(item => item.price);
+
+    for (let j = moment(dateIn); j.isBefore(dateOut); j.add(1, 'days')) {
+      let item = (j.format('YYYY-MM-DD'));
+      let index = customDatesOnly.indexOf(item);
+      if (index >= 0) {
+        total += Number(customPricesOnly[index]);
+      } else {
+        total += base_rate;
+      }
+    }
+    this.setState({ total_base: total }, () => {
+      this.setState({ displayPricing: true });
+    });
   }
 
   calculateExtraGuests(callback = () => {}) {
@@ -332,9 +345,15 @@ class App extends React.Component {
         </div>
 
           { this.state.id ? 
-          <Calendar id={id} view={view} getSelectedDates={this.getSelectedDates} hideCalendar={this.hideCalendar}
-            clearSelectedDates={this.clearSelectedDates} minStay={min_stay} />
-            : null }
+            <Calendar
+              id={id}
+              view={view}
+              getSelectedDates={this.getSelectedDates}
+              hideCalendar={this.hideCalendar}
+              clearSelectedDates={this.clearSelectedDates}
+              minStay={min_stay}
+            />
+          : null }
           
           <div className={styles.guestBarContainer}>
             <span className={styles.titles}>Guests</span>
@@ -429,15 +448,28 @@ class App extends React.Component {
                   </span>
                 </div>
               </div>
-
-              <div id={styles.bookingButton}>
-                <button type="submit" className={styles.booking} aria-busy="false" data-veloute="book-it-button">
-                    Request to Book
-                </button>
-              </div>
             </div>
             : null }
-
+            <div className={styles.pricing}>
+              <div id={styles.bookingButton}>
+                <button type="submit" className={styles.booking}>
+                    Request to Book
+                </button>
+                <div className={styles.disclaimer}>
+                  You won't be charged yet.
+                </div>
+              </div>
+            </div>
+        <div className={styles.highlights}>
+            <div className={styles.highlightsText}>
+              <span className={styles.highlightsTextMain}>
+                This place is a rare find.
+              </span>
+              <div className={styles.highlightsTextBottom}>
+              Katherine's place is usually booked. Grab it while you can!
+              </div>
+            </div>
+        </div>
         </div>
       </div>
     );

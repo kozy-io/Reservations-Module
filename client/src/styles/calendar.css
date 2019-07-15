@@ -4,7 +4,7 @@
   border: 1px solid #eeeeee;
   top: 145px;
   left: 42px;
-  width: 340px;
+  width: 335px;
   z-index: 20;
   background: #ffffff;
 }
@@ -30,14 +30,13 @@
 
 .container {
   box-shadow: 0 1px 1px 1px rgba(72, 72, 72, 0.16);
-  padding: 16px;
+  padding: 4px;
   text-align: center;
 }
 
 .header {
-  width: 320px;
   padding: 0px;
-  margin: 0px;
+  margin-top: 20px;
 }
 
 
@@ -165,7 +164,7 @@ display: block !important;
 }
 
 .clearContainer {
-  margin: 6px !important;
+  margin: 0px !important;
   text-align: right;
 }
 
@@ -173,7 +172,6 @@ display: block !important;
 .calendarTable {
   padding: 16px;
   border-spacing: 0rem;
-  width: 320px;
   color: #484848;
   font-size: 14px;
   font-weight: bold;
@@ -201,4 +199,8 @@ display: block !important;
   color: #484848;
 }
 
-
+.clearDisclaimer {
+  font-size: 10px !important;
+  margin-top: 6px;
+  font-weight: 600;
+}

@@ -12,7 +12,7 @@
   position: absolute !important;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 6px, rgba(0, 0, 0, 0.07) 0px 0px 0px 1px !important;
   width: 100% !important; 
-  min-width: 326px;
+  min-width: 300px;
   text-align: left !important;
   margin-bottom: 16px !important;
   box-sizing: border-box !important;
@@ -208,4 +208,14 @@
 .arrowDown {
   transform: rotate(-45deg);
   -webkit-transform: rotate(-45deg);
+}
+
+.guestDisclaimer {
+  margin: 0px !important;
+  word-wrap: break-word !important;
+  font-family: Circular,-apple-system,BlinkMacSystemFont,Roboto,Helvetica Neue,sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  line-height: 1.2857142857142858em !important;
+  color: #484848 !important;
 }

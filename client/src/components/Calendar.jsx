@@ -1,12 +1,13 @@
-/* eslint-disable react/prop-types */
 /* eslint-disable react/button-has-type */
 import React from 'react';
 import axios from 'axios';
 import OutsideClickHandler from 'react-outside-click-handler';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
+import PropTypes from 'prop-types';
 import styles from '../styles/calendar.css';
 import Month from './Month.jsx';
+
 const moment = extendMoment(Moment);
 
 class Calendar extends React.Component {
@@ -58,11 +59,6 @@ class Calendar extends React.Component {
     const currentMonth = current.month();
     const currentYear = current.year();
     const fullDate = moment(`${currentYear}-${currentMonth + 1}-${date}`, 'YYYY-MM-DD');
-
-    const reservedDates = reserved.map((day) => {
-      const date = `${currentYear}-${currentMonth + 1}-${day}`;
-      return moment(date, 'YYYY-MM-DD');
-    });
 
     if (fullDate.isSame(selectCheckIn)) {
       return 'Between';
@@ -122,20 +118,12 @@ class Calendar extends React.Component {
     const fullDate = moment(`${currentYear}-${currentMonth}-${date}`, 'YYYY-MM-DD');
 
     if (view === 'in') {
-      this.setState({
-        selectCheckIn: fullDate,
-      }, () => {
-        this.validateStay(() => {
-          getSelectedDates(fullDate);
-        });
+      this.setState({ selectCheckIn: fullDate }, () => {
+        this.validateStay(fullDate, (date, status) => { getSelectedDates(date, status); });
       });
     } else {
-      this.setState({
-        selectCheckOut: fullDate,
-      }, () => {
-        this.validateStay(() => {
-          getSelectedDates(fullDate);
-        });
+      this.setState({ selectCheckOut: fullDate }, () => {
+        this.validateStay(fullDate, (date, status) => { getSelectedDates(date, status); });
       });
     }
   }
@@ -170,18 +158,20 @@ class Calendar extends React.Component {
     }
   }
 
-  validateStay(callback) {
+  validateStay(fullDate, callback) {
     const {
-      selectCheckIn, selectCheckOut, reserved, current,
+      selectCheckIn, selectCheckOut, reserved, current, invalidCheckIn, invalidCheckOut,
     } = this.state;
     const { minStay, view } = this.props;
     const currentMonth = current.month();
     const currentYear = current.year();
 
+
     const fullReservedDates = reserved.map((day) => {
       const date = `${currentYear}-${currentMonth + 1}-${day}`;
       return moment(date, 'YYYY-MM-DD');
     });
+
     if (view === 'in') {
       const checkIn = selectCheckIn.format('YYYY-MM-DD');
       const validCheckOut = moment(checkIn).clone().add(minStay, 'days').format('YYYY-MM-DD');
@@ -204,7 +194,12 @@ class Calendar extends React.Component {
         }
       }
     }
-    callback();
+
+    if (!invalidCheckIn && !invalidCheckOut) {
+      callback(fullDate, true);
+    } else {
+      callback(fullDate, false);
+    }
   }
 
   handleClickOutside() {
@@ -218,6 +213,7 @@ class Calendar extends React.Component {
     const { current } = this.state;
     const allMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
       'September', 'October', 'November', 'December'];
+    const { minStay } = this.props;
     const month = current.month();
     const year = current.year();
     const startingDay = current.weekday();
@@ -264,10 +260,18 @@ class Calendar extends React.Component {
             </div>
 
           
-            <Month period={month} startingDay={startingDay} daysInMonth={daysInMonth}
-              handleSelect={this.handleSelect} getStatus={this.getStatus} />
+            <Month
+              period={month}
+              startingDay={startingDay}
+              daysInMonth={daysInMonth}
+              handleSelect={this.handleSelect}
+              getStatus={this.getStatus}
+            />
             
-            <div className="clearContainer">
+            <div className={styles.clearContainer}>
+              <span className={styles.clearDisclaimer}>
+                {minStay} night minimum stay.
+              </span>
               <button name="clear" className={styles.clear} onClick={(event) => { this.handleReset(event); }}>
                 Clear dates
               </button>
@@ -280,4 +284,16 @@ class Calendar extends React.Component {
   }
 }
 
+Calendar.propTypes = {
+  id: PropTypes.number.isRequired,
+  getSelectedDates: PropTypes.func.isRequired,
+  hideCalendar: PropTypes.func.isRequired,
+  clearSelectedDates: PropTypes.func.isRequired,
+  minStay: PropTypes.number.isRequired,
+  view: PropTypes.oneOf(['in', 'out', null]),
+};
+
+Calendar.defaultProps = {
+  view: 'in',
+};
 export default Calendar;
