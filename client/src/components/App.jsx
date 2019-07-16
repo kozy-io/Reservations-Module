@@ -60,7 +60,9 @@ class App extends React.Component {
   }
 
   getListing() {
-    let id = window.location.href.split('/')[4];
+    const parts = window.location.href.split('/');
+    const id = parts[parts.length - 2];
+    console.log(id);
     axios.get(`/listing/${id}`)
       .then((response) => {
         const { base_rate, currency, extra_guest_cap, extra_guest_charge, id, local_tax, max_guests,
