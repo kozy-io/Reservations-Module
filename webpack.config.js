@@ -34,7 +34,7 @@ module.exports = {
   },
   output: {
     filename: 'bundle.js',
-    path: __dirname + '/public/dist',
+    path: '/Users/katherinewang/Desktop/Reservations/public/dist',
   },
   watch: true,
 };
