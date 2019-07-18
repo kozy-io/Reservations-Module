@@ -114,15 +114,6 @@ class Resize extends React.Component {
 
           </div>
 
-          <div className={styles.bookingContainer}>
-            <button
-              type="submit"
-              className={styles.bookingButtonSmall}
-              onClick={this.toggleDisplayPop}
-            >
-              Book
-            </button>
-          </div>
           </div>
         ) : null
         }

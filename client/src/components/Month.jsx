@@ -1,8 +1,4 @@
 import React from 'react';
-import axios from 'axios';
-// import OutsideClickHandler from 'react-outside-click-handler';
-import moment from 'moment';
-import { extendMoment } from 'moment-range';
 import styles from '../styles/calendar.css';
 import Date from './Date.jsx';
 
@@ -26,7 +22,6 @@ class Month extends React.Component {
     const filler = [];
     for (let i = 0; i < startingDay; i += 1) {
       filler.push(
-        // <Date />
         <td key={`${i}-null`} className={styles.fillerDays}>{null}</td>,
       );
     }
@@ -69,7 +64,7 @@ class Month extends React.Component {
         {calendarDays}
         </tbody>
       </table>
-    )
+    );
   }
 }
 

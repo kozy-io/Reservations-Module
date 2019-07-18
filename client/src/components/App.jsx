@@ -62,7 +62,6 @@ class App extends React.Component {
   getListing() {
     const parts = window.location.href.split('/');
     const id = parts[parts.length - 2];
-    console.log(id);
     axios.get(`/listing/${id}`)
       .then((response) => {
         const { base_rate, currency, extra_guest_cap, extra_guest_charge, id, local_tax, max_guests,
@@ -70,8 +69,16 @@ class App extends React.Component {
         } = response.data;
         
         this.setState({
-          currency, extra_guest_cap, extra_guest_charge, id, local_tax, max_guests,
-          min_stay, review_count, star_rating, base_rate: Number(base_rate),
+          currency,
+          extra_guest_cap,
+          extra_guest_charge,
+          id,
+          local_tax,
+          max_guests,
+          min_stay,
+          review_count,
+          star_rating,
+          base_rate: Number(base_rate),
         }, () => {
           this.setState({ displayCalendar: false });
         });
@@ -242,8 +249,13 @@ class App extends React.Component {
 
   // eslint-disable-next-line class-methods-use-this
   styleNumber(number) {
-    return <NumberFormat value={number} displayType={'text'} 
-    thousandSeparator={true} prefix={'$'} decimalScale={0}/>;
+    return <NumberFormat
+      value={number}
+      displayType={'text'} 
+      thousandSeparator={true}
+      prefix={'$'}
+      decimalScale={0}
+    />;
   }
 
   render() {
@@ -284,7 +296,7 @@ class App extends React.Component {
     if (duration) {
       perNight = Math.round((total_base + extraGuestFee) / duration);
     } else if (!duration && adults + children > 1) {
-      perNight = base_rate + extraGuestFee; // total base would only include the additional guest charge at this point since no dates selected
+      perNight = base_rate + extraGuestFee;
     } else {
       perNight = base_rate;
     }

@@ -84,7 +84,6 @@ class Guest extends React.Component {
   }
 
   render() {
-    // console.log(styles.reservations-inner);
     const { maxGuests } = this.props;
     const { adult, child, infant } = this.state;
     let adultStatusPlus = 'buttonPlusOuter';
@@ -94,24 +93,19 @@ class Guest extends React.Component {
     let infantStatusPlus = 'buttonPlusOuter';
     let infantStatusMinus = 'buttonMinusOuter';
 
-    // it max guests are reached, add buttons are disabled for adult and child
-    // infants do not count toward total guests
     if (adult + child >= maxGuests) {
       adultStatusPlus = 'buttonPlusOuterDisabled';
       childStatusPlus = 'buttonPlusOuterDisabled';
     }
-    // adults cannot go below 1
     if (adult === 1) {
       adultStatusMinus = 'buttonMinusOuterDisabled';
     }
-    // child and infant cannot go below 0
     if (child === 0) {
       childStatusMinus = 'buttonMinusOuterDisabled';
     }
     if (infant === 0) {
       infantStatusMinus = 'buttonMinusOuterDisabled';
     }
-    // infants cannot be above 5
     if (infant >= 5) {
       infantStatusPlus = 'buttonPlusOuterDisabled';
     }
