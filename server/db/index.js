@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 
 const sequelize = new Sequelize('guestly', 'root', '', {
   host: 'localhost',
-  dialect: 'mysql'
+  dialect: 'mysql',
 });
 
 const Listing = sequelize.define('listing', {
@@ -109,9 +109,8 @@ const CustomRates = sequelize.define('custom_rate', {
   ]
 })
 
-// sequelize.sync();
-
+sequelize.sync();
 
 module.exports = {
-  Listing, Reserved, CustomRates
+  Listing, Reserved, CustomRates, sequelize,
 }
