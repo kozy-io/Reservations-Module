@@ -47,32 +47,5 @@
     "react-outside-click-handler": "^1.2.3",
     "regenerator-runtime": "^0.13.2",
     "sequelize": "^5.10.1"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.5.0",
-    "@babel/preset-env": "^7.5.0",
-    "@babel/preset-react": "^7.0.0",
-    "babel-jest": "^24.8.0",
-    "babel-loader": "^8.0.6",
-    "css": "^2.2.4",
-    "css-loader": "^3.0.0",
-    "enzyme": "^3.10.0",
-    "enzyme-adapter-react-16": "^1.14.0",
-    "eslint": "^5.16.0",
-    "eslint-config-airbnb": "^17.1.1",
-    "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor",
-    "eslint-plugin-import": "^2.18.0",
-    "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-react": "^7.14.2",
-    "file-loader": "^4.0.0",
-    "jest": "^24.8.0",
-    "jest-cli": "^24.8.0",
-    "loader": "^2.1.1",
-    "react-test-renderer": "^16.8.6",
-    "style": "0.0.3",
-    "style-loader": "^0.23.1",
-    "svg-inline-loader": "^0.8.0",
-    "webpack": "^4.35.2",
-    "webpack-cli": "^3.3.5"
   }
 }

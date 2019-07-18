@@ -4,7 +4,6 @@ import axios from 'axios';
 import OutsideClickHandler from 'react-outside-click-handler';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
-import PropTypes from 'prop-types';
 import styles from '../styles/calendar.css';
 import Month from './Month.jsx';
 
@@ -284,16 +283,4 @@ class Calendar extends React.Component {
   }
 }
 
-Calendar.propTypes = {
-  id: PropTypes.number.isRequired,
-  getSelectedDates: PropTypes.func.isRequired,
-  hideCalendar: PropTypes.func.isRequired,
-  clearSelectedDates: PropTypes.func.isRequired,
-  minStay: PropTypes.number.isRequired,
-  view: PropTypes.oneOf(['in', 'out', null]),
-};
-
-Calendar.defaultProps = {
-  view: 'in',
-};
 export default Calendar;
