@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 
 const sequelize = new Sequelize('guestly_reservations', 'root', '', {
-  host: 'localhost',
+  host: '"172.17.0.2',
   dialect: 'mysql',
 });
 
