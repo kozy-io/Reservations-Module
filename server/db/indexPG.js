@@ -1,14 +1,14 @@
 const Sequelize = require('sequelize');
 
-//Create schema for MySQL
-const sequelize = new Sequelize('guestly_reservations', 'root', '', {
+//Create schema for PostgreSQL
+const sequelize = new Sequelize('reservations', 'shane', '', {
   host: 'localhost',
-  dialect: 'mysql',
+  dialect: 'postgres',
 });
 
 const Listing = sequelize.define('listing', {
   id: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.BIGINT,
     autoIncrement: true,
     primaryKey: true,
     unique: true
@@ -21,13 +21,13 @@ const Listing = sequelize.define('listing', {
     type: Sequelize.INTEGER,
     defaultValue: 0,
   },
-  local_tax: {
-    type: Sequelize.DECIMAL(10,2),
-    defaultValue: 0.085,
+  zipcode: {
+    type: Sequelize.INTEGER,
+    allowNull: false
   },
   min_stay: {
     type: Sequelize.INTEGER,
-    defaultValue: 1,
+    defaultValue: 1
   },
   base_rate: {
     type: Sequelize.DECIMAL(10,2),
@@ -41,58 +41,42 @@ const Listing = sequelize.define('listing', {
     type: Sequelize.INTEGER,
     allowNull: true,
   },
-  currency: {
-    type: Sequelize.STRING,
-    defaultValue: 'USD'
-  },
   star_rating: {
     type: Sequelize.DECIMAL(10,1),
   },
   review_count: {
     type: Sequelize.INTEGER
+  },
+  room_listings: {
+    type: Sequelize.ARRAY(Sequelize.INTEGER),
+    defaultValue: []    
   }
 });
 
 const Reserved = sequelize.define('reserved_date', {
   id: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.BIGINT,
     autoIncrement: true,
     unique: true,
     primaryKey: true
   },
   listing_id: {
     type: Sequelize.INTEGER,
-    references: {
-      model: Listing,
-      key: 'id',
-    }
   },
   date: {
     type: Sequelize.DATEONLY,
   }
-},
-{
-  indexes: [
-      {
-          unique: true,
-          fields: ['listing_id', 'date']
-      }
-  ]
 })
 
 const CustomRates = sequelize.define('custom_rate', {
   id: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.BIGINT,
     autoIncrement: true,
     unique: true,
     primaryKey: true
   },
   listing_id: {
-    type: Sequelize.INTEGER,
-    references: {
-      model: Listing,
-      key: 'id'
-    }
+    type: Sequelize.INTEGER
   },
   date: {
     type: Sequelize.DATEONLY,
@@ -100,18 +84,35 @@ const CustomRates = sequelize.define('custom_rate', {
   price: {
     type: Sequelize.DECIMAL(10,2)
   }
-},
-{
-  indexes: [
-      {
-          unique: true,
-          fields: ['listing_id', 'date']
-      }
-  ]
-})
+});
+
+const Location = sequelize.define ('location', {
+  id: {
+    type: Sequelize.BIGINT,
+    autoIncrement: true,
+    primaryKey: true,
+    unique: true
+  },
+  zipcode: {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  },
+  country: {
+    type: Sequelize.STRING,
+    defaultValue: 'United States'
+  },
+  currency: {
+    type: Sequelize.STRING,
+    defaultValue: 'USD'
+  },
+  localtax: {
+    type: Sequelize.DECIMAL(10,2),
+    allowNull: false
+  }
+});
 
 sequelize.sync();
 
 module.exports = {
-  Listing, Reserved, CustomRates, sequelize,
+  Listing, Reserved, CustomRates, Location, sequelize,
 }
