@@ -33,6 +33,8 @@
   "dependencies": {
     "axios": "^0.19.0",
     "body-parser": "^1.19.0",
+    "cassandra-driver": "^4.1.0",
+    "convert-array-to-csv": "^1.0.8",
     "express": "^4.17.1",
     "faker": "^4.1.0",
     "identity-obj-proxy": "^3.0.0",
@@ -40,12 +42,14 @@
     "moment-range": "^4.0.2",
     "mysql2": "^1.6.5",
     "nodemon": "^1.19.1",
+    "pg": "^7.12.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-number-format": "^4.0.8",
     "react-outside-click-handler": "^1.2.3",
     "regenerator-runtime": "^0.13.2",
-    "sequelize": "^5.10.1"
+    "sequelize": "^5.10.1",
+    "underscore": "^1.9.1"
   }
 }
