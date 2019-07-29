@@ -19,9 +19,9 @@
 | HTTP Method     | Endpoint                               | Description                              |
 |:----------------|:---------------------------------------|:-----------------------------------------|
 | GET             | /api/reservations/:listingID/reserved  | Return all reserved dates for a listing  |
-| POST            | /api/reservations/reserved             | Add a resered date for a listing         |
+| POST            | /api/reservations/reserved             | Add a reserved date for a listing         |
 | PUT             | /api/reservations/:listingID/reserved  | Replace a reserved date for a  listing   |
-| PATCH           | /api/reservations/:listingID/reserved  | Update a reserved date for a  listing    |   
+| PATCH           | /api/reservations/:listingID/reserved  | Update a reserved date for a listing    |   
 | DELETE          | /api/reservations/:listingID/reserved  | Delete a reserved date for a listing     |
 
 ### Reservation - Custom
