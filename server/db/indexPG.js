@@ -30,7 +30,7 @@ const Listing = sequelize.define('listing', {
     defaultValue: 1
   },
   base_rate: {
-    type: Sequelize.DECIMAL(10,2),
+    type: Sequelize.INTEGER,
     allowNull: false
   },
   extra_guest_cap: {
@@ -42,7 +42,7 @@ const Listing = sequelize.define('listing', {
     allowNull: true,
   },
   star_rating: {
-    type: Sequelize.DECIMAL(10,1),
+    type: Sequelize.INTEGER,
   },
   review_count: {
     type: Sequelize.INTEGER
@@ -82,7 +82,7 @@ const CustomRates = sequelize.define('custom_rate', {
     type: Sequelize.DATEONLY,
   },
   price: {
-    type: Sequelize.DECIMAL(10,2)
+    type: Sequelize.INTEGER
   }
 });
 
@@ -106,7 +106,7 @@ const Location = sequelize.define ('location', {
     defaultValue: 'USD'
   },
   localtax: {
-    type: Sequelize.DECIMAL(10,2),
+    type: Sequelize.INTEGER,
     allowNull: false
   }
 });
