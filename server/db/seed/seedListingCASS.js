@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const _ = require('underscore');
 
-const filename = path.join(__dirname, '../csv/listing.csv');
+const filename = path.join(__dirname, '../../csv/cassandra/listing.csv');
 const writeStream = fs.createWriteStream(filename);
 const encoding = 'utf8';
 
@@ -33,15 +33,14 @@ function generateListingData() {
         }
       }
 
-      let roomStr = JSON.stringify(room_listings)
-      let newStr = `"{${roomStr.slice(1,roomStr.length-1)}}"`;
+      let newStr = `"[${room_listings}]"`;
    
       i--;
       if (i === 0) {
-        data = `${i},${max_guests}, ${cleaning_fee}, ${zipcode_id}, ${min_stay}, ${base_rate}, ${extra_guest_cap}, ${extra_guest_charge}, ${star_rating}, ${review_count}, ${newStr}\n`
+        data = `${i},${base_rate},${cleaning_fee},${extra_guest_cap},${extra_guest_charge},${max_guests},${min_stay},${review_count},${newStr},${star_rating},${zipcode_id}\n`
         writeStream.write(data, encoding);
       } else {
-        data = `${i},${max_guests}, ${cleaning_fee}, ${zipcode_id}, ${min_stay}, ${base_rate}, ${extra_guest_cap}, ${extra_guest_charge}, ${star_rating}, ${review_count}, ${newStr}\n`        
+        data = `${i},${base_rate},${cleaning_fee},${extra_guest_cap},${extra_guest_charge},${max_guests},${min_stay},${review_count},${newStr},${star_rating},${zipcode_id}\n`     
         ok = writeStream.write(data, encoding);
       }
     } while (i > 0 && ok);

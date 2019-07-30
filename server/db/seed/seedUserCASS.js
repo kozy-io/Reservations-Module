@@ -4,27 +4,26 @@ const fs = require('fs');
 const path = require('path');
 const _ = require('underscore');
 
-const filename = path.join(__dirname, '../csv/locations.csv');
+const filename = path.join(__dirname, '../../csv/cassandra/users.csv');
 const writeStream = fs.createWriteStream(filename);
 const encoding = 'utf8';
 
-function generateLocationsData() {
-  let i = 10000;
+function generateUsersData() {
+  let i = 1000000;
 
   function write() {
     let ok = true;
     do {
-      let zipcode = parseInt(faker.address.zipCode());
-      let country = 'United States';
-      let currency = 'USD';
-      let localtax = faker.finance.amount(0.2, 0.7, 2)
+      let user_id = i;
+      let first_name = faker.name.firstName();
+      let last_name = faker.name.lastName();
    
       i--;
       if (i === 0) {
-        data = `${i},${zipcode}, ${country}, ${currency}, ${localtax}\n`
+        data = `${i},${first_name}, ${last_name}\n`
         writeStream.write(data, encoding);
       } else {
-        data = `${i},${zipcode}, ${country}, ${currency}, ${localtax}\n`       
+        data = `${i},${first_name}, ${last_name}\n`      
         ok = writeStream.write(data, encoding);
       }
     } while (i > 0 && ok);
@@ -35,5 +34,5 @@ function generateLocationsData() {
   write();
 }
 
-generateLocationsData();
+generateUsersData();
 

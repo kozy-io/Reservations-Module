@@ -1,5 +1,5 @@
 const faker = require('faker');
-const db = require('./index.js');
+const db = require('../index.js');
 
 let generateListing = () => {
   let max_guests = faker.random.number({
