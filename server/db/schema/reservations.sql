@@ -14,7 +14,7 @@ CREATE TABLE listing (
   base_rate SMALLINT,
   extra_guest_cap SMALLINT,
   extra_guest_charge SMALLINT,
-  star_rating SMALLINT,
+  st\dar_rating SMALLINT,
   review_count SMALLINT,
   room_listings INT []
 );
