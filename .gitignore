@@ -2,3 +2,4 @@ node_modules
 coverage
 public/dist/bundle.js
 server/csv
+newrelic.js
