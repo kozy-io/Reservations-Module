@@ -1,0 +1,24 @@
+List of files in zipfile
+Stored file name:Base/Config/newrelic.js
+Original path:/Users/shane/reservations/newrelic.js
+
+Stored file name:Base/Config/newrelic(1).js
+Original path:/Users/shane/reservations/node_modules/@newrelic/koa/tests/unit/newrelic.js
+
+Stored file name:Base/Config/newrelic(2).js
+Original path:/Users/shane/reservations/node_modules/@newrelic/koa/tests/versioned/newrelic.js
+
+Stored file name:Base/Config/newrelic(3).js
+Original path:/Users/shane/reservations/node_modules/@newrelic/superagent/tests/unit/newrelic.js
+
+Stored file name:Base/Config/newrelic(4).js
+Original path:/Users/shane/reservations/node_modules/@newrelic/superagent/tests/versioned/newrelic.js
+
+Stored file name:Base/Config/newrelic(5).js
+Original path:/Users/shane/reservations/node_modules/newrelic/newrelic.js
+
+Stored file name:nrdiag-filelist.txt
+Original path:./nrdiag-filelist.txt
+
+Stored file name:nrdiag-output.json
+Original path:./nrdiag-output.json

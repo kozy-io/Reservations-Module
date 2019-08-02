@@ -41,7 +41,7 @@ class Calendar extends React.Component {
     const month = current.month();
     const year = current.year();
 
-    axios.get(`/reserved/month?id=${id}&month=${month+1}&year=${year}`)
+    axios.get(`/api/reservations/reserved/month?id=${id}&month=${month+1}&year=${year}`)
       .then(response => this.setState({
         reserved: response.data,
       }, () => {
