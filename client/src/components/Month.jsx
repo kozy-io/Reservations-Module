@@ -29,7 +29,7 @@ class Month extends React.Component {
     const existingDays = [];
     for (let j = 1; j <= daysInMonth; j += 1) {
       let status = getStatus(j);
-      existingDays.push(<Date status={'weekDays' + status + 'Normal'} number={j} handleSelect={handleSelect} />);
+      existingDays.push(<Date key={startingDay + j} status={'weekDays' + status + 'Normal'} number={j} handleSelect={handleSelect} />);
     }
 
     const totalElements = filler.concat(existingDays);

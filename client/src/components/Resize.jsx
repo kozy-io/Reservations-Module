@@ -75,7 +75,8 @@ class Resize extends React.Component {
   getListing() {
     const parts = window.location.href.split('/');
     const id = parts[parts.length - 2];
-    axios.get(`/listing/${id}`)
+    console.log('id', id)
+    axios.get(`/api/reservations/${id}`)
       .then((response) => {
         const { base_rate, review_count, star_rating } = response.data;
         this.setState({ base_rate, review_count, star_rating })})

@@ -26,6 +26,7 @@ class App extends React.Component {
       min_stay: 0,
       review_count: 0,
       star_rating: 0,
+      room_listings: [],
       selectedCheckIn: null,
       selectedCheckOut: null,
       displayCalendar: false,
@@ -62,12 +63,14 @@ class App extends React.Component {
   getListing() {
     const parts = window.location.href.split('/');
     const id = parts[parts.length - 2];
-    axios.get(`/listing/${id}`)
+    axios.get(`/api/reservations/${id}`)
       .then((response) => {
         const { base_rate, currency, extra_guest_cap, extra_guest_charge, id, local_tax, max_guests,
-          min_stay, review_count, star_rating,
+          min_stay, review_count, star_rating, room_listings
         } = response.data;
         
+        console.log('response', response)
+
         this.setState({
           currency,
           extra_guest_cap,
@@ -79,6 +82,7 @@ class App extends React.Component {
           review_count,
           star_rating,
           base_rate: Number(base_rate),
+          room_listings
         }, () => {
           this.setState({ displayCalendar: false });
         });
@@ -196,7 +200,7 @@ class App extends React.Component {
     for (let i = 0; i < daysBetween.length; i += 1) {
       query += `&time=${daysBetween[i]}`;
     }
-
+    console.log('query', `/custom/month?id=${id}${query}`)
     axios.get(`/custom/month?id=${id}${query}`)
       .then((response) => {
         this.calculateBase(response.data);
