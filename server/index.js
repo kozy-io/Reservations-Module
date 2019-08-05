@@ -33,29 +33,10 @@ app.get('/api/reservations/reserved/month/', (req, res) => {
       res.status(400).send(err);
     }
     else {
-      const results = data.rows.map(days => Number(days.booked_day))
+      const results = data.rows.map(days => Number(days.booked_day));
       res.status(200).send(results);
     }
   });
 });
-
-// app.get('/custom/month/', (req, res) => {
-//   const { id, time } = req.query;
-
-//   let timeArr = time.map(date => String(faker.date.between(date, date)));
-
-//1.How to query multiple values within timeArr
-//2.What's the shape of the results sent back from the query?
-
-//   // db.CustomRates.findAll({
-//   //   attributes: ['date', 'price'],
-//   //   where: {
-//   //     date: timeArr,
-//   //     listing_id: id,
-//   //   },
-//   // })
-//   //   .then(results => res.send(results))
-//   //   .catch(error => res.send(error));
-// });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
