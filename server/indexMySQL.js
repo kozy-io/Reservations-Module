@@ -25,8 +25,8 @@ app.get('/listing/:listingID', (req, res) => {
 app.get('/reserved/month/', (req, res) => {
   const { id, month, year } = req.query;
    
-  console.log('month query', month); //months are numbers, e.g. 8 or 9
-  console.log('year query', year); //years are numb, e.g. 2019
+  // console.log('month query', month); //months are numbers, e.g. 8 or 9
+  // console.log('year query', year); //years are numb, e.g. 2019
 
   db.Reserved.findAll({
     attributes: ['date'],
@@ -39,8 +39,8 @@ app.get('/reserved/month/', (req, res) => {
   .then((results) => {
     const days = results.map(date => Number(date.date.slice(-2)));
 
-    console.log('days', days) //days [21, 24]
-    res.send(days);
+    // console.log('days', days) //days [21, 24]
+    // res.send(days);
   })
     .catch(error => res.send(error));
 });
