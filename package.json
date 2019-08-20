@@ -9,12 +9,9 @@
   },
   "scripts": {
     "start-nodemon": "nodemon server/index.js",
-    "start": "node server/index.js",
-    "react-dev": "webpack -p --watch",
+    "react-dev": "webpack -d --watch",
     "db": "node server/db/index.js",
-    "seed": "node server/db/seed.js",
-    "start:docker": "npm run db && npm run seed && npm run start",
-    "test": "jest"
+    "seed": "node server/db/seed.js"
   },
   "jest": {
     "transform": {
@@ -48,6 +45,7 @@
     "express": "^4.17.1",
     "faker": "^4.1.0",
     "file-loader": "^4.1.0",
+    "fs": "0.0.1-security",
     "identity-obj-proxy": "^3.0.0",
     "jshint": "^2.10.2",
     "k6": "0.0.0",

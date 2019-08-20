@@ -4,7 +4,7 @@ config:
   ensure:
     p95: 3000
   phases:
-    - duration: 600
+    - duration: 60
       arrivalRate: 100
 scenarios:
   - flow:

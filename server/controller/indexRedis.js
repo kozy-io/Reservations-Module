@@ -11,7 +11,6 @@ client.on('error', function (err) {
 
 const cacheListing = (req, res) => {
   const { listingID } = req.params;
-   
   client.get(listingID, (err, result) => {
     if (result) {
       res.status(200).send(result);
@@ -23,14 +22,12 @@ const cacheListing = (req, res) => {
         }
         else {
           client.setex(listingID, 3600, JSON.stringify(data.rows[0]))
-
           res.status(200).send(data.rows[0]);
         }
       });
     }
   });
 }
-
 
 const cacheReserved = (req, res) => {
   const { id, month, year } = req.query;
@@ -46,18 +43,14 @@ const cacheReserved = (req, res) => {
           res.status(400).send(err);
         }
         else {
-          const results = data.rows.map(days => Number(days.booked_day));
-                    
+          const results = data.rows.map(days => Number(days.booked_day));                    
           client.setex([id, month, year], 3600, JSON.stringify(results));
-
           res.status(200).send(results);
         }
       });
     }
   });
 }
-
-
 
 module.exports.cacheListing = cacheListing;
 module.exports.cacheReserved = cacheReserved;

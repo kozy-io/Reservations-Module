@@ -2,9 +2,9 @@ const Pool = require('pg-pool');
 
 const pool = new Pool({
   //Connect to postgres on ec2
-  database: 'kozy',
+  database: 'reservations',
   host: 'ec2-54-67-66-194.us-west-1.compute.amazonaws.com',
-  user: 'power_user',
+  user: 'postgres',
   port: 5432,
   password: 'hackreactor'
 
